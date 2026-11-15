@@ -1,0 +1,1168 @@
+# PROMPT TỔNG THỂ TẠO ỨNG DỤNG SMART WATER TANK 3D
+
+## I. VAI TRÒ VÀ YÊU CẦU CHUNG
+
+Bạn là chuyên gia phát triển phần mềm giáo dục STEM, lập trình React, TypeScript, Three.js, mô phỏng 3D tương tác, trực quan hóa toán học và thiết kế giao diện website hiện đại.
+
+Hãy thiết kế, lập trình và hoàn thiện một ứng dụng web hoạt động thực sự, có tên:
+
+**SMART WATER TANK 3D**
+
+*Thiết kế và mô phỏng bồn chứa nước 3D tương tác – Vận dụng tích phân trong Toán 12.*
+
+Thông tin dự án:
+
+- Đơn vị: Trường THPT Nguyễn Huệ.
+- Giáo viên phụ trách: Lê Văn Mạnh.
+- Môn học: Toán 12.
+- Bộ sách: Kết nối tri thức với cuộc sống.
+- Chương IV: Nguyên hàm và tích phân.
+- Bài 13: Ứng dụng hình học của tích phân.
+- Quy mô thực nghiệm: 40 học sinh, chia thành 4 nhóm, mỗi nhóm 10 học sinh.
+- Định hướng: Dạy học tích hợp STEM, phát triển năng lực số và sử dụng AI có kiểm chứng.
+
+Ứng dụng phải giúp học sinh:
+
+1. Quan sát hình dạng bồn chứa nước dưới dạng mô hình 3D.
+2. Tự thiết kế bồn bằng cách thay đổi các thông số hình học.
+3. Sử dụng tích phân tính thể tích bồn nước.
+4. Quan sát quá trình bơm nước, xả nước và thay đổi mực nước.
+5. Hiểu mối quan hệ giữa hình dạng bồn, tiết diện, thể tích và chiều cao mực nước.
+6. Vẽ và phân tích các đồ thị toán học liên quan.
+7. So sánh phương án thiết kế nhằm tiết kiệm vật liệu.
+8. Thực hiện các bài tập Toán 12 thông qua mô hình 3D.
+9. Tham gia các nhiệm vụ STEM theo nhóm.
+10. Sử dụng Gemini để tham gia quá trình xây dựng, kiểm tra và cải tiến một ứng dụng chung.
+
+**Yêu cầu bắt buộc:** Hãy tạo mã nguồn ứng dụng hoàn chỉnh, có thể chạy trong bản xem trước. Không chỉ viết bản mô tả hoặc tạo ảnh giao diện. Không sử dụng những con số thể tích cố định thay cho kết quả tính toán.
+
+---
+
+## II. CÔNG NGHỆ VÀ CẤU TRÚC HỆ THỐNG
+
+Ưu tiên sử dụng:
+
+- React + TypeScript + Vite để xây dựng website.
+- Three.js và React Three Fiber để dựng mô hình 3D.
+- Drei OrbitControls để điều khiển camera.
+- Tailwind CSS để thiết kế giao diện.
+- Recharts để hiển thị đồ thị tương tác.
+- KaTeX để hiển thị công thức tích phân.
+- math.js để phân tích biểu thức toán học tùy chỉnh một cách an toàn.
+- localStorage hoặc IndexedDB để lưu cấu hình và tiến độ demo trên thiết bị.
+
+Chia mã nguồn thành các thành phần rõ ràng như:
+
+- `App` – Điều phối toàn bộ ứng dụng.
+- `Dashboard` – Trang chủ dự án.
+- `TankScene3D` – Không gian 3D.
+- `TankGeometry` – Dựng hình dạng bồn.
+- `WaterGeometry` – Dựng và cập nhật phần nước.
+- `TankControls` – Điều khiển mô hình.
+- `MathEngine` – Công thức, tích phân và tính toán.
+- `PumpSimulation` – Mô phỏng bơm và xả.
+- `MathCharts` – Đồ thị.
+- `OptimizationLab` – Tối ưu thiết kế.
+- `PracticeLab` – Trò chơi và bài tập.
+- `GroupWorkspace` – Nhiệm vụ học sinh.
+- `TeacherDashboard` – Bảng theo dõi và đánh giá.
+- `TestPanel` – Kiểm thử chương trình.
+
+Đặt logic tính toán toán học trong các hàm riêng, không viết trực tiếp trong thành phần giao diện.
+
+Ứng dụng cần hỗ trợ máy tính, máy tính bảng và điện thoại. Có bản build để triển khai trên Netlify hoặc Vercel.
+
+---
+
+## III. THIẾT KẾ GIAO DIỆN CHÍNH
+
+### 1. Phong cách thiết kế
+
+Thiết kế theo phong cách phòng thí nghiệm công nghệ hiện đại, kết hợp giữa khoa học, công nghệ và mô phỏng công trình thực tế.
+
+Màu sắc chủ đạo:
+
+- Xanh nước biển đậm: màu nền điều hướng.
+- Xanh cyan: màu nước và hiệu ứng 3D.
+- Trắng: nền thẻ thông tin.
+- Xanh lá: trạng thái hoạt động tốt.
+- Cam: cảnh báo thông số.
+- Đỏ: lỗi hoặc nguy cơ tràn nước.
+
+Giao diện cần có độ hoàn thiện cao, sử dụng các thẻ bo góc, thanh điều khiển trực quan, biểu tượng thống nhất và hiệu ứng chuyển động mượt.
+
+Không tạo quá nhiều hiệu ứng gây rối mắt hoặc làm giảm hiệu năng.
+
+### 2. Trang chủ
+
+Phần đầu trang hiển thị:
+
+**SMART WATER TANK 3D**
+
+*HỆ SINH THÁI MÔ PHỎNG BỒN CHỨA NƯỚC 3D – HỌC TÍCH PHÂN QUA THỰC HÀNH*
+
+Có nhãn:
+
+`DỰ ÁN STEM | TOÁN 12 | KẾT NỐI TRI THỨC`
+
+Bên dưới hiển thị ba thông tin:
+
+- Trường THPT Nguyễn Huệ.
+- Giáo viên: Lê Văn Mạnh.
+- Bài 13 – Ứng dụng hình học của tích phân.
+
+Tạo khu vực giới thiệu bằng hình 3D bồn nước lớn, chứa nước xanh trong suốt và có thể chuyển động.
+
+Thêm ba nút chính:
+
+- **Khám phá mô hình 3D**
+- **Bắt đầu thiết kế bồn**
+- **Tham gia thử thách STEM**
+
+Khi bấm nút, điều hướng đến phần tương ứng.
+
+### 3. Sáu khu vực chính
+
+Thiết kế hệ thống gồm 6 màn hình:
+
+| Màn hình | Chức năng |
+|---|---|
+| 1. Giới thiệu & dự án STEM | Kiến thức, nhiệm vụ, quy trình 4 nhóm |
+| 2. Phòng thiết kế 3D | Dựng mô hình, chỉnh thông số, xoay, quan sát |
+| 3. Phòng toán học tích phân | Thiết lập tích phân và tính thể tích |
+| 4. Phòng thí nghiệm bơm – xả | Mô phỏng dòng nước và mực nước |
+| 5. Đồ thị & khám phá | Quan sát, phân tích đồ thị toán học |
+| 6. Tối ưu & luyện tập | So sánh phương án, trò chơi và bài tập |
+
+Có thanh menu điều hướng phía trên, không cần tải lại trang khi chuyển màn hình.
+
+---
+
+## IV. XÂY DỰNG PHÒNG THIẾT KẾ BỒN NƯỚC 3D
+
+Đây là chức năng trung tâm của toàn bộ ứng dụng.
+
+### 1. Không gian mô phỏng
+
+Tạo một cảnh 3D thực sự gồm:
+
+- Một bồn chứa nước đặt giữa sân mô phỏng.
+- Khung đỡ bồn bằng kim loại.
+- Hệ thống đường ống dẫn nước.
+- Van bơm và van xả.
+- Đồng hồ đo mực nước.
+- Các vạch chia chiều cao.
+- Mặt đất có lưới tọa độ.
+- Ánh sáng tự nhiên, bóng đổ.
+- Bối cảnh nhà trường hoặc công trình cấp nước ở phía xa.
+
+Bồn nước phải có màu xanh lam bán trong suốt để quan sát được nước bên trong.
+
+Nước có màu xanh cyan, mặt nước nằm ngang, có ánh sáng phản chiếu nhẹ và chuyển động gợn sóng khi bơm – xả.
+
+Không sử dụng ảnh tĩnh làm bồn nước.
+
+Có thể chuyển giữa:
+
+- Chế độ phòng thí nghiệm: nền lưới và hệ trục.
+- Chế độ thực tế: khung cảnh ngoài trời với hệ thống bồn chứa.
+
+### 2. Điều khiển mô hình 3D
+
+Người học có thể:
+
+- Kéo chuột để xoay mô hình 360 độ.
+- Phóng to và thu nhỏ bằng bánh xe chuột.
+- Quan sát từ phía trước, bên cạnh và phía trên.
+- Chọn chế độ xem toàn cảnh.
+- Bật/tắt mặt cắt của bồn.
+- Hiện/ẩn phần vỏ bồn.
+- Hiện/ẩn đường trục đối xứng.
+- Hiện/ẩn kích thước.
+- Đặt lại camera.
+
+Tạo các nút:
+
+`Xoay 360°` – `Mặt cắt` – `Nhìn từ trên` – `Nhìn ngang` – `Lưới tọa độ` – `Đặt lại`.
+
+Ở chế độ mặt cắt, thể hiện rõ đường sinh của vật thể tròn xoay, bán kính theo từng độ cao và vùng nước đang chiếm chỗ.
+
+### 3. Bốn loại bồn mặc định
+
+**Loại 1 – Bồn hình trụ**
+
+Thông số:
+
+- Bán kính R.
+- Chiều cao H.
+- Độ cao mực nước h.
+
+Công thức:
+
+r(z) = R
+
+V = πR²H
+
+Mô hình phải có tiết diện tròn không đổi.
+
+**Loại 2 – Bồn hình nón cụt**
+
+Thông số:
+
+- Bán kính đáy dưới r₀.
+- Bán kính miệng trên r₁.
+- Chiều cao H.
+
+Hàm bán kính:
+
+r(z) = r₀ + (r₁ − r₀)z/H
+
+Thể tích:
+
+V = πH(r₀² + r₀r₁ + r₁²)/3
+
+Khi thay đổi hai bán kính, mô hình thay đổi chính xác theo dạng nón cụt.
+
+**Loại 3 – Bồn thành cong**
+
+Dùng hàm bán kính có dạng:
+
+r(z) = a + b sin(πz/H)
+
+Giá trị mặc định:
+
+- a = 1 m.
+- b = 0,5 m.
+- H = 2 m.
+
+Khi đó:
+
+r(z) = 1 + 0,5sin(πz/2).
+
+Bồn có phần thân phình ở giữa, phù hợp minh họa mối liên hệ giữa đường cong và hình khối.
+
+Thể tích chuẩn:
+
+V = 2,25π + 4 ≈ 11,069 m³.
+
+**Loại 4 – Bồn tùy chỉnh bằng hàm số**
+
+Cho nhập:
+
+r(z) = a + bz + cz²
+
+Có ô điều chỉnh a, b, c, H.
+
+Có thể bổ sung chế độ nâng cao cho phép nhập các biểu thức hợp lệ có `sin`, `cos`, `sqrt`, `pi` và các phép toán cơ bản bằng bộ phân tích math.js.
+
+Kiểm tra miền xác định và bán kính. Hàm phải liên tục, hữu hạn và không âm trên đoạn xét; bán kính bên trong bồn phải dương, ngoại trừ các đầu mút được phép bằng 0 đối với hình phù hợp.
+
+Nếu dữ liệu không hợp lệ, hiển thị thông báo dễ hiểu và giữ lại mô hình hợp lệ gần nhất.
+
+### 4. Ví dụ minh họa từ poster
+
+Tạo thêm nút:
+
+**Xem ví dụ bán cầu – V = 16π/3**
+
+Dùng:
+
+r(z) = √(4 − z²), với 0 ≤ z ≤ 2.
+
+Thể tích chính xác:
+
+V = π∫₀²(4 − z²)dz = 16π/3 ≈ 16,755 m³.
+
+Hình dựng từ công thức này phải là khối bán cầu tương ứng, không dùng hình bồn thành cong rồi gắn kết quả 16,755 m³ vào.
+
+### 5. Thanh chỉnh thông số
+
+Ở bên phải màn hình có bảng **THÔNG SỐ THIẾT KẾ**.
+
+Gồm:
+
+- Chiều cao H.
+- Bán kính R hoặc r₀, r₁.
+- Tham số hàm số.
+- Chiều cao nước h.
+- Tỉ lệ chứa nước.
+- Dung tích toàn bồn.
+- Thể tích nước hiện có.
+
+Mỗi giá trị có thanh trượt và ô nhập số.
+
+Ví dụ khoảng giá trị mặc định:
+
+- H từ 0,5 đến 10 m.
+- R, r₀, r₁ từ 0,2 đến 5 m.
+- h từ 0 đến H.
+
+Cho phép cấu hình phạm vi phù hợp khi cần.
+
+Khi kéo một thanh trượt, yêu cầu đồng thời cập nhật:
+
+1. Hình dạng bồn 3D.
+2. Công thức toán học.
+3. Kết quả thể tích.
+4. Đồ thị.
+5. Vạch kích thước.
+6. Phần trăm mực nước.
+
+Không được sử dụng giá trị thể tích cũ sau khi thay đổi hình dạng.
+
+---
+
+## V. HỆ THỐNG TOÁN HỌC – TÍCH PHÂN CHÍNH XÁC
+
+### 1. Công thức tổng quát
+
+Quy ước trục Oz theo phương thẳng đứng, đáy bồn tại z = 0, đỉnh bồn tại z = H.
+
+Bán kính lát cắt tại độ cao z là r(z).
+
+Thể tích toàn bồn:
+
+Vmax = π∫₀ᴴ[r(z)]²dz.
+
+Thể tích nước đến độ cao h:
+
+Vwater(h) = π∫₀ʰ[r(z)]²dz.
+
+Trong đó:
+
+- H: chiều cao toàn bồn (m).
+- h: chiều cao nước (m).
+- r(z): bán kính tiết diện tại độ cao z (m).
+- Vmax: thể tích toàn bồn (m³).
+- Vwater: lượng nước hiện có (m³).
+
+Phải phân biệt rõ Vmax và Vwater.
+
+### 2. Hiển thị từng bước giải
+
+Khi học sinh chọn một bồn, hệ thống tự hiển thị:
+
+**Bước 1:** Xác định hình dạng và hàm bán kính r(z).
+
+**Bước 2:** Viết công thức diện tích thiết diện ngang A(z) = π[r(z)]².
+
+**Bước 3:** Thiết lập cận tích phân từ 0 đến H.
+
+**Bước 4:** Tính tích phân.
+
+**Bước 5:** Kết luận thể tích và đổi đơn vị.
+
+Có nút **Giải thích từng bước** và nút **Ẩn lời giải**.
+
+Hiển thị công thức bằng KaTeX, không để dưới dạng chuỗi ký tự khó đọc.
+
+Với các trường hợp có công thức nguyên hàm đơn giản, đưa ra lời giải đại số. Với hàm phức tạp, nêu rõ đang sử dụng tích phân số.
+
+### 3. Động cơ tính toán
+
+Yêu cầu tạo các hàm toán học độc lập:
+
+- `radiusAtHeight(z, parameters)`
+- `crossSectionArea(z, parameters)`
+- `calculateTotalVolume(parameters)`
+- `calculateWaterVolume(h, parameters)`
+- `findHeightFromVolume(volume, parameters)`
+- `calculateSideArea(parameters)`
+- `calculateSurfaceArea(parameters)`
+
+Dùng công thức chính xác cho hình trụ và hình nón cụt.
+
+Với hàm tổng quát, dùng tích phân số như Simpson hoặc phương pháp thích hợp có kiểm tra sai số.
+
+Cần kiểm tra giá trị trả về là số hữu hạn, không âm và phù hợp miền hình học.
+
+Tuyệt đối không sử dụng `eval` để xử lý chuỗi hàm số người dùng nhập.
+
+### 4. Thể hiện kiến thức trực quan
+
+Thêm nút **Từ đồ thị đến bồn nước 3D**.
+
+Khi bật:
+
+1. Hiển thị đường cong r(z) trên mặt phẳng.
+2. Tô sáng một dải nhỏ ứng với lát cắt.
+3. Minh họa lát cắt quay quanh trục Oz.
+4. Hiển thị tiết diện hình tròn.
+5. Tích lũy các lát cắt thành toàn bộ bồn 3D.
+6. Xuất hiện công thức V = π∫[r(z)]²dz.
+
+Cho phép học sinh điều khiển từng bước bằng nút Tiếp theo hoặc Quay lại.
+
+Phần này phải thể hiện trực quan bản chất của phép tính tích phân, không chỉ chạy một hoạt ảnh trang trí.
+
+---
+
+## VI. PHÒNG THÍ NGHIỆM BƠM – XẢ NƯỚC
+
+### 1. Các chức năng
+
+Tạo các nút lớn:
+
+- **Bơm nước**
+- **Xả nước**
+- **Tạm dừng**
+- **Tiếp tục**
+- **Đặt lại**
+- **Bơm đầy**
+- **Xả hết**
+
+Tất cả nút phải điều khiển mô phỏng thực sự.
+
+### 2. Thông số mô phỏng
+
+Cho người dùng thiết lập:
+
+- Lưu lượng bơm vào Qv.
+- Lưu lượng xả ra Qr.
+- Lượng nước ban đầu.
+- Thời gian mô phỏng.
+- Tốc độ phát mô phỏng.
+- Đơn vị m³/phút hoặc lít/phút.
+
+Chuyển đổi đơn vị chính xác: 1 m³ = 1.000 lít.
+
+Các mức tốc độ mô phỏng: x1, x5, x10, x60.
+
+### 3. Công thức tính
+
+Tại mỗi bước thời gian:
+
+V(t + Δt) = V(t) + (Qv − Qr)Δt
+
+Trong đó Δt phải được tính bằng phút nếu Q đang dùng đơn vị m³/phút.
+
+Giới hạn:
+
+0 ≤ Vwater ≤ Vmax.
+
+Tìm độ cao nước h bằng cách giải:
+
+π∫₀ʰ[r(z)]²dz = Vwater.
+
+Dùng phương pháp chia đôi hoặc một thuật toán tìm nghiệm ổn định.
+
+**Không được đặt h = H × Vwater/Vmax cho mọi loại bồn.** Công thức đó chỉ đúng khi tiết diện ngang không đổi.
+
+### 4. Hiệu ứng mô phỏng
+
+Khi bấm Bơm:
+
+- Máy bơm chuyển sang trạng thái hoạt động.
+- Đường ống có hiệu ứng dòng nước.
+- Nước trong bồn tăng lên dần.
+- Mực nước, thể tích, đồng hồ và đồ thị cùng thay đổi.
+
+Khi bấm Xả:
+
+- Van xả mở.
+- Dòng nước đi ra khỏi bồn.
+- Mặt nước hạ xuống theo tiết diện bồn.
+- Thể tích giảm tương ứng.
+
+Khi bấm Tạm dừng, tất cả chuyển động theo thời gian phải ngừng.
+
+Có cảnh báo:
+
+- Bồn đã đầy.
+- Bồn đã cạn.
+- Lưu lượng bằng 0.
+- Thông số không hợp lệ.
+
+Không để nước vượt ra ngoài vỏ bồn hoặc có chiều cao âm.
+
+### 5. Đồng hồ thông minh
+
+Hiển thị thời gian dạng phút:giây.
+
+Các thẻ số liệu:
+
+- Mực nước hiện tại: ... m.
+- Lượng nước hiện tại: ... m³.
+- Dung tích tối đa: ... m³.
+- Tỉ lệ đầy: ... %.
+- Lưu lượng vào: ... m³/phút.
+- Lưu lượng ra: ... m³/phút.
+
+Có thanh tiến trình thể hiện phần trăm dung tích đang sử dụng.
+
+---
+
+## VII. ĐỒ THỊ TOÁN HỌC TƯƠNG TÁC
+
+Tạo phòng đồ thị gồm 4 biểu đồ.
+
+### Biểu đồ 1 – Bán kính theo chiều cao
+
+Đồ thị:
+
+r(z) theo z.
+
+Khi đưa chuột đến một điểm, hiện:
+
+- Độ cao z.
+- Bán kính r(z).
+- Diện tích thiết diện ngang A(z).
+
+### Biểu đồ 2 – Thể tích theo mực nước
+
+Đồ thị:
+
+Vwater(h) = π∫₀ʰ[r(z)]²dz.
+
+Có điểm đánh dấu tại mực nước hiện tại.
+
+Khi kéo điểm trên đồ thị, mô hình 3D cập nhật lượng nước tương ứng.
+
+### Biểu đồ 3 – Thể tích theo thời gian
+
+Đồ thị V(t) khi bơm hoặc xả.
+
+Có thể xem lại lịch sử một lần mô phỏng và so sánh với tốc độ bơm khác.
+
+### Biểu đồ 4 – Tốc độ tăng mực nước
+
+Hiển thị dh/dt khi lưu lượng không đổi và tiết diện hợp lệ:
+
+dh/dt = (Qv − Qr) / [πr(h)²].
+
+Giải thích rằng khi bồn có tiết diện nhỏ, cùng một lượng nước có thể làm mực nước thay đổi nhanh hơn.
+
+Xử lý riêng các điểm mà tiết diện bằng 0 hoặc gần 0, không hiển thị vô cực hoặc NaN thành kết quả thông thường.
+
+Yêu cầu:
+
+- Đồ thị thay đổi ngay khi tham số thay đổi.
+- Có nhãn và đơn vị.
+- Có chú giải.
+- Có nút phóng to.
+- Có thể tải ảnh biểu đồ PNG.
+- Có thể xuất dữ liệu CSV.
+
+---
+
+## VIII. PHÒNG THÍ NGHIỆM TỐI ƯU THIẾT KẾ
+
+Mục tiêu: Giúp học sinh lựa chọn phương án bồn đáp ứng dung tích yêu cầu và có diện tích vật liệu hợp lý.
+
+### 1. So sánh hai bồn
+
+Tạo hai ô:
+
+**Phương án A** và **Phương án B**.
+
+Mỗi phương án có mô hình 3D nhỏ, thông số riêng và kết quả riêng.
+
+Cho phép lựa chọn dạng bồn khác nhau và nhập thông số.
+
+Tính:
+
+- Chiều cao.
+- Bán kính đặc trưng.
+- Dung tích.
+- Diện tích thành.
+- Diện tích đáy và nắp nếu được chọn.
+- Chi phí vật liệu ước tính.
+
+### 2. Công thức diện tích vỏ
+
+Diện tích thành:
+
+Sside = 2π∫₀ᴴ r(z)√(1 + [r'(z)]²) dz.
+
+Diện tích đáy:
+
+Sbottom = π[r(0)]².
+
+Diện tích nắp:
+
+Stop = π[r(H)]².
+
+Diện tích tổng:
+
+Stotal = Sside + Sbottom + Stop.
+
+Cho tùy chọn bồn có nắp, không nắp, chỉ tính thành.
+
+### 3. Ràng buộc
+
+Người dùng nhập:
+
+- Dung tích yêu cầu Vtarget.
+- Chiều cao nhỏ nhất và lớn nhất.
+- Bán kính lớn nhất.
+- Đơn giá vật liệu trên 1 m².
+
+Chỉ so sánh các phương án thỏa mãn điều kiện.
+
+Hệ thống có thể quét một tập hữu hạn các bộ tham số hợp lệ để tìm phương án có diện tích nhỏ nhất trong tập đã xét.
+
+Hiển thị:
+
+- Phương án đạt yêu cầu.
+- Diện tích cần dùng.
+- Chi phí ước tính.
+- Mức chênh lệch giữa hai phương án.
+- Lý do lựa chọn.
+
+**Không khẳng định phương án tối ưu tuyệt đối nếu chỉ thử một tập phương án hữu hạn.**
+
+Ghi chú: Kết quả là mô hình toán học phục vụ học tập, chưa xét độ bền kết cấu, áp suất, tiêu chuẩn thi công và các yếu tố kỹ thuật thực tế.
+
+---
+
+## IX. PHÒNG LUYỆN TẬP VÀ TRÒ CHƠI TOÁN 12
+
+Tạo ba hoạt động học tập.
+
+### Hoạt động 1 – Kéo thả công thức
+
+Học sinh nối dạng bồn với công thức tương ứng:
+
+- Bồn trụ.
+- Bồn nón cụt.
+- Bồn có thành cong.
+- Vật thể tròn xoay tổng quát.
+
+Hệ thống kiểm tra đáp án và giải thích.
+
+### Hoạt động 2 – Thử thách thiết kế
+
+Hiển thị nhiệm vụ như:
+
+“Thiết kế một bồn nước có dung tích tối thiểu 6 m³ bằng cách điều chỉnh bán kính và chiều cao.”
+
+Học sinh kéo các thanh thông số và quan sát kết quả.
+
+Khi thỏa mãn điều kiện, hiện thông báo hoàn thành. Khi chưa đạt, đưa gợi ý dựa trên giá trị thiếu hoặc vượt.
+
+### Hoạt động 3 – Trắc nghiệm 10 câu
+
+Tạo ngân hàng tối thiểu 10 câu hỏi Toán 12, gồm:
+
+1. Công thức tính thể tích vật thể tròn xoay.
+2. Tính thể tích bồn trụ.
+3. Tính thể tích bồn nón cụt.
+4. Viết tích phân từ hàm bán kính.
+5. Tính thể tích bồn thành cong.
+6. Phân biệt thể tích nước và toàn bồn.
+7. Đổi m³ sang lít.
+8. Tính lượng nước theo lưu lượng.
+9. Giải thích sự tăng mực nước khi tiết diện thay đổi.
+10. So sánh hai thiết kế bồn chứa.
+
+Có ba mức độ:
+
+- Nhận biết.
+- Thông hiểu.
+- Vận dụng.
+
+Mỗi câu có đáp án và lời giải thích. Câu hỏi tính toán phải được kiểm tra trước khi hiển thị.
+
+Chức năng cần có:
+
+- Trộn câu hỏi.
+- Nộp bài.
+- Chấm điểm tự động.
+- Xem đáp án.
+- Làm lại.
+- Thống kê số câu đúng và sai.
+- Hiển thị điểm theo thang 10.
+
+Không đưa câu hỏi quá phạm vi kiến thức tích phân Toán 12 khi chưa có phần hướng dẫn bổ sung.
+
+---
+
+## X. KHÔNG GIAN DỰ ÁN STEM – 40 HỌC SINH, 4 NHÓM
+
+Đây là phần quan trọng để ứng dụng phục vụ trực tiếp tiết học STEM, đồng thời minh chứng cách học sinh cùng tạo ra sản phẩm số.
+
+Tạo một khu vực **DỰ ÁN STEM CỦA CHÚNG EM** trong màn hình Giới thiệu.
+
+Mặc định lớp có 40 học sinh, sử dụng mã HS01 đến HS40.
+
+Tạo 4 nhóm, mỗi nhóm 10 học sinh.
+
+### NHÓM 1 – XÂY DỰNG Ý TƯỞNG
+
+HS01–HS10.
+
+Nhiệm vụ:
+
+- Xác định vấn đề thực tiễn.
+- Nghiên cứu các dạng bồn nước.
+- Xác định nội dung Toán 12 cần vận dụng.
+- Đề xuất chức năng của website.
+- Phác thảo giao diện.
+- Xác định công thức cần kiểm tra.
+- Chuẩn bị bản thiết kế bàn giao cho Nhóm 2.
+
+Phân công:
+
+- HS01: Điều phối và chốt yêu cầu.
+- HS02: Ghi chép ý tưởng.
+- HS03: Nghiên cứu vấn đề thực tế.
+- HS04: Liệt kê chức năng.
+- HS05: Phác thảo trang chủ.
+- HS06: Phác thảo các dạng bồn.
+- HS07: Kiểm tra công thức hình trụ, nón cụt.
+- HS08: Nghiên cứu mực nước và lưu lượng.
+- HS09: Đề xuất đồ thị và bài tập.
+- HS10: Trình bày và bàn giao ý tưởng.
+
+Sản phẩm: Bản thiết kế và danh sách yêu cầu chức năng.
+
+### NHÓM 2 – VIẾT PROMPT VÀ TẠO ỨNG DỤNG BẰNG GEMINI
+
+HS11–HS20.
+
+Nhiệm vụ:
+
+- Chuyển yêu cầu thành prompt.
+- Sử dụng Gemini trong Google AI Studio.
+- Tạo giao diện.
+- Tạo mô hình 3D.
+- Tạo phần toán học.
+- Thử chạy ứng dụng.
+- Ghi nhận và sửa lỗi prompt.
+
+Phân công:
+
+- HS11: Tổng hợp prompt.
+- HS12: Viết yêu cầu giao diện.
+- HS13: Viết yêu cầu mô hình 3D.
+- HS14: Viết yêu cầu tính tích phân.
+- HS15: Xây dựng bồn hình trụ và nón cụt.
+- HS16: Xây dựng bồn thành cong.
+- HS17: Mô phỏng bơm – xả.
+- HS18: Đồ thị và bài tập.
+- HS19: Kiểm thử prompt, ghi lỗi.
+- HS20: Trình diễn và bàn giao bản demo.
+
+Sản phẩm: Prompt v1, prompt đã chỉnh và ứng dụng demo.
+
+### NHÓM 3 – TÌM HIỂU VÀ SO SÁNH CÔNG CỤ AI
+
+HS21–HS30.
+
+Ba công cụ cần khảo sát:
+
+- Google AI Studio dùng Gemini.
+- Base44.
+- Google Antigravity.
+
+Mỗi công cụ được thử với cùng một nhiệm vụ: tạo bồn trụ 3D, cho chỉnh R, H và tính V = πR²H.
+
+Tiêu chí so sánh:
+
+1. Dễ sử dụng.
+2. Tạo giao diện.
+3. Khả năng xây dựng 3D.
+4. Tính đúng công thức.
+5. Khả năng chỉnh sửa.
+6. Xuất mã và triển khai.
+7. Điều kiện sử dụng.
+8. Phù hợp với học sinh THPT.
+
+Phân công:
+
+- HS21: Xây dựng tiêu chí.
+- HS22: Thử Google AI Studio.
+- HS23: Thử Base44.
+- HS24: Tìm hiểu Antigravity.
+- HS25: Kiểm tra khả năng 3D.
+- HS26: So sánh khả năng tính toán.
+- HS27: Tìm hiểu giới hạn sử dụng.
+- HS28: Tìm hiểu lưu trữ, xuất bản.
+- HS29: Tổng hợp ưu và nhược điểm.
+- HS30: Báo cáo đề xuất.
+
+Tạo bảng so sánh tương tác có thể nhập điểm từ 0–2 cho mỗi tiêu chí trong bộ tiêu chí đánh giá 10 điểm đã thống nhất, kèm ghi chú và minh chứng.
+
+Không tự tạo điểm đánh giá hoặc khẳng định một công cụ đã được kiểm thử khi chưa có dữ liệu.
+
+Sản phẩm: Bảng đánh giá và phương án lựa chọn công cụ.
+
+### NHÓM 4 – TỔNG HỢP, KIỂM THỬ VÀ HOÀN THIỆN
+
+HS31–HS40.
+
+Nhiệm vụ:
+
+- Tiếp nhận kết quả ba nhóm.
+- Tổng hợp mã nguồn và nội dung.
+- Kiểm tra mô hình 3D.
+- Đối chiếu công thức.
+- Kiểm tra hoạt động bơm – xả.
+- Kiểm tra giao diện trên điện thoại.
+- Hoàn thiện sản phẩm.
+- Tổ chức trình diễn.
+
+Phân công:
+
+- HS31: Điều phối công việc cuối.
+- HS32: Tổng hợp hồ sơ.
+- HS33: Hoàn thiện giao diện.
+- HS34: Kiểm tra hình trụ và nón cụt.
+- HS35: Kiểm tra bồn cong.
+- HS36: Kiểm tra bơm – xả.
+- HS37: Kiểm tra xoay và zoom.
+- HS38: Kiểm thử điện thoại.
+- HS39: Ghi lỗi và kiểm thử lại.
+- HS40: Trình bày sản phẩm.
+
+Sản phẩm cuối cùng: Một website SMART WATER TANK 3D hoàn chỉnh.
+
+### Bảng tiến độ nhóm
+
+Tạo bảng theo dõi gồm:
+
+- Mã học sinh.
+- Nhóm.
+- Nhiệm vụ.
+- Trạng thái.
+- Minh chứng.
+- Ghi chú.
+- Người kiểm tra.
+
+Trạng thái:
+
+- Chưa thực hiện.
+- Đang thực hiện.
+- Chờ kiểm tra.
+- Hoàn thành.
+- Cần chỉnh sửa.
+
+Có thể chọn một mã học sinh để xem nhiệm vụ.
+
+Cho phép cập nhật trạng thái, lưu tiến độ cục bộ và xuất/nhập dữ liệu JSON để tổng hợp giữa các thiết bị.
+
+Nếu chưa cấu hình cơ sở dữ liệu chung, phải thông báo rõ đây là dữ liệu lưu trên thiết bị, không giả lập việc đồng bộ giữa 40 học sinh.
+
+---
+
+## XI. HƯỚNG DẪN QUY TRÌNH STEM
+
+Hiển thị sơ đồ quy trình:
+
+**Khảo sát vấn đề → Phác thảo ý tưởng → Viết prompt Gemini → So sánh công cụ → Tạo ứng dụng → Kiểm thử → Trình diễn.**
+
+Thiết kế từng bước thành thẻ có thể mở rộng để xem:
+
+- Mục tiêu.
+- Người phụ trách.
+- Công việc.
+- Sản phẩm bàn giao.
+- Tiêu chí hoàn thành.
+
+Tạo một thanh tiến độ chung của dự án dựa trên các nhiệm vụ đã được đánh dấu và kiểm tra.
+
+Có khu vực nhật ký phiên bản:
+
+- Ý tưởng v1.
+- Prompt v1.
+- Demo v1.
+- Demo v2.
+- Bản kiểm thử.
+- Bản hoàn chỉnh.
+
+Không đánh dấu hoàn thành tự động nếu chưa có thao tác xác nhận.
+
+---
+
+## XII. DASHBOARD DÀNH CHO GIÁO VIÊN
+
+Tạo khu vực theo dõi phục vụ giáo viên Lê Văn Mạnh.
+
+Các thông tin:
+
+- Sĩ số mặc định: 40.
+- Số nhóm: 4.
+- Số nhiệm vụ.
+- Nhiệm vụ đã hoàn thành.
+- Nhiệm vụ cần sửa.
+- Kết quả luyện tập.
+- Kết quả kiểm thử ứng dụng.
+
+Thiết kế bảng đánh giá dự án theo thang 10 điểm:
+
+| Tiêu chí | Điểm tối đa |
+|---|---:|
+| Kiến thức tích phân, số liệu, đơn vị | 3,0 |
+| Mô hình 3D và điều khiển | 2,0 |
+| Chất lượng prompt Gemini | 1,5 |
+| So sánh công cụ có minh chứng | 1,0 |
+| Hợp tác 4 nhóm | 1,5 |
+| Báo cáo và trình diễn | 1,0 |
+| **Tổng** | **10,0** |
+
+Có ô nhận xét của giáo viên và chức năng xuất kết quả CSV hoặc in báo cáo.
+
+Trong phiên bản demo, khu vực này có thể hoạt động không cần tài khoản. Nếu bổ sung đăng nhập hoặc cơ sở dữ liệu trực tuyến, phải có xác thực và phân quyền thực sự; không dùng mật khẩu quản trị cố định trong mã nguồn.
+
+---
+
+## XIII. KIỂM THỬ TOÁN HỌC VÀ CHỨC NĂNG
+
+Hãy tạo một trang kiểm thử nội bộ với nút **Chạy kiểm thử**.
+
+Cần có các trường hợp sau:
+
+**Test 01 – Bồn hình trụ**
+
+R = 1 m, H = 2 m.
+
+Kết quả:
+
+V = 2π ≈ 6,283185 m³.
+
+Khi h = 1 m:
+
+Vwater = π ≈ 3,141593 m³.
+
+**Test 02 – Bồn hình nón cụt**
+
+r₀ = 1 m, r₁ = 2 m, H = 3 m.
+
+Kết quả:
+
+V = 7π ≈ 21,991149 m³.
+
+**Test 03 – Bồn thành cong**
+
+r(z) = 1 + 0,5sin(πz/2), H = 2 m.
+
+Kết quả:
+
+V = 2,25π + 4 ≈ 11,068583 m³.
+
+**Test 04 – Ví dụ bán cầu**
+
+r(z) = √(4 − z²), 0 ≤ z ≤ 2.
+
+Kết quả:
+
+V = 16π/3 ≈ 16,755161 m³.
+
+**Test 05 – Bơm nước**
+
+Bồn trụ R = 1, H = 2.
+
+Ban đầu rỗng.
+
+Qv = 0,5 m³/phút, Qr = 0.
+
+Sau 6 phút:
+
+- Vwater = 3 m³.
+- h = 3/π ≈ 0,95493 m.
+
+**Test 06 – Đầy bồn**
+
+Tiếp tục bơm sau khi đầy.
+
+Kết quả: không vượt Vmax.
+
+**Test 07 – Bồn rỗng**
+
+Tiếp tục xả khi không có nước.
+
+Kết quả: thể tích vẫn bằng 0.
+
+**Test 08 – Dữ liệu sai**
+
+Nhập H = −1 hoặc R = 0 đối với hình trụ.
+
+Kết quả: xuất hiện cảnh báo, không tính thể tích không hợp lệ.
+
+**Test 09 – Đồng bộ mô hình**
+
+Thay đổi R hoặc H.
+
+Kết quả: 3D, công thức, đồ thị và thể tích cùng cập nhật.
+
+**Test 10 – Giao diện**
+
+Thử trên màn hình laptop và điện thoại.
+
+Kết quả: không tràn nội dung, nút dễ thao tác.
+
+**Test 11 – Diện tích hình trụ**
+
+R = 1 m, H = 2 m.
+
+- Diện tích thành: 4π m².
+- Cộng đáy và nắp: 6π m².
+
+**Test 12 – Kiểm thử tiến độ nhóm**
+
+Chọn HS11, đánh dấu một nhiệm vụ đang thực hiện, tải lại trang.
+
+Kết quả: thông tin vẫn được lưu nếu chế độ lưu cục bộ đang bật.
+
+Đối với các test số học, đặt sai số chấp nhận phù hợp, ví dụ sai số tuyệt đối dưới 0,001 m³ đối với các ví dụ chuẩn.
+
+Mỗi test phải hiện trạng thái Đạt/Không đạt, giá trị kỳ vọng, giá trị thực tế và thông tin lỗi.
+
+---
+
+## XIV. CHỨC NĂNG HỖ TRỢ HỌC TẬP
+
+### 1. Hướng dẫn thao tác
+
+Khi sử dụng lần đầu, có hướng dẫn ngắn:
+
+1. Chọn loại bồn.
+2. Chỉnh thông số.
+3. Xem mô hình 3D.
+4. Kiểm tra công thức.
+5. Thử bơm hoặc xả.
+6. Quan sát đồ thị.
+7. Làm bài tập.
+
+Có thể bỏ qua hướng dẫn.
+
+### 2. Từ điển thuật ngữ Việt – Anh
+
+Tạo từ điển các thuật ngữ cơ bản:
+
+- Water Tank – Bồn chứa nước.
+- Volume – Thể tích.
+- Integral – Tích phân.
+- Radius – Bán kính.
+- Height – Chiều cao.
+- Water Level – Mực nước.
+- Flow Rate – Lưu lượng.
+- Cylinder – Hình trụ.
+- Frustum – Hình nón cụt.
+- Surface Area – Diện tích bề mặt.
+- Optimization – Tối ưu hóa.
+- Three-dimensional Model – Mô hình ba chiều.
+
+Có công tắc Việt – Anh cho các thành phần giao diện chính.
+
+Tích hợp nút đọc thuật ngữ bằng Web Speech API khi trình duyệt hỗ trợ; nếu thiết bị không có giọng đọc thì thông báo rõ, không gây lỗi hệ thống.
+
+### 3. Trợ lý giải thích Toán học
+
+Tạo khung **TRỢ LÝ TOÁN HỌC**.
+
+Có thể đặt câu hỏi:
+
+- Vì sao phải dùng tích phân?
+- Vì sao bán kính thay đổi làm thể tích thay đổi?
+- Vì sao mực nước bồn cong không tăng đều?
+- Công thức nón cụt được thiết lập như thế nào?
+- Khi nào bồn dùng ít vật liệu hơn?
+
+Ưu tiên xây dựng bộ câu trả lời toán học có sẵn, chính xác, hoạt động ngay cả khi không gọi API.
+
+Nếu môi trường có hỗ trợ Gemini API ở phía máy chủ, có thể bổ sung trợ lý AI mở rộng. Không nhúng khóa API vào mã phía trình duyệt hoặc giả vờ đang gọi AI khi chưa cấu hình.
+
+---
+
+## XV. YÊU CẦU VỀ HÌNH ẢNH VÀ CHẤT LƯỢNG 3D
+
+Mô hình 3D phải có chất lượng tốt khi trình chiếu trước Ban Giám khảo:
+
+- Hình học tròn xoay mịn, không bị méo.
+- Thành bồn bán trong suốt.
+- Mặt nước phản chiếu ánh sáng nhẹ.
+- Mực nước luôn nằm ngang.
+- Khung đỡ và đường ống rõ ràng.
+- Ánh sáng tạo chiều sâu.
+- Hiệu ứng nước có thể tắt để tăng hiệu năng.
+- Camera xoay mượt.
+- Mô hình không biến mất khi thay đổi tham số.
+
+Sử dụng hình học sinh theo hàm r(z), chẳng hạn bằng LatheGeometry hoặc cách dựng lưới tương đương.
+
+Dựng riêng vỏ bồn và phần thể tích nước.
+
+Phần nước phải có hình dạng tương ứng chính xác với lòng bồn từ z = 0 đến z = h, có mặt nước ở trên. Không dùng hình trụ đơn giản cố định đặt bên trong mọi dạng bồn nếu điều đó làm nước xuyên qua thành.
+
+Nếu hỗ trợ xuất .GLB, cung cấp chức năng xuất hình học bồn đang chọn bằng GLTFExporter và kiểm tra tệp xuất ra có thể mở lại. Đây là chức năng nâng cao, không được làm hỏng các chức năng cốt lõi.
+
+---
+
+## XVI. YÊU CẦU HIỆU NĂNG VÀ TRIỂN KHAI
+
+1. Không dùng ảnh tĩnh thay mô hình tương tác.
+2. Không hiển thị giá trị Toán học giả.
+3. Không tạo nút bấm không có chức năng.
+4. Kiểm tra và xử lý lỗi TypeScript.
+5. Không để lỗi ở console khi tải ứng dụng và thực hiện các thao tác chính.
+6. Dùng cơ chế cập nhật trạng thái phù hợp để tránh mất dữ liệu khi chuyển màn hình.
+7. Giảm độ chi tiết 3D trên điện thoại khi cần.
+8. Hủy các animation frame, bộ nghe sự kiện và tài nguyên đồ họa không còn sử dụng.
+9. Kiểm tra dữ liệu người dùng trước khi tính.
+10. Không yêu cầu khóa API để chạy phần toán học và mô hình 3D cơ bản.
+11. Cung cấp bản chạy được bằng lệnh build của dự án.
+12. Viết hướng dẫn README ngắn gọn bằng tiếng Việt.
+
+Khi thiếu thư viện hoặc cấu hình, hãy chọn giải pháp tương thích với môi trường hiện tại thay vì chỉ tạo mã chưa thể chạy.
+
+---
+
+## XVII. TRÌNH TỰ THỰC HIỆN CỦA GEMINI
+
+Hãy thực hiện theo thứ tự:
+
+**Giai đoạn 1 – Xây dựng ứng dụng nền**
+
+Tạo cấu trúc React, giao diện, thanh điều hướng 6 khu vực và trạng thái dữ liệu chung.
+
+**Giai đoạn 2 – Hoàn thiện Toán học**
+
+Xây dựng hàm bán kính, công thức thể tích, tích phân số và bộ test Toán học. Kiểm tra kết quả trước khi nối với giao diện.
+
+**Giai đoạn 3 – Tạo mô hình 3D**
+
+Dựng bồn theo hàm r(z), tạo nước và điều khiển camera. Đồng bộ thông số với động cơ Toán học.
+
+**Giai đoạn 4 – Bơm – xả và đồ thị**
+
+Tạo mô phỏng theo thời gian, hàm đổi thể tích ra chiều cao và các biểu đồ.
+
+**Giai đoạn 5 – Hoàn thiện STEM**
+
+Thêm phòng tối ưu, bài tập, phân công 4 nhóm và dashboard giáo viên.
+
+**Giai đoạn 6 – Kiểm thử và hoàn thiện**
+
+Chạy bộ test, sửa lỗi, tối ưu giao diện và kiểm tra trên các kích thước màn hình.
+
+Trong mọi giai đoạn, ưu tiên tính đúng và chức năng thực sự hoạt động. Nếu cần đơn giản hóa hiệu ứng hình ảnh để bảo đảm tính toán và thao tác, hãy ưu tiên chức năng cốt lõi.
+
+---
+
+## XVIII. KẾT QUẢ CUỐI CÙNG PHẢI BÀN GIAO
+
+Sau khi hoàn thành, tôi cần nhận được:
+
+1. Một ứng dụng web SMART WATER TANK 3D chạy được.
+2. Giao diện tiếng Việt đẹp, phù hợp trình chiếu.
+3. Bốn loại bồn nước có mô hình 3D tương tác thực.
+4. Công thức tích phân và tính thể tích chính xác.
+5. Mô phỏng bơm – xả nước có thay đổi mực nước.
+6. Hệ thống đồ thị tự cập nhật.
+7. Phòng so sánh và tối ưu thiết kế.
+8. Phòng luyện tập 10 câu hỏi và trò chơi.
+9. Khu vực phân công 40 học sinh thành 4 nhóm.
+10. Bảng so sánh ba công cụ AI có thể nhập đánh giá.
+11. Dashboard theo dõi và đánh giá thang 10 điểm.
+12. Bộ kiểm thử và hướng dẫn sử dụng.
+
+**QUY TẮC CUỐI CÙNG:**
+
+Không dừng ở kế hoạch hoặc mô tả. Hãy tạo các tệp mã nguồn, kết nối các thành phần, chạy bản xem trước và sửa những lỗi phát hiện được trong môi trường làm việc hiện tại.
+
+Mục tiêu không chỉ là tạo một bồn nước đẹp, mà phải giúp học sinh quan sát trực tiếp:
+
+**Hàm số → Đồ thị → Tích phân → Hình khối 3D → Thể tích → Mực nước → Thiết kế tối ưu.**
+
+Ứng dụng phải thể hiện rõ đây là sản phẩm học tập STEM do 40 học sinh phối hợp thực hiện dưới sự hướng dẫn của giáo viên, sử dụng Gemini để hỗ trợ sáng tạo, nhưng luôn kiểm chứng bằng kiến thức Toán học.

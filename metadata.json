@@ -1,0 +1,6 @@
+{
+  "name": "SMART WATER TANK 3D",
+  "description": "Thiết kế và mô phỏng bồn chứa nước 3D tương tác – Vận dụng tích phân trong Toán 12 (Dự án STEM Trường THPT Nguyễn Huệ).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
