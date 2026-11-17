@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import katex from 'katex';
 import {
   DEFAULT_TANK_PARAMETERS,
   calculateSideArea,
@@ -8,12 +9,22 @@ import {
   calculateWaterRiseRate,
   calculateWaterVolume,
   findHeightFromVolume,
+  generateStepByStepSolution,
   radiusAtHeight,
   runInternalTestSuite,
   scanCandidateTankDesigns,
   simulatePumpStep,
   validateTankParameters,
 } from './MathEngine';
+import { stripMathDelimiters, tokenizeMathText } from './mathTextParser';
+import {
+  AI_TOOL_CRITERIA,
+  BUILTIN_MATH_QA,
+  QUIZ_BANK,
+  STEM_GLOSSARY,
+  STEM_GROUPS_META,
+  STEM_WORKFLOW_STAGES,
+} from '../data/stemData';
 import { TankParameters } from '../types';
 
 const TOL = 1e-4;
@@ -173,4 +184,132 @@ test('Test 11 & dh/dt singularity handling & candidate scan', () => {
   for (const t of all12) {
     assert.equal(t.passed, true, `${t.id} failed: ${t.errorInfo ?? t.actual}`);
   }
+});
+
+test('Test 13: All LaTeX math tokens across Quiz, QA, Glossary, and MathEngine render cleanly in KaTeX without broken Unicode pseudo-math', () => {
+  const sampleTokens = tokenizeMathText(
+    'Công thức $\\displaystyle V = \\pi \\int_{0}^{H} [r(z)]^2\\,dz$ và $$A(z) = \\pi [r(z)]^2$$ chuẩn.',
+  );
+  assert.equal(sampleTokens.length, 5);
+  assert.equal(sampleTokens[1].type, 'inline-math');
+  assert.equal(sampleTokens[3].type, 'display-math');
+  assert.ok(!stripMathDelimiters('Bán kính ($r_0$)').includes('$'));
+
+  const allRichTexts: { source: string; text: string }[] = [];
+
+  for (const q of QUIZ_BANK) {
+    allRichTexts.push({ source: `${q.id}.question`, text: q.question });
+    q.options.forEach((opt, idx) =>
+      allRichTexts.push({ source: `${q.id}.option[${idx}]`, text: opt }),
+    );
+    allRichTexts.push({ source: `${q.id}.explanation`, text: q.explanation });
+  }
+
+  for (const qa of BUILTIN_MATH_QA) {
+    allRichTexts.push({ source: `${qa.id}.question`, text: qa.question });
+    allRichTexts.push({ source: `${qa.id}.shortSummary`, text: qa.shortSummary });
+    allRichTexts.push({ source: `${qa.id}.detailedAnswer`, text: qa.detailedAnswer });
+  }
+
+  for (const g of STEM_GLOSSARY) {
+    allRichTexts.push({ source: `glossary.${g.en}`, text: g.definitionVi });
+  }
+
+  for (const grp of STEM_GROUPS_META) {
+    grp.objectives.forEach((obj, idx) =>
+      allRichTexts.push({ source: `group${grp.id}.obj[${idx}]`, text: obj }),
+    );
+  }
+
+  for (const crit of AI_TOOL_CRITERIA) {
+    allRichTexts.push({ source: `crit.${crit.id}`, text: crit.description });
+  }
+
+  for (const stg of STEM_WORKFLOW_STAGES) {
+    stg.tasks.forEach((t, idx) =>
+      allRichTexts.push({ source: `stage${stg.step}.task[${idx}]`, text: t }),
+    );
+    allRichTexts.push({ source: `stage${stg.step}.criteria`, text: stg.criteria });
+  }
+
+  const tankVariants: TankParameters[] = [
+    { ...DEFAULT_TANK_PARAMETERS, type: 'cylinder' },
+    { ...DEFAULT_TANK_PARAMETERS, type: 'frustum' },
+    { ...DEFAULT_TANK_PARAMETERS, type: 'curved' },
+    { ...DEFAULT_TANK_PARAMETERS, type: 'custom', customMode: 'polynomial' },
+    {
+      ...DEFAULT_TANK_PARAMETERS,
+      type: 'custom',
+      customMode: 'expression',
+      customExpression: 'sqrt(4 - z^2)',
+      H: 2,
+      h: 1.2,
+    },
+  ];
+
+  for (const variant of tankVariants) {
+    const sol = generateStepByStepSolution(variant);
+    allRichTexts.push({ source: `sol.${variant.type}.method`, text: sol.methodLabel });
+    for (const st of sol.steps) {
+      allRichTexts.push({ source: `sol.${variant.type}.s${st.stepNumber}.title`, text: st.title });
+      allRichTexts.push({
+        source: `sol.${variant.type}.s${st.stepNumber}.exp`,
+        text: st.explanation,
+      });
+    }
+  }
+
+  const scan = scanCandidateTankDesigns({
+    vTarget: 10,
+    hMin: 1,
+    hMax: 5,
+    rMax: 3,
+    unitCostVnd: 850000,
+    surfaceMode: 'closed',
+  });
+  for (const c of scan.bestCandidates) {
+    allRichTexts.push({ source: `scan.${c.label}`, text: c.summary });
+  }
+
+  for (const r of runInternalTestSuite()) {
+    allRichTexts.push({ source: `${r.id}.name`, text: r.name });
+    allRichTexts.push({ source: `${r.id}.desc`, text: r.description });
+    allRichTexts.push({ source: `${r.id}.expected`, text: r.expected });
+    allRichTexts.push({ source: `${r.id}.actual`, text: r.actual });
+    if (r.errorInfo) {
+      allRichTexts.push({ source: `${r.id}.errorInfo`, text: r.errorInfo });
+    }
+  }
+
+  const brokenUnicodeRegex = /[∫₀₁₂ᵢᴴʰ]/;
+  let mathTokenCount = 0;
+
+  for (const item of allRichTexts) {
+    assert.equal(
+      brokenUnicodeRegex.test(item.text),
+      false,
+      `Found broken Unicode pseudo-math in ${item.source}: ${item.text}`,
+    );
+
+    const tokens = tokenizeMathText(item.text);
+    for (const tok of tokens) {
+      if (tok.type === 'text') {
+        assert.equal(
+          tok.content.includes('$'),
+          false,
+          `Unmatched $ delimiter in ${item.source}: ${item.text}`,
+        );
+      } else {
+        mathTokenCount++;
+        const html = katex.renderToString(tok.content, {
+          displayMode: tok.type === 'display-math',
+          throwOnError: true,
+          strict: false,
+        });
+        assert.ok(html.includes('katex'), `KaTeX failed on ${item.source}: ${tok.content}`);
+      }
+    }
+  }
+
+  assert.ok(mathTokenCount > 150, `Expected > 150 KaTeX math tokens, got ${mathTokenCount}`);
 });

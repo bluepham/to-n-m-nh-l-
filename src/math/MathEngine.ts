@@ -192,32 +192,32 @@ export function validateTankParameters(parameters: TankParameters): ValidationRe
   if (!Number.isFinite(h) || h < -1e-9 || h > H + 1e-9) {
     return {
       valid: false,
-      error: `Chiều cao mực nước h phải nằm trong đoạn [0, H] = [0, ${H.toFixed(2)} m].`,
+      error: `Chiều cao mực nước $h$ phải nằm trong đoạn $[0, H] = [0, ${H.toFixed(2)}\\text{ m}]$.`,
     };
   }
 
   if (type === 'cylinder') {
     if (!Number.isFinite(parameters.R) || parameters.R <= 0) {
-      return { valid: false, error: 'Bán kính bồn hình trụ R phải lớn hơn 0.' };
+      return { valid: false, error: 'Bán kính bồn hình trụ $R$ phải lớn hơn $0$.' };
     }
     if (parameters.R > 15) {
-      return { valid: false, error: 'Bán kính R vượt giới hạn mô phỏng (tối đa 15 m).' };
+      return { valid: false, error: 'Bán kính $R$ vượt giới hạn mô phỏng (tối đa $15\\text{ m}$).' };
     }
     return { valid: true };
   }
 
   if (type === 'frustum') {
     if (!Number.isFinite(parameters.r0) || !Number.isFinite(parameters.r1)) {
-      return { valid: false, error: 'Bán kính đáy r₀ và miệng r₁ phải là số thực hợp lệ.' };
+      return { valid: false, error: 'Bán kính đáy $r_0$ và miệng $r_1$ phải là số thực hợp lệ.' };
     }
     if (parameters.r0 < 0 || parameters.r1 < 0) {
-      return { valid: false, error: 'Bán kính r₀ và r₁ không được âm.' };
+      return { valid: false, error: 'Bán kính $r_0$ và $r_1$ không được âm.' };
     }
     if (parameters.r0 === 0 && parameters.r1 === 0) {
-      return { valid: false, error: 'Cả hai bán kính đáy và miệng không thể đồng thời bằng 0.' };
+      return { valid: false, error: 'Cả hai bán kính đáy và miệng không thể đồng thời bằng $0$.' };
     }
     if (parameters.r0 > 15 || parameters.r1 > 15) {
-      return { valid: false, error: 'Bán kính vượt giới hạn mô phỏng (tối đa 15 m).' };
+      return { valid: false, error: 'Bán kính vượt giới hạn mô phỏng (tối đa $15\\text{ m}$).' };
     }
     return { valid: true };
   }
@@ -247,7 +247,7 @@ export function validateTankParameters(parameters: TankParameters): ValidationRe
     if (!Number.isFinite(r)) {
       return {
         valid: false,
-        error: `Hàm bán kính r(z) không xác định hoặc vô hạn tại z ≈ ${z.toFixed(3)} m.`,
+        error: `Hàm bán kính $r(z)$ không xác định hoặc vô hạn tại $z \\approx ${z.toFixed(3)}\\text{ m}$.`,
       };
     }
 
@@ -256,20 +256,20 @@ export function validateTankParameters(parameters: TankParameters): ValidationRe
       if (r < 0) {
         return {
           valid: false,
-          error: `Bán kính tại đầu mút z = ${z.toFixed(2)} m bị âm (${r.toFixed(3)} m).`,
+          error: `Bán kính tại đầu mút $z = ${z.toFixed(2)}\\text{ m}$ bị âm ($${r.toFixed(3)}\\text{ m}$).`,
         };
       }
     } else if (r <= 1e-5) {
       return {
         valid: false,
-        error: `Bán kính bên trong lòng bồn tại z ≈ ${z.toFixed(3)} m phải dương (r(z) > 0).`,
+        error: `Bán kính bên trong lòng bồn tại $z \\approx ${z.toFixed(3)}\\text{ m}$ phải dương ($r(z) > 0$).`,
       };
     }
 
     if (r > 20) {
       return {
         valid: false,
-        error: `Bán kính r(z) = ${r.toFixed(2)} m quá lớn trên đoạn [0, H] (giới hạn 20 m).`,
+        error: `Bán kính $r(z) = ${r.toFixed(2)}\\text{ m}$ quá lớn trên đoạn $[0, H]$ (giới hạn $20\\text{ m}$).`,
       };
     }
 
@@ -607,32 +607,32 @@ export function generateStepByStepSolution(parameters: TankParameters): MathSolu
       steps: [
         {
           stepNumber: 1,
-          title: 'Xác định hình dạng và hàm bán kính r(z)',
-          explanation: 'Bồn hình trụ đứng có bán kính tiết diện ngang không đổi theo mọi độ cao z.',
+          title: 'Xác định hình dạng và hàm bán kính $r(z)$',
+          explanation: 'Bồn hình trụ đứng có bán kính tiết diện ngang không đổi theo mọi độ cao $z$.',
           latex: `r(z) = R = ${fmtNum(R)}\\text{ (m)}, \\quad 0 \\le z \\le ${fmtNum(H)}`,
         },
         {
           stepNumber: 2,
-          title: 'Viết công thức diện tích thiết diện ngang A(z)',
-          explanation: 'Mặt phẳng vuông góc với trục Oz tại độ cao z cắt bồn theo hình tròn bán kính r(z).',
+          title: 'Viết công thức diện tích thiết diện ngang $A(z)$',
+          explanation: 'Mặt phẳng vuông góc với trục $Oz$ tại độ cao $z$ cắt bồn theo hình tròn bán kính $r(z)$.',
           latex: `A(z) = \\pi [r(z)]^2 = \\pi \\cdot (${fmtNum(R)})^2 = ${fmtNum(R * R)}\\pi\\text{ (m}^2\\text{)}`,
         },
         {
           stepNumber: 3,
-          title: 'Thiết lập cận tích phân từ 0 đến H (và mực nước h)',
+          title: 'Thiết lập cận tích phân từ $0$ đến $H$ (và mực nước $h$)',
           explanation: 'Áp dụng công thức thể tích vật thể tròn xoay trong Bài 13 – Toán 12.',
           latex: `V_{\\max} = \\int_{0}^{${fmtNum(H)}} A(z)\\,dz = \\pi \\int_{0}^{${fmtNum(H)}} ${fmtNum(R * R)}\\,dz, \\qquad V_{\\text{water}}(${fmtNum(h)}) = \\pi \\int_{0}^{${fmtNum(h)}} ${fmtNum(R * R)}\\,dz`,
         },
         {
           stepNumber: 4,
           title: 'Tính nguyên hàm và thế cận Newton – Leibniz',
-          explanation: 'Nguyên hàm của hằng số theo biến z là hàm bậc nhất.',
+          explanation: 'Nguyên hàm của hằng số theo biến $z$ là hàm bậc nhất.',
           latex: `V_{\\max} = \\pi \\Big[ ${fmtNum(R * R)} z \\Big]_{0}^{${fmtNum(H)}} = ${fmtNum(R * R * H)}\\pi \\approx ${fmtNum(vMax, 4)}\\text{ m}^3`,
         },
         {
           stepNumber: 5,
           title: 'Kết luận thể tích và đổi đơn vị thực tế',
-          explanation: 'Quy đổi sang đơn vị lít (1 m³ = 1.000 lít) cho cả toàn bồn và lượng nước hiện có.',
+          explanation: 'Quy đổi sang đơn vị lít ($1\\text{ m}^3 = 1.000\\text{ lít}$) cho cả toàn bồn và lượng nước hiện có.',
           latex: `V_{\\max} \\approx ${fmtNum(vMax, 3)}\\text{ m}^3 = ${Math.round(vMax * 1000).toLocaleString('vi-VN')}\\text{ lít}; \\quad V_{\\text{water}}(${fmtNum(h)}) \\approx ${fmtNum(vWater, 3)}\\text{ m}^3 = ${Math.round(vWater * 1000).toLocaleString('vi-VN')}\\text{ lít}`,
         },
       ],
@@ -652,32 +652,32 @@ export function generateStepByStepSolution(parameters: TankParameters): MathSolu
       steps: [
         {
           stepNumber: 1,
-          title: 'Xác định đường sinh thẳng và hàm bán kính r(z)',
-          explanation: 'Bán kính thay đổi tuyến tính từ đáy r₀ tại z = 0 đến miệng r₁ tại z = H.',
+          title: 'Xác định đường sinh thẳng và hàm bán kính $r(z)$',
+          explanation: 'Bán kính thay đổi tuyến tính từ đáy $r_0$ tại $z = 0$ đến miệng $r_1$ tại $z = H$.',
           latex: `r(z) = r_0 + \\frac{r_1 - r_0}{H}z = ${fmtNum(r0)} + \\frac{${fmtNum(r1 - r0)}}{${fmtNum(H)}}z, \\quad 0 \\le z \\le ${fmtNum(H)}`,
         },
         {
           stepNumber: 2,
-          title: 'Viết diện tích thiết diện ngang A(z) = π[r(z)]²',
-          explanation: 'Bình phương hàm bậc nhất tạo thành tam thức bậc hai theo z.',
+          title: 'Viết diện tích thiết diện ngang $A(z) = \\pi [r(z)]^2$',
+          explanation: 'Bình phương hàm bậc nhất tạo thành tam thức bậc hai theo $z$.',
           latex: `A(z) = \\pi \\left(${fmtNum(r0)} ${k >= 0 ? '+' : '-'} ${fmtNum(Math.abs(k))}z\\right)^2\\text{ (m}^2\\text{)}`,
         },
         {
           stepNumber: 3,
-          title: 'Thiết lập tích phân xác định trên đoạn [0, H]',
-          explanation: 'Cộng dồn vô hạn các lát cắt tròn từ đáy z = 0 tới đỉnh z = H.',
+          title: 'Thiết lập tích phân xác định trên đoạn $[0, H]$',
+          explanation: 'Cộng dồn vô hạn các lát cắt tròn từ đáy $z = 0$ tới đỉnh $z = H$.',
           latex: `V_{\\max} = \\pi \\int_{0}^{${fmtNum(H)}} \\left(${fmtNum(r0)} ${k >= 0 ? '+' : '-'} ${fmtNum(Math.abs(k))}z\\right)^2 dz`,
         },
         {
           stepNumber: 4,
           title: 'Tính nguyên hàm đại số của khối nón cụt',
-          explanation: 'Đặt u = r(z) hoặc khai triển đa thức, thu được công thức nón cụt tổng quát.',
+          explanation: 'Đặt $u = r(z)$ hoặc khai triển đa thức, thu được công thức nón cụt tổng quát.',
           latex: `V_{\\max} = \\frac{\\pi \\cdot ${fmtNum(H)}}{3}\\left(${fmtNum(r0)}^2 + ${fmtNum(r0)}\\cdot ${fmtNum(r1)} + ${fmtNum(r1)}^2\\right) \\approx ${fmtNum(vMax, 4)}\\text{ m}^3`,
         },
         {
           stepNumber: 5,
-          title: 'Kết luận thể tích toàn bồn và lượng nước ở độ cao h',
-          explanation: `Tại mực nước h = ${fmtNum(h)} m, bán kính mặt thoáng r(h) = ${fmtNum(radiusAtHeight(h, parameters))} m.`,
+          title: 'Kết luận thể tích toàn bồn và lượng nước ở độ cao $h$',
+          explanation: `Tại mực nước $h = ${fmtNum(h)}\\text{ m}$, bán kính mặt thoáng $r(h) = ${fmtNum(radiusAtHeight(h, parameters))}\\text{ m}$.`,
           latex: `V_{\\max} \\approx ${fmtNum(vMax, 3)}\\text{ m}^3 \\; (${Math.round(vMax * 1000).toLocaleString('vi-VN')}\\text{ lít}), \\quad V_{\\text{water}}(${fmtNum(h)}) \\approx ${fmtNum(vWater, 3)}\\text{ m}^3 \\; (${Math.round(vWater * 1000).toLocaleString('vi-VN')}\\text{ lít})`,
         },
       ],
@@ -702,26 +702,26 @@ export function generateStepByStepSolution(parameters: TankParameters): MathSolu
       steps: [
         {
           stepNumber: 1,
-          title: 'Xác định hàm bán kính thành cong hình sin r(z)',
-          explanation: 'Thành bồn uốn cong trơn theo hàm lượng giác, phình/thắt lớn nhất tại giữa bồn z = H/2.',
+          title: 'Xác định hàm bán kính thành cong hình sin $r(z)$',
+          explanation: 'Thành bồn uốn cong trơn theo hàm lượng giác, phình/thắt lớn nhất tại giữa bồn $z = \\dfrac{H}{2}$.',
           latex: `r(z) = ${fmtNum(a)} ${b >= 0 ? '+' : '-'} ${fmtNum(Math.abs(b))}\\sin\\left(\\frac{\\pi z}{${fmtNum(H)}}\\right), \\quad 0 \\le z \\le ${fmtNum(H)}`,
         },
         {
           stepNumber: 2,
-          title: 'Khai triển diện tích thiết diện ngang A(z) = π[r(z)]²',
-          explanation: 'Khai triển hằng đẳng thức và dùng công thức hạ bậc sin²α = (1 − cos 2α)/2.',
+          title: 'Khai triển diện tích thiết diện ngang $A(z) = \\pi [r(z)]^2$',
+          explanation: 'Khai triển hằng đẳng thức và dùng công thức hạ bậc $\\sin^2\\alpha = \\dfrac{1 - \\cos 2\\alpha}{2}$.',
           latex: `A(z) = \\pi \\left[ ${fmtNum(a * a)} ${2 * a * b >= 0 ? '+' : '-'} ${fmtNum(Math.abs(2 * a * b))}\\sin\\left(\\frac{\\pi z}{${fmtNum(H)}}\\right) + ${fmtNum(b * b)}\\cdot\\frac{1 - \\cos\\left(\\frac{2\\pi z}{${fmtNum(H)}}\\right)}{2} \\right]`,
         },
         {
           stepNumber: 3,
-          title: 'Thiết lập tích phân thể tích từ đáy z = 0 đến đỉnh z = H',
-          explanation: 'Lấy tích phân từng số hạng trên đoạn [0, H].',
+          title: 'Thiết lập tích phân thể tích từ đáy $z = 0$ đến đỉnh $z = H$',
+          explanation: 'Lấy tích phân từng số hạng trên đoạn $[0, H]$.',
           latex: `V_{\\max} = \\pi \\int_{0}^{${fmtNum(H)}} \\left[${fmtNum(a)} ${b >= 0 ? '+' : '-'} ${fmtNum(Math.abs(b))}\\sin\\left(\\frac{\\pi z}{${fmtNum(H)}}\\right)\\right]^2 dz`,
         },
         {
           stepNumber: 4,
           title: 'Tính nguyên hàm lượng giác chính xác',
-          explanation: 'Tích phân của cos(2πz/H) trên một chu kỳ bằng 0; tích phân của sin(πz/H) bằng 2H/π.',
+          explanation: 'Tích phân của $\\cos\\left(\\frac{2\\pi z}{H}\\right)$ trên một chu kỳ bằng $0$; tích phân của $\\sin\\left(\\frac{\\pi z}{H}\\right)$ bằng $\\dfrac{2H}{\\pi}$.',
           latex: `V_{\\max} = \\pi\\left(a^2 + \\frac{b^2}{2}\\right)H + 4abH = ${fmtNum(piCoeff, 4)}\\pi ${constTerm >= 0 ? '+' : '-'} ${fmtNum(Math.abs(constTerm), 4)} \\approx ${fmtNum(vMax, 4)}\\text{ m}^3`,
         },
         {
@@ -748,32 +748,32 @@ export function generateStepByStepSolution(parameters: TankParameters): MathSolu
       steps: [
         {
           stepNumber: 1,
-          title: 'Xác định hàm bán kính đa thức bậc hai r(z)',
-          explanation: 'Đường sinh là nhánh parabol r(z) = a + bz + cz² liên tục và dương bên trong đoạn xét.',
+          title: 'Xác định hàm bán kính đa thức bậc hai $r(z)$',
+          explanation: 'Đường sinh là nhánh parabol $r(z) = a + bz + cz^2$ liên tục và dương bên trong đoạn xét.',
           latex: `r(z) = ${rTex}`,
         },
         {
           stepNumber: 2,
-          title: 'Thiết lập diện tích mặt cắt ngang A(z)',
-          explanation: 'Khai triển bình phương tạo thành đa thức bậc bốn theo biến độ cao z.',
+          title: 'Thiết lập diện tích mặt cắt ngang $A(z)$',
+          explanation: 'Khai triển bình phương tạo thành đa thức bậc bốn theo biến độ cao $z$.',
           latex: `A(z) = \\pi [r(z)]^2 = \\pi \\big[a^2 + 2abz + (b^2 + 2ac)z^2 + 2bcz^3 + c^2z^4\\big]`,
         },
         {
           stepNumber: 3,
-          title: 'Thiết lập cận tích phân từ 0 đến H',
-          explanation: 'Tích phân từ đáy z = 0 đến đỉnh bồn z = H.',
+          title: 'Thiết lập cận tích phân từ $0$ đến $H$',
+          explanation: 'Tích phân từ đáy $z = 0$ đến đỉnh bồn $z = H$.',
           latex: `V_{\\max} = \\pi \\int_{0}^{${fmtNum(H)}} \\left(${rTex}\\right)^2 dz`,
         },
         {
           stepNumber: 4,
           title: 'Tính nguyên hàm đa thức từng hạng tử',
-          explanation: 'Áp dụng nguyên hàm lũy thừa ∫ zⁿ dz = zⁿ⁺¹ / (n + 1).',
+          explanation: 'Áp dụng nguyên hàm lũy thừa $\\displaystyle \\int z^n\\,dz = \\frac{z^{n+1}}{n + 1}$.',
           latex: `V_{\\max} = \\pi \\left[ a^2 z + ab z^2 + \\frac{b^2+2ac}{3}z^3 + \\frac{bc}{2}z^4 + \\frac{c^2}{5}z^5 \\right]_{0}^{${fmtNum(H)}} \\approx ${fmtNum(vMax, 4)}\\text{ m}^3`,
         },
         {
           stepNumber: 5,
           title: 'Kết luận thể tích và đổi đơn vị',
-          explanation: 'Quy đổi thể tích sang mét khối và lít.',
+          explanation: 'Quy đổi thể tích sang mét khối ($\\text{m}^3$) và lít.',
           latex: `V_{\\max} \\approx ${fmtNum(vMax, 3)}\\text{ m}^3 = ${Math.round(vMax * 1000).toLocaleString('vi-VN')}\\text{ lít}; \\quad V_{\\text{water}}(${fmtNum(h)}) \\approx ${fmtNum(vWater, 3)}\\text{ m}^3`,
         },
       ],
@@ -788,7 +788,7 @@ export function generateStepByStepSolution(parameters: TankParameters): MathSolu
   if (isHemisphere) {
     return {
       isExactSymbolic: true,
-      methodLabel: 'Ví dụ chuẩn Poster STEM: Khối bán cầu R = 2 m (Nguyên hàm chính xác)',
+      methodLabel: 'Ví dụ chuẩn Poster STEM: Khối bán cầu $R = 2\\text{ m}$ (Nguyên hàm chính xác)',
       radiusLatex: `r(z) = \\sqrt{4 - z^2}, \\quad 0 \\le z \\le 2`,
       areaLatex: `A(z) = \\pi \\left(\\sqrt{4 - z^2}\\right)^2 = \\pi(4 - z^2)\\text{ (m}^2\\text{)}`,
       totalIntegralLatex: `V_{\\max} = \\pi \\int_{0}^{2} (4 - z^2)\\,dz = \\pi\\left[4z - \\frac{z^3}{3}\\right]_{0}^{2} = \\frac{16\\pi}{3} \\approx ${fmtNum(vMax, 4)}\\text{ m}^3`,
@@ -796,32 +796,32 @@ export function generateStepByStepSolution(parameters: TankParameters): MathSolu
       steps: [
         {
           stepNumber: 1,
-          title: 'Xác định hàm bán kính khối bán cầu r(z)',
-          explanation: 'Cung tròn x² + z² = 4 với 0 ≤ z ≤ 2 quay quanh trục Oz tạo thành khối bán cầu bán kính 2 m.',
+          title: 'Xác định hàm bán kính khối bán cầu $r(z)$',
+          explanation: 'Cung tròn $x^2 + z^2 = 4$ với $0 \\le z \\le 2$ quay quanh trục $Oz$ tạo thành khối bán cầu bán kính $2\\text{ m}$.',
           latex: `r(z) = \\sqrt{4 - z^2}, \\quad 0 \\le z \\le 2`,
         },
         {
           stepNumber: 2,
-          title: 'Viết diện tích thiết diện ngang A(z) = π[r(z)]²',
-          explanation: 'Khi bình phương căn bậc hai trên miền 0 ≤ z ≤ 2, biểu thức trở thành đa thức bậc hai đơn giản.',
+          title: 'Viết diện tích thiết diện ngang $A(z) = \\pi [r(z)]^2$',
+          explanation: 'Khi bình phương căn bậc hai trên miền $0 \\le z \\le 2$, biểu thức trở thành đa thức bậc hai đơn giản.',
           latex: `A(z) = \\pi \\left(\\sqrt{4 - z^2}\\right)^2 = \\pi(4 - z^2)\\text{ (m}^2\\text{)}`,
         },
         {
           stepNumber: 3,
-          title: 'Thiết lập cận tích phân từ z = 0 đến z = 2',
-          explanation: 'Đáy bán cầu ở z = 0 (r = 2 m) và đỉnh vòm ở z = 2 (r = 0 m).',
+          title: 'Thiết lập cận tích phân từ $z = 0$ đến $z = 2$',
+          explanation: 'Đáy bán cầu ở $z = 0$ ($r = 2\\text{ m}$) và đỉnh vòm ở $z = 2$ ($r = 0\\text{ m}$).',
           latex: `V_{\\max} = \\pi \\int_{0}^{2} (4 - z^2)\\,dz`,
         },
         {
           stepNumber: 4,
           title: 'Tính tích phân xác định',
-          explanation: 'Tìm nguyên hàm 4z − z³/3 và thay cận 0 → 2.',
+          explanation: 'Tìm nguyên hàm $4z - \\dfrac{z^3}{3}$ và thay cận từ $0$ đến $2$.',
           latex: `V_{\\max} = \\pi \\left(4\\cdot 2 - \\frac{2^3}{3}\\right) = \\pi\\left(8 - \\frac{8}{3}\\right) = \\frac{16\\pi}{3} \\approx 16{,}7552\\text{ m}^3`,
         },
         {
           stepNumber: 5,
           title: 'Kết luận thể tích và quy đổi đơn vị',
-          explanation: 'Trùng khớp với công thức thể tích nửa mặt cầu (1/2)·(4/3)πR³ = (2/3)π·2³ = 16π/3.',
+          explanation: 'Trùng khớp với công thức thể tích nửa mặt cầu $\\dfrac{1}{2} \\cdot \\dfrac{4}{3}\\pi R^3 = \\dfrac{2}{3}\\pi \\cdot 2^3 = \\dfrac{16\\pi}{3}$.',
           latex: `V_{\\max} = \\frac{16\\pi}{3} \\approx 16{,}755\\text{ m}^3 = 16.755\\text{ lít}; \\quad V_{\\text{water}}(${fmtNum(h)}) \\approx ${fmtNum(vWater, 3)}\\text{ m}^3`,
         },
       ],
@@ -843,27 +843,27 @@ export function generateStepByStepSolution(parameters: TankParameters): MathSolu
     steps: [
       {
         stepNumber: 1,
-        title: 'Xác định hàm bán kính tùy chỉnh r(z)',
-        explanation: 'Hệ thống phân tích cú pháp an toàn bằng math.js và kiểm tra tính liên tục, không âm trên đoạn [0, H].',
+        title: 'Xác định hàm bán kính tùy chỉnh $r(z)$',
+        explanation: 'Hệ thống phân tích cú pháp an toàn bằng math.js và kiểm tra tính liên tục, không âm trên đoạn $[0, H]$.',
         latex: `r(z) = ${exprSafeTex}, \\quad z \\in [0, ${fmtNum(H)}]`,
       },
       {
         stepNumber: 2,
-        title: 'Thiết lập diện tích mặt cắt ngang A(z)',
-        explanation: 'Mỗi lát cắt ngang tại độ cao z có diện tích hình tròn bán kính r(z).',
+        title: 'Thiết lập diện tích mặt cắt ngang $A(z)$',
+        explanation: 'Mỗi lát cắt ngang tại độ cao $z$ có diện tích hình tròn bán kính $r(z)$.',
         latex: `A(z) = \\pi \\big[r(z)\\big]^2`,
       },
       {
         stepNumber: 3,
         title: 'Thiết lập cận tích phân xác định',
-        explanation: 'Tính tổng thể tích từ đáy z = 0 đến đỉnh z = H và đến mực nước hiện tại z = h.',
+        explanation: 'Tính tổng thể tích từ đáy $z = 0$ đến đỉnh $z = H$ và đến mực nước hiện tại $z = h$.',
         latex: `V_{\\max} = \\pi \\int_{0}^{${fmtNum(H)}} [r(z)]^2\\,dz, \\qquad V_{\\text{water}}(${fmtNum(h)}) = \\pi \\int_{0}^{${fmtNum(h)}} [r(z)]^2\\,dz`,
       },
       {
         stepNumber: 4,
         title: 'Xấp xỉ bằng phương pháp tích phân số Simpson hợp thành',
         explanation:
-          'Vì biểu thức tổng quát có thể không có nguyên hàm sơ cấp đơn giản, động cơ Toán học chia đoạn thành N = 400 khoảng đều và kiểm chứng sai số hội tụ.',
+          'Vì biểu thức tổng quát có thể không có nguyên hàm sơ cấp đơn giản, động cơ Toán học chia đoạn thành $N = 400$ khoảng đều và kiểm chứng sai số hội tụ.',
         latex: `V_{\\max} \\approx \\frac{\\pi \\Delta z}{3}\\Big[r(z_0)^2 + 4r(z_1)^2 + 2r(z_2)^2 + \\dots + r(z_N)^2\\Big] \\approx ${fmtNum(vMax, 4)}\\text{ m}^3`,
       },
       {
@@ -917,12 +917,12 @@ export function scanCandidateTankDesigns(constraints: OptimizationConstraints): 
           volume: vol,
           surfaceArea: area,
           estimatedCost: area * unitCostVnd,
-          summary: `R = ${reqR.toFixed(2)} m, H = ${H.toFixed(2)} m`,
+          summary: `$R = ${reqR.toFixed(2)}\\text{ m},\\; H = ${H.toFixed(2)}\\text{ m}$`,
         });
       }
     }
 
-    // 2. Frustum candidates with ratio r1/r0 in {0.75, 0.9, 1.15, 1.3}
+    // 2. Frustum candidates with ratio r1/r0 in {0.8, 1.2}
     for (const ratio of [0.8, 1.2]) {
       scannedCount++;
       // V = pi * H / 3 * r0^2 * (1 + ratio + ratio^2) = vTarget
@@ -948,7 +948,7 @@ export function scanCandidateTankDesigns(constraints: OptimizationConstraints): 
             volume: vol,
             surfaceArea: area,
             estimatedCost: area * unitCostVnd,
-            summary: `r₀ = ${r0.toFixed(2)} m, r₁ = ${r1.toFixed(2)} m, H = ${H.toFixed(2)} m`,
+            summary: `$r_0 = ${r0.toFixed(2)}\\text{ m},\\; r_1 = ${r1.toFixed(2)}\\text{ m},\\; H = ${H.toFixed(2)}\\text{ m}$`,
           });
         }
       }
@@ -956,7 +956,6 @@ export function scanCandidateTankDesigns(constraints: OptimizationConstraints): 
 
     // 3. Curved barrel tank candidates: r(z) = a * (1 + 0.25 * sin(pi*z/H))
     scannedCount++;
-    // For b = 0.25*a: V = a^2 * H * [pi*(1 + 0.25^2/2) + 4*0.25] = a^2 * H * (pi * 1.03125 + 1)
     const unitCurvedVol = H * (Math.PI * (1 + 0.25 * 0.25 * 0.5) + 1.0);
     const a = Math.sqrt(vTarget / unitCurvedVol);
     const b = 0.25 * a;
@@ -979,7 +978,7 @@ export function scanCandidateTankDesigns(constraints: OptimizationConstraints): 
           volume: vol,
           surfaceArea: area,
           estimatedCost: area * unitCostVnd,
-          summary: `a = ${a.toFixed(2)} m, b = ${b.toFixed(2)} m, H = ${H.toFixed(2)} m`,
+          summary: `$a = ${a.toFixed(2)}\\text{ m},\\; b = ${b.toFixed(2)}\\text{ m},\\; H = ${H.toFixed(2)}\\text{ m}$`,
         });
       }
     }
@@ -1023,12 +1022,12 @@ export function runInternalTestSuite(options?: {
     const ok = Math.abs(vTotal - expTotal) < tol && Math.abs(vWater - expWater) < tol;
     results.push({
       id: 'Test 01',
-      name: 'Bồn hình trụ (R = 1 m, H = 2 m, h = 1 m)',
-      description: 'Kiểm tra V = 2π ≈ 6,283185 m³ và Vwater(1) = π ≈ 3,141593 m³.',
+      name: 'Bồn hình trụ ($R = 1\\text{ m},\\; H = 2\\text{ m},\\; h = 1\\text{ m}$)',
+      description: 'Kiểm tra $V = 2\\pi \\approx 6{,}283185\\text{ m}^3$ và $V_{\\text{water}}(1) = \\pi \\approx 3{,}141593\\text{ m}^3$.',
       passed: ok,
-      expected: `V = ${expTotal.toFixed(6)} m³; Vwater = ${expWater.toFixed(6)} m³`,
-      actual: `V = ${vTotal.toFixed(6)} m³; Vwater = ${vWater.toFixed(6)} m³`,
-      errorInfo: ok ? undefined : `Sai số vượt ngưỡng ${tol} m³`,
+      expected: `$V = ${expTotal.toFixed(6)}\\text{ m}^3;\\; V_{\\text{water}} = ${expWater.toFixed(6)}\\text{ m}^3$`,
+      actual: `$V = ${vTotal.toFixed(6)}\\text{ m}^3;\\; V_{\\text{water}} = ${vWater.toFixed(6)}\\text{ m}^3$`,
+      errorInfo: ok ? undefined : `Sai số vượt ngưỡng $${tol}\\text{ m}^3$`,
     });
   }
 
@@ -1047,12 +1046,12 @@ export function runInternalTestSuite(options?: {
     const ok = Math.abs(vTotal - expTotal) < tol;
     results.push({
       id: 'Test 02',
-      name: 'Bồn hình nón cụt (r₀ = 1 m, r₁ = 2 m, H = 3 m)',
-      description: 'Kiểm tra công thức V = 7π ≈ 21,991149 m³.',
+      name: 'Bồn hình nón cụt ($r_0 = 1\\text{ m},\\; r_1 = 2\\text{ m},\\; H = 3\\text{ m}$)',
+      description: 'Kiểm tra công thức $V = 7\\pi \\approx 21{,}991149\\text{ m}^3$.',
       passed: ok,
-      expected: `V = ${expTotal.toFixed(6)} m³`,
-      actual: `V = ${vTotal.toFixed(6)} m³`,
-      errorInfo: ok ? undefined : `Sai số |V - 7π| = ${Math.abs(vTotal - expTotal).toExponential(3)}`,
+      expected: `$V = ${expTotal.toFixed(6)}\\text{ m}^3$`,
+      actual: `$V = ${vTotal.toFixed(6)}\\text{ m}^3$`,
+      errorInfo: ok ? undefined : `Sai số $|V - 7\\pi| = ${Math.abs(vTotal - expTotal).toExponential(3)}$`,
     });
   }
 
@@ -1071,12 +1070,12 @@ export function runInternalTestSuite(options?: {
     const ok = Math.abs(vTotal - expTotal) < tol;
     results.push({
       id: 'Test 03',
-      name: 'Bồn thành cong r(z) = 1 + 0,5sin(πz/2), H = 2 m',
-      description: 'Kiểm tra tích phân V = 2,25π + 4 ≈ 11,068583 m³.',
+      name: 'Bồn thành cong $r(z) = 1 + 0{,}5\\sin\\left(\\frac{\\pi z}{2}\\right),\\; H = 2\\text{ m}$',
+      description: 'Kiểm tra tích phân $V = 2{,}25\\pi + 4 \\approx 11{,}068583\\text{ m}^3$.',
       passed: ok,
-      expected: `V = ${expTotal.toFixed(6)} m³`,
-      actual: `V = ${vTotal.toFixed(6)} m³`,
-      errorInfo: ok ? undefined : `Sai số = ${Math.abs(vTotal - expTotal).toExponential(3)}`,
+      expected: `$V = ${expTotal.toFixed(6)}\\text{ m}^3$`,
+      actual: `$V = ${vTotal.toFixed(6)}\\text{ m}^3$`,
+      errorInfo: ok ? undefined : `Sai số $= ${Math.abs(vTotal - expTotal).toExponential(3)}$`,
     });
   }
 
@@ -1095,12 +1094,12 @@ export function runInternalTestSuite(options?: {
     const ok = Math.abs(vTotal - expTotal) < tol;
     results.push({
       id: 'Test 04',
-      name: 'Ví dụ bán cầu r(z) = √(4 − z²), 0 ≤ z ≤ 2',
-      description: 'Kiểm tra V = 16π/3 ≈ 16,755161 m³.',
+      name: 'Ví dụ bán cầu $r(z) = \\sqrt{4 - z^2},\\; 0 \\le z \\le 2$',
+      description: 'Kiểm tra $V = \\dfrac{16\\pi}{3} \\approx 16{,}755161\\text{ m}^3$.',
       passed: ok,
-      expected: `V = ${expTotal.toFixed(6)} m³`,
-      actual: `V = ${vTotal.toFixed(6)} m³`,
-      errorInfo: ok ? undefined : `Sai số = ${Math.abs(vTotal - expTotal).toExponential(3)}`,
+      expected: `$V = ${expTotal.toFixed(6)}\\text{ m}^3$`,
+      actual: `$V = ${vTotal.toFixed(6)}\\text{ m}^3$`,
+      errorInfo: ok ? undefined : `Sai số $= ${Math.abs(vTotal - expTotal).toExponential(3)}$`,
     });
   }
 
@@ -1113,11 +1112,11 @@ export function runInternalTestSuite(options?: {
     const ok = Math.abs(sim.volume - expV) < tol && Math.abs(sim.height - expH) < tol;
     results.push({
       id: 'Test 05',
-      name: 'Mô phỏng bơm nước sau 6 phút (Qv = 0,5 m³/phút)',
-      description: 'Bồn trụ R = 1, H = 2 rỗng → Vwater = 3 m³, h = 3/π ≈ 0,954930 m.',
+      name: 'Mô phỏng bơm nước sau $6\\text{ phút}$ ($Q_v = 0{,}5\\text{ m}^3/\\text{phút}$)',
+      description: 'Bồn trụ $R = 1,\\; H = 2$ rỗng $\\to V_{\\text{water}} = 3\\text{ m}^3,\\; h = \\dfrac{3}{\\pi} \\approx 0{,}954930\\text{ m}$.',
       passed: ok,
-      expected: `Vwater = ${expV.toFixed(4)} m³; h = ${expH.toFixed(6)} m`,
-      actual: `Vwater = ${sim.volume.toFixed(4)} m³; h = ${sim.height.toFixed(6)} m`,
+      expected: `$V_{\\text{water}} = ${expV.toFixed(4)}\\text{ m}^3;\\; h = ${expH.toFixed(6)}\\text{ m}$`,
+      actual: `$V_{\\text{water}} = ${sim.volume.toFixed(4)}\\text{ m}^3;\\; h = ${sim.height.toFixed(6)}\\text{ m}$`,
       errorInfo: ok ? undefined : 'Kết quả lưu lượng hoặc quy đổi chiều cao lệch chuẩn.',
     });
   }
@@ -1131,11 +1130,11 @@ export function runInternalTestSuite(options?: {
     results.push({
       id: 'Test 06',
       name: 'Giới hạn đầy bồn (Chống tràn)',
-      description: 'Tiếp tục bơm sau khi đầy không vượt quá Vmax và h ≤ H.',
+      description: 'Tiếp tục bơm sau khi đầy không vượt quá $V_{\\max}$ và $h \\le H$.',
       passed: ok,
-      expected: `Vwater ≤ Vmax (${vMax.toFixed(4)} m³), trạng thái Đầy = true`,
-      actual: `Vwater = ${sim.volume.toFixed(4)} m³, h = ${sim.height.toFixed(4)} m, Đầy = ${sim.isFull}`,
-      errorInfo: ok ? undefined : 'Thể tích vượt quá Vmax khi bơm tràn.',
+      expected: `$V_{\\text{water}} \\le V_{\\max}\\; (${vMax.toFixed(4)}\\text{ m}^3)$, Đầy = true`,
+      actual: `$V_{\\text{water}} = ${sim.volume.toFixed(4)}\\text{ m}^3,\\; h = ${sim.height.toFixed(4)}\\text{ m}$, Đầy = ${sim.isFull}`,
+      errorInfo: ok ? undefined : 'Thể tích vượt quá $V_{\\max}$ khi bơm tràn.',
     });
   }
 
@@ -1147,10 +1146,10 @@ export function runInternalTestSuite(options?: {
     results.push({
       id: 'Test 07',
       name: 'Giới hạn bồn rỗng (Chống thể tích âm)',
-      description: 'Tiếp tục xả khi bồn cạn giữ nguyên Vwater = 0 m³ và h = 0 m.',
+      description: 'Tiếp tục xả khi bồn cạn giữ nguyên $V_{\\text{water}} = 0\\text{ m}^3$ và $h = 0\\text{ m}$.',
       passed: ok,
-      expected: 'Vwater = 0.0000 m³, h = 0.0000 m, Cạn = true',
-      actual: `Vwater = ${sim.volume.toFixed(4)} m³, h = ${sim.height.toFixed(4)} m, Cạn = ${sim.isEmpty}`,
+      expected: '$V_{\\text{water}} = 0.0000\\text{ m}^3,\\; h = 0.0000\\text{ m}$, Cạn = true',
+      actual: `$V_{\\text{water}} = ${sim.volume.toFixed(4)}\\text{ m}^3,\\; h = ${sim.height.toFixed(4)}\\text{ m}$, Cạn = ${sim.isEmpty}`,
       errorInfo: ok ? undefined : 'Thể tích bị âm khi xả cạn.',
     });
   }
@@ -1166,11 +1165,11 @@ export function runInternalTestSuite(options?: {
     const ok = !c1.valid && !c2.valid && Number.isNaN(v1) && Number.isNaN(v2);
     results.push({
       id: 'Test 08',
-      name: 'Kiểm soát dữ liệu sai (H = −1 hoặc R = 0)',
+      name: 'Kiểm soát dữ liệu sai ($H = -1$ hoặc $R = 0$)',
       description: 'Xuất hiện cảnh báo rõ ràng và từ chối tính thể tích không hợp lệ.',
       passed: ok,
       expected: 'Hợp lệ = false, có thông báo cảnh báo, không trả về thể tích sai',
-      actual: `H=-1: valid=${c1.valid} ("${c1.error ?? ''}"); R=0: valid=${c2.valid} ("${c2.error ?? ''}")`,
+      actual: `$H = -1$: valid=${c1.valid}; $R = 0$: valid=${c2.valid}`,
       errorInfo: ok ? undefined : 'Bộ kiểm tra đầu vào bỏ sót thông số không hợp lệ.',
     });
   }
@@ -1191,10 +1190,10 @@ export function runInternalTestSuite(options?: {
     results.push({
       id: 'Test 09',
       name: 'Đồng bộ tham số mô hình – công thức – đồ thị – thể tích',
-      description: 'Thay đổi R = 1→2, H = 2→3 cập nhật đồng bộ r(z), lời giải KaTeX và V = 12π.',
+      description: 'Thay đổi $R: 1 \\to 2,\\; H: 2 \\to 3$ cập nhật đồng bộ $r(z)$, lời giải KaTeX và $V = 12\\pi$.',
       passed: ok,
-      expected: 'r(1,5) = 2 m, V = 12π ≈ 37,6991 m³, công thức chứa 12π',
-      actual: `r(1,5) = ${rProfile2} m, V = ${v2.toFixed(4)} m³, công thức đồng bộ = ${sol2.totalIntegralLatex.includes('12\\pi')}`,
+      expected: '$r(1{,}5) = 2\\text{ m},\\; V = 12\\pi \\approx 37{,}6991\\text{ m}^3$, công thức chứa $12\\pi$',
+      actual: `$r(1{,}5) = ${rProfile2}\\text{ m},\\; V = ${v2.toFixed(4)}\\text{ m}^3$, đồng bộ = ${sol2.totalIntegralLatex.includes('12\\pi')}`,
       errorInfo: ok ? undefined : 'Thiếu đồng bộ khi cập nhật thông số hình học.',
     });
   }
@@ -1202,7 +1201,7 @@ export function runInternalTestSuite(options?: {
   // Test 10 - Responsive viewport & layout readiness
   {
     const hasWindow = typeof window !== 'undefined';
-    const widthInfo = hasWindow ? `${window.innerWidth}×${window.innerHeight}px` : 'Môi trường Node CLI';
+    const widthInfo = hasWindow ? `$${window.innerWidth} \\times ${window.innerHeight}\\text{ px}$` : 'Môi trường Node CLI';
     const noOverflow = hasWindow
       ? document.documentElement.scrollWidth <= window.innerWidth + 4
       : true;
@@ -1212,7 +1211,7 @@ export function runInternalTestSuite(options?: {
       name: 'Tương thích giao diện Laptop & Điện thoại',
       description: 'Kiểm tra bố cục đáp ứng (responsive grid) và không tràn thanh cuộn ngang.',
       passed: ok,
-      expected: 'Không tràn chiều ngang, các nút điều khiển ≥ 40px dễ thao tác',
+      expected: 'Không tràn chiều ngang, các nút điều khiển $\\ge 40\\text{ px}$ dễ thao tác',
       actual: `Khung nhìn hiện tại: ${widthInfo}, Không tràn ngang = ${ok}`,
       errorInfo: ok ? undefined : 'Phát hiện phần tử tràn chiều ngang màn hình.',
     });
@@ -1228,11 +1227,11 @@ export function runInternalTestSuite(options?: {
     const ok = Math.abs(sSide - expSide) < tol && Math.abs(sTotal - expTotal) < tol;
     results.push({
       id: 'Test 11',
-      name: 'Diện tích bề mặt hình trụ (R = 1 m, H = 2 m)',
-      description: 'Kiểm tra diện tích xung quanh 4π m² và tổng cả đáy + nắp 6π m².',
+      name: 'Diện tích bề mặt hình trụ ($R = 1\\text{ m},\\; H = 2\\text{ m}$)',
+      description: 'Kiểm tra diện tích xung quanh $4\\pi\\text{ m}^2$ và tổng cả đáy + nắp $6\\pi\\text{ m}^2$.',
       passed: ok,
-      expected: `Sside = ${expSide.toFixed(6)} m²; Stotal = ${expTotal.toFixed(6)} m²`,
-      actual: `Sside = ${sSide.toFixed(6)} m²; Stotal = ${sTotal.toFixed(6)} m²`,
+      expected: `$S_{\\text{side}} = ${expSide.toFixed(6)}\\text{ m}^2;\\; S_{\\text{total}} = ${expTotal.toFixed(6)}\\text{ m}^2$`,
+      actual: `$S_{\\text{side}} = ${sSide.toFixed(6)}\\text{ m}^2;\\; S_{\\text{total}} = ${sTotal.toFixed(6)}\\text{ m}^2$`,
       errorInfo: ok ? undefined : 'Sai số công thức tích phân diện tích mặt tròn xoay.',
     });
   }

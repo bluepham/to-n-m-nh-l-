@@ -25,7 +25,7 @@ import { TankScene3D } from './TankScene3D';
 import { GroupWorkspace } from './GroupWorkspace';
 import { TeacherDashboard } from './TeacherDashboard';
 import { TestPanel } from './TestPanel';
-import { MathFormula } from './MathFormula';
+import { MathFormula, MathText } from './MathFormula';
 
 interface DashboardProps {
   language: LanguageMode;
@@ -126,9 +126,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
               {/* Core Integral Formula Highlight */}
               <div className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-                <MathFormula latex="V_{\text{water}}(h) = \pi \int_{0}^{h} [r(z)]^2\,dz" />
+                <MathFormula displayMode latex="V_{\text{water}}(h) = \pi \int_{0}^{h} [r(z)]^2\,dz" />
                 <div className="text-xs font-mono text-slate-700 tabular-nums">
-                  Hiện tại: <strong>{vWater.toFixed(2)}</strong> / {vMax.toFixed(2)} m³
+                  Hiện tại: <strong>{vWater.toFixed(2)}</strong> / {vMax.toFixed(2)}{' '}
+                  <MathFormula latex="\text{m}^3" />
                 </div>
               </div>
             </div>
@@ -183,7 +184,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
               tab: 'design3d' as AppTab,
               icon: Box,
               step: '01. Hình khối 3D',
-              desc: '4 loại bồn & mặt cắt r(z)',
+              desc: '4 loại bồn & mặt cắt $r(z)$',
             },
             {
               tab: 'math' as AppTab,
@@ -195,13 +196,13 @@ export const Dashboard: React.FC<DashboardProps> = ({
               tab: 'pump' as AppTab,
               icon: Droplets,
               step: '03. Bơm – Xả',
-              desc: 'Mực nước phi tuyến theo t',
+              desc: 'Mực nước phi tuyến theo $t$',
             },
             {
               tab: 'charts' as AppTab,
               icon: LineChart,
               step: '04. Đồ thị số',
-              desc: '4 đồ thị r(z), V(h), V(t), dh/dt',
+              desc: '4 đồ thị $r(z), V(h), V(t), \\frac{dh}{dt}$',
             },
             {
               tab: 'optimize_practice' as AppTab,
@@ -228,9 +229,9 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   <span>{item.step}</span>
                   <Icon className="w-3.5 h-3.5 text-cyan-700 group-hover:translate-x-0.5 transition-transform" />
                 </div>
-                <p className="text-[11px] text-slate-500 mt-1 flex items-center justify-between">
-                  <span>{item.desc}</span>
-                  <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-700" />
+                <p className="text-[11px] text-slate-500 mt-1 flex items-center justify-between gap-1 leading-relaxed">
+                  <MathText text={item.desc} />
+                  <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-cyan-700 shrink-0" />
                 </p>
               </button>
             );

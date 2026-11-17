@@ -19,7 +19,7 @@ import {
   radiusAtHeight,
 } from '../math/MathEngine';
 import { BUILTIN_MATH_QA } from '../data/stemData';
-import { MathFormula } from './MathFormula';
+import { MathFormula, MathText } from './MathFormula';
 import { TankControls } from './TankControls';
 
 interface IntegralLabProps {
@@ -28,12 +28,12 @@ interface IntegralLabProps {
 }
 
 const VISUAL_STAGE_TITLES = [
-  '1. Đường cong bán kính r(z) trên mặt phẳng (Oz, r)',
-  '2. Tô sáng một dải vi phân chiều dày Δz tại độ cao zᵢ',
-  '3. Quay dải phẳng quanh trục Oz tạo chuyển động tròn xoay',
-  '4. Hình thành thiết diện tròn A(zᵢ) = π[r(zᵢ)]²',
-  '5. Tích lũy N lát cắt đĩa trụ thành khối bồn 3D xấp xỉ',
-  '6. Qua giới hạn N → ∞ thu được công thức tích phân chính xác',
+  '1. Đường cong bán kính $r(z)$ trên mặt phẳng $(Oz, r)$',
+  '2. Tô sáng một dải vi phân chiều dày $\\Delta z$ tại độ cao $z_i$',
+  '3. Quay dải phẳng quanh trục $Oz$ tạo chuyển động tròn xoay',
+  '4. Hình thành thiết diện tròn $A(z_i) = \\pi [r(z_i)]^2$',
+  '5. Tích lũy $N$ lát cắt đĩa trụ thành khối bồn 3D xấp xỉ',
+  '6. Qua giới hạn $N \\to \\infty$ thu được công thức tích phân chính xác',
 ];
 
 export const IntegralLab: React.FC<IntegralLabProps> = ({
@@ -193,23 +193,25 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-2">
                 <span className="text-xs font-semibold text-slate-700 block">
-                  1. Thể tích toàn bồn (Dung tích tối đa Vmax)
+                  <MathText text="1. Thể tích toàn bồn (Dung tích tối đa $V_{\max}$)" />
                 </span>
                 <MathFormula
                   displayMode
                   latex="V_{\max} = \pi \int_{0}^{H} [r(z)]^2\,dz"
                 />
                 <div className="pt-1 border-t border-slate-200/80 flex items-baseline justify-between text-xs">
-                  <span className="text-slate-600">Giá trị tính được (z: 0 → {parameters.H} m):</span>
+                  <span className="text-slate-600">
+                    <MathText text={`Giá trị tính được ($z: 0 \\to ${parameters.H}\\text{ m}$):`} />
+                  </span>
                   <span className="font-bold font-mono text-slate-900 text-sm tabular-nums">
-                    {vMax.toFixed(4)} m³
+                    {vMax.toFixed(4)} <MathFormula latex="\text{m}^3" />
                   </span>
                 </div>
               </div>
 
               <div className="rounded-xl border border-cyan-200 bg-cyan-50/50 p-4 space-y-2">
                 <span className="text-xs font-semibold text-cyan-950 block">
-                  2. Thể tích lượng nước hiện có Vwater(h)
+                  <MathText text="2. Thể tích lượng nước hiện có $V_{\text{water}}(h)$" />
                 </span>
                 <MathFormula
                   displayMode
@@ -217,10 +219,10 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                 />
                 <div className="pt-1 border-t border-cyan-200/80 flex items-baseline justify-between text-xs">
                   <span className="text-cyan-900">
-                    Tại mực nước h = {parameters.h.toFixed(2)} m:
+                    <MathText text={`Tại mực nước $h = ${parameters.h.toFixed(2)}\\text{ m}$:`} />
                   </span>
                   <span className="font-bold font-mono text-cyan-950 text-sm tabular-nums">
-                    {vWater.toFixed(4)} m³
+                    {vWater.toFixed(4)} <MathFormula latex="\text{m}^3" />
                   </span>
                 </div>
               </div>
@@ -228,10 +230,15 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
 
             <div className="rounded-lg bg-slate-100/80 px-3.5 py-2.5 text-xs text-slate-700 flex flex-wrap items-center justify-between gap-2">
               <span>
-                Phương pháp tính hiện hành: <strong className="text-slate-900">{solution.methodLabel}</strong>
+                Phương pháp tính hiện hành:{' '}
+                <strong className="text-slate-900">
+                  <MathText text={solution.methodLabel} />
+                </strong>
               </span>
-              <span className="font-mono text-slate-600">
-                Đáy bồn z = 0 m · Đỉnh bồn z = H = {parameters.H.toFixed(2)} m
+              <span className="text-slate-600">
+                <MathText
+                  text={`Đáy bồn $z = 0\\text{ m}$ · Đỉnh bồn $z = H = ${parameters.H.toFixed(2)}\\text{ m}$`}
+                />
               </span>
             </div>
 
@@ -244,14 +251,16 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                     className="rounded-xl border border-slate-200 bg-white p-4 space-y-2"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-slate-900 text-xs font-bold text-white font-mono">
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-slate-900 text-xs font-bold text-white font-mono shrink-0">
                         {st.stepNumber}
                       </span>
                       <h3 className="text-sm font-bold text-slate-900">
-                        Bước {st.stepNumber}: {st.title}
+                        Bước {st.stepNumber}: <MathText text={st.title} />
                       </h3>
                     </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">{st.explanation}</p>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      <MathText text={st.explanation} />
+                    </p>
                     <div className="rounded-lg bg-slate-50 px-3 py-2 overflow-x-auto border border-slate-100">
                       <MathFormula displayMode latex={st.latex} />
                     </div>
@@ -269,7 +278,7 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                   Trực quan hóa bản chất tích phân: Từ đồ thị đến bồn nước 3D
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Điều khiển từng bước để quan sát lát cắt r(z) quay quanh trục Oz tạo thành vật thể 3D
+                  <MathText text="Điều khiển từng bước để quan sát lát cắt $r(z)$ quay quanh trục $Oz$ tạo thành vật thể 3D" />
                 </p>
               </div>
               <button
@@ -287,7 +296,7 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                 {/* Stepper Bar */}
                 <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-slate-50 p-3 border border-slate-200">
                   <div className="text-xs font-semibold text-slate-900">
-                    {VISUAL_STAGE_TITLES[visualStep]}
+                    <MathText text={VISUAL_STAGE_TITLES[visualStep]} />
                   </div>
                   <div className="flex items-center gap-2">
                     <button
@@ -319,10 +328,10 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                   <div className="rounded-lg border border-slate-200 p-3 space-y-1">
                     <div className="flex justify-between text-xs">
                       <label htmlFor="slice-pos-slider" className="font-medium text-slate-700">
-                        Vị trí lát cắt đang xét zᵢ:
+                        <MathText text="Vị trí lát cắt đang xét $z_i$:" />
                       </label>
-                      <span className="font-mono font-semibold text-cyan-800 tabular-nums">
-                        {zFocus.toFixed(2)} m (r = {rFocus.toFixed(2)} m)
+                      <span className="font-semibold text-cyan-800 tabular-nums">
+                        <MathText text={`$${zFocus.toFixed(2)}\\text{ m}$ ($r = ${rFocus.toFixed(2)}\\text{ m}$)`} />
                       </span>
                     </div>
                     <input
@@ -340,10 +349,12 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                   <div className="rounded-lg border border-slate-200 p-3 space-y-1">
                     <div className="flex justify-between text-xs">
                       <label htmlFor="slice-count-slider" className="font-medium text-slate-700">
-                        Số lát cắt đĩa trụ N (Tổng Riemann):
+                        <MathText text="Số lát cắt đĩa trụ $N$ (Tổng Riemann):" />
                       </label>
-                      <span className="font-mono font-semibold text-slate-900 tabular-nums">
-                        N = {sliceCount} lát (Δz = {riemannData.dz.toFixed(3)} m)
+                      <span className="font-semibold text-slate-900 tabular-nums">
+                        <MathText
+                          text={`$N = ${sliceCount}$ lát ($\\Delta z = ${riemannData.dz.toFixed(3)}\\text{ m}$)`}
+                        />
                       </span>
                     </div>
                     <input
@@ -364,7 +375,7 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                   {/* Panel A: 2D Generating Curve */}
                   <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                     <div className="text-xs font-semibold text-slate-700 mb-2">
-                      Mặt phẳng tọa độ (Oz, r) & Đường sinh r(z)
+                      <MathText text="Mặt phẳng tọa độ $(Oz, r)$ & Đường sinh $r(z)$" />
                     </div>
                     <svg
                       viewBox="0 0 320 260"
@@ -451,13 +462,17 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                                   fill="#dc2626"
                                 />
                                 <text
-                                  x={Math.min(220, 62 + focusW)}
+                                  x={Math.min(212, 62 + focusW)}
                                   y={Math.max(32, focusY - 6)}
                                   fontSize="10"
                                   fontWeight="600"
                                   fill="#92400e"
                                 >
-                                  r(zᵢ) = {rFocus.toFixed(2)}m
+                                  r(z
+                                  <tspan dy="2.5" fontSize="8">
+                                    i
+                                  </tspan>
+                                  <tspan dy="-2.5">) = {rFocus.toFixed(2)} m</tspan>
                                 </text>
                               </g>
                             )}
@@ -470,7 +485,7 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                   {/* Panel B: 3D Isometric Disc Revolution & Accumulation */}
                   <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
                     <div className="text-xs font-semibold text-slate-700 mb-2">
-                      Khối tròn xoay quanh trục Oz & Lát cắt hình tròn
+                      <MathText text="Khối tròn xoay quanh trục $Oz$ & Lát cắt hình tròn" />
                     </div>
                     <svg
                       viewBox="0 0 320 260"
@@ -578,7 +593,11 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                                   strokeWidth="2.5"
                                 />
                                 <text x="20" y="246" fontSize="10" fill="#fde68a">
-                                  Quay 360° bán kính r(zᵢ) quanh trục Oz
+                                  Quay 360° bán kính r(z
+                                  <tspan dy="2.5" fontSize="8">
+                                    i
+                                  </tspan>
+                                  <tspan dy="-2.5">) quanh trục Oz</tspan>
                                 </text>
                               </g>
                             );
@@ -605,7 +624,22 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                                 strokeWidth="1.8"
                               />
                               <text x="18" y="246" fontSize="10" fill="#bae6fd">
-                                A(zᵢ) = π·r(zᵢ)² = {aFocus.toFixed(3)} m²
+                                A(z
+                                <tspan dy="2.5" fontSize="8">
+                                  i
+                                </tspan>
+                                <tspan dy="-2.5">) = π·[r(z</tspan>
+                                <tspan dy="2.5" fontSize="8">
+                                  i
+                                </tspan>
+                                <tspan dy="-2.5">)]</tspan>
+                                <tspan dy="-3.5" fontSize="8">
+                                  2
+                                </tspan>
+                                <tspan dy="3.5"> = {aFocus.toFixed(3)} m</tspan>
+                                <tspan dy="-3.5" fontSize="8">
+                                  2
+                                </tspan>
                               </text>
                             </g>
                           );
@@ -616,21 +650,34 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
 
                 {/* Quantitative Convergence Box (Riemann Sum vs Exact Integral) */}
                 <div className="rounded-xl bg-slate-900 text-slate-100 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <span className="text-xs text-cyan-300 font-medium block">
-                      Đối chiếu tổng xấp xỉ {sliceCount} lát cắt trụ và tích phân xác định:
+                      <MathText
+                        text={`Đối chiếu tổng xấp xỉ $${sliceCount}$ lát cắt trụ và tích phân xác định:`}
+                      />
                     </span>
-                    <div className="text-sm font-mono tabular-nums">
-                      Tổng {sliceCount} đĩa trụ Σ π·r(zᵢ)²Δz ={' '}
-                      <strong className="text-amber-300">{riemannData.sumVol.toFixed(4)} m³</strong>{' '}
-                      · Tích phân chuẩn V ={' '}
-                      <strong className="text-cyan-300">{vMax.toFixed(4)} m³</strong> (Sai lệch:{' '}
-                      {Math.abs(riemannData.sumVol - vMax).toFixed(4)} m³)
+                    <div className="text-xs sm:text-sm leading-relaxed">
+                      <MathText
+                        text={`Tổng $${sliceCount}$ đĩa trụ $\\displaystyle \\sum_{i=1}^{${sliceCount}} \\pi [r(z_i)]^2 \\Delta z =$ `}
+                      />
+                      <strong className="font-mono text-amber-300">
+                        {riemannData.sumVol.toFixed(4)}
+                      </strong>{' '}
+                      <MathFormula latex="\text{m}^3" /> · Tích phân chuẩn{' '}
+                      <MathFormula latex="V =" />{' '}
+                      <strong className="font-mono text-cyan-300">
+                        {vMax.toFixed(4)}
+                      </strong>{' '}
+                      <MathFormula latex="\text{m}^3" /> (Sai lệch:{' '}
+                      <span className="font-mono">
+                        {Math.abs(riemannData.sumVol - vMax).toFixed(4)}
+                      </span>{' '}
+                      <MathFormula latex="\text{m}^3" />)
                     </div>
                   </div>
                   {visualStep === 5 && (
                     <div className="bg-slate-800 rounded-lg px-3 py-1.5 shrink-0">
-                      <MathFormula latex="V = \pi \int_{0}^{H} [r(z)]^2\,dz" />
+                      <MathFormula displayMode latex="V = \pi \int_{0}^{H} [r(z)]^2\,dz" />
                     </div>
                   )}
                 </div>
@@ -665,17 +712,19 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                 >
-                  {item.question}
+                  <MathText text={item.question} />
                 </button>
               ))}
             </div>
 
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-2.5">
-              <div className="flex items-center gap-2 text-xs font-semibold text-cyan-900">
+              <div className="flex items-center gap-2 text-xs font-semibold text-cyan-900 leading-relaxed">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>{selectedQa.shortSummary}</span>
+                <MathText text={selectedQa.shortSummary} />
               </div>
-              <p className="text-xs text-slate-700 leading-relaxed">{selectedQa.detailedAnswer}</p>
+              <p className="text-xs text-slate-700 leading-relaxed">
+                <MathText text={selectedQa.detailedAnswer} />
+              </p>
               <div className="rounded-lg bg-white border border-slate-200 px-3 py-2 overflow-x-auto">
                 <MathFormula displayMode latex={selectedQa.latex} />
               </div>
@@ -728,7 +777,7 @@ export const IntegralLab: React.FC<IntegralLabProps> = ({
                   <span className="font-semibold text-cyan-950 block mb-1">
                     Phản hồi từ Gemini (hãy đối chiếu lại bằng công thức tích phân):
                   </span>
-                  {aiAnswer}
+                  <MathText text={aiAnswer} />
                 </div>
               )}
             </div>

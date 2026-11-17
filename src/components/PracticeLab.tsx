@@ -15,7 +15,7 @@ import {
   calculateTotalVolume,
 } from '../math/MathEngine';
 import { TankParameters } from '../types';
-import { MathFormula } from './MathFormula';
+import { MathFormula, MathText } from './MathFormula';
 import { TankScene3D } from './TankScene3D';
 
 interface PracticeLabProps {
@@ -34,40 +34,40 @@ interface FormulaMatchItem {
 const MATCH_ITEMS: FormulaMatchItem[] = [
   {
     shapeId: 'cyl',
-    shapeName: 'Bồn hình trụ đứng (bán kính R, cao H)',
+    shapeName: 'Bồn hình trụ đứng (bán kính $R$, cao $H$)',
     formulaId: 'f_cyl',
     latex: 'V = \\pi R^2 H',
-    explanation: 'Tiết diện tròn không đổi r(z) = R trên toàn đoạn [0, H].',
+    explanation: 'Tiết diện tròn không đổi $r(z) = R$ trên toàn đoạn $[0, H]$.',
   },
   {
     shapeId: 'frustum',
-    shapeName: 'Bồn hình nón cụt (đáy r₀, miệng r₁, cao H)',
+    shapeName: 'Bồn hình nón cụt (đáy $r_0$, miệng $r_1$, cao $H$)',
     formulaId: 'f_frustum',
     latex: 'V = \\frac{\\pi H}{3}(r_0^2 + r_0 r_1 + r_1^2)',
-    explanation: 'Nguyên hàm của hàm bán kính tuyến tính r(z) = r₀ + (r₁ − r₀)z/H.',
+    explanation: 'Nguyên hàm của hàm bán kính tuyến tính $r(z) = r_0 + \\frac{r_1 - r_0}{H}z$.',
   },
   {
     shapeId: 'curved',
-    shapeName: 'Bồn có thành cong r(z) = a + b·sin(πz/H)',
+    shapeName: 'Bồn có thành cong $r(z) = a + b\\sin\\left(\\frac{\\pi z}{H}\\right)$',
     formulaId: 'f_curved',
     latex: 'V = \\pi \\int_{0}^{H} \\left[a + b\\sin\\left(\\frac{\\pi z}{H}\\right)\\right]^2 dz',
-    explanation: 'Bán kính biến thiên theo hàm lượng giác nên tích phân bình phương hàm sin.',
+    explanation: 'Bán kính biến thiên theo hàm lượng giác nên tích phân bình phương hàm $\\sin$.',
   },
   {
     shapeId: 'general',
-    shapeName: 'Vật thể tròn xoay tổng quát quanh trục Oz',
+    shapeName: 'Vật thể tròn xoay tổng quát quanh trục $Oz$',
     formulaId: 'f_general',
     latex: 'V = \\pi \\int_{0}^{H} [r(z)]^2\\,dz',
-    explanation: 'Công thức tổng quát Bài 13 – Toán 12 cho mọi hàm r(z) liên tục, không âm.',
+    explanation: 'Công thức tổng quát Bài 13 – Toán 12 cho mọi hàm $r(z)$ liên tục, không âm.',
   },
 ];
 
 const CHALLENGES = [
   {
     id: 'ch1',
-    title: 'Thử thách 1: Bồn chứa sinh hoạt ≥ 6 m³',
+    title: 'Thử thách 1: Bồn chứa sinh hoạt $\\ge 6\\text{ m}^3$',
     prompt:
-      'Thiết kế một bồn nước hình trụ có dung tích tối thiểu 6,00 m³ (nhưng không quá 8,00 m³ để tránh lãng phí diện tích sân) bằng cách điều chỉnh bán kính R và chiều cao H.',
+      'Thiết kế một bồn nước hình trụ có dung tích tối thiểu $6{,}00\\text{ m}^3$ (nhưng không quá $8{,}00\\text{ m}^3$ để tránh lãng phí diện tích sân) bằng cách điều chỉnh bán kính $R$ và chiều cao $H$.',
     type: 'cylinder' as const,
     minV: 6.0,
     maxV: 8.0,
@@ -75,9 +75,9 @@ const CHALLENGES = [
   },
   {
     id: 'ch2',
-    title: 'Thử thách 2: Bồn nón cụt đạt chuẩn 12 ± 0,5 m³',
+    title: 'Thử thách 2: Bồn nón cụt đạt chuẩn $12 \\pm 0{,}5\\text{ m}^3$',
     prompt:
-      'Điều chỉnh bán kính đáy r₀, miệng r₁ và chiều cao H của bồn nón cụt để dung tích nằm trong khoảng từ 11,50 m³ đến 12,50 m³ với chiều cao H ≤ 3,2 m.',
+      'Điều chỉnh bán kính đáy $r_0$, miệng $r_1$ và chiều cao $H$ của bồn nón cụt để dung tích nằm trong khoảng từ $11{,}50\\text{ m}^3$ đến $12{,}50\\text{ m}^3$ với chiều cao $H \\le 3{,}2\\text{ m}$.',
     type: 'frustum' as const,
     minV: 11.5,
     maxV: 12.5,
@@ -268,25 +268,25 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
                         onClick={() =>
                           setSelectedShapeId(isSelected ? null : item.shapeId)
                         }
-                        className="text-left text-xs font-bold text-slate-900 hover:text-cyan-800"
+                        className="text-left text-xs font-bold text-slate-900 hover:text-cyan-800 leading-relaxed"
                       >
-                        {item.shapeName}
+                        <MathText text={item.shapeName} />
                       </button>
                       {matchingChecked &&
                         (isCorrect ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 shrink-0">
                             <CheckCircle2 className="w-4 h-4" /> Đúng
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-700">
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-700 shrink-0">
                             <XCircle className="w-4 h-4" /> Chưa đúng
                           </span>
                         ))}
                     </div>
 
-                    <div className="mt-2 rounded-lg border border-dashed border-slate-300 bg-white px-3 py-2 min-h-[44px] flex items-center justify-between">
+                    <div className="mt-2 rounded-lg border border-dashed border-slate-300 bg-white px-3 py-2.5 min-h-[48px] flex items-center justify-between overflow-x-auto">
                       {assignedFormula ? (
-                        <MathFormula latex={assignedFormula.latex} />
+                        <MathFormula displayMode latex={assignedFormula.latex} />
                       ) : (
                         <span className="text-xs text-slate-400">
                           {isSelected
@@ -297,8 +297,8 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
                     </div>
 
                     {matchingChecked && (
-                      <p className="mt-2 text-xs text-slate-600">
-                        Giải thích: {item.explanation}
+                      <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+                        Giải thích: <MathText text={item.explanation} />
                       </p>
                     )}
                   </div>
@@ -377,8 +377,12 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
         <div className="rounded-xl border border-slate-200 bg-white p-6 space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900">{activeChallenge.title}</h3>
-              <p className="text-xs text-slate-600 mt-1 max-w-3xl">{activeChallenge.prompt}</p>
+              <h3 className="text-base font-bold text-slate-900">
+                <MathText text={activeChallenge.title} />
+              </h3>
+              <p className="text-xs text-slate-600 mt-1 max-w-3xl leading-relaxed">
+                <MathText text={activeChallenge.prompt} />
+              </p>
             </div>
             <div className="flex gap-1.5">
               {CHALLENGES.map((ch, idx) => (
@@ -424,7 +428,7 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
                   <div>
                     <div className="flex justify-between text-xs mb-1">
                       <label htmlFor="ch-R" className="font-medium text-slate-700">
-                        Bán kính R (m)
+                        <MathText text="Bán kính $R$ ($\text{m}$)" />
                       </label>
                       <span className="font-mono font-bold">{challengeParams.R.toFixed(2)} m</span>
                     </div>
@@ -451,7 +455,7 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
                   <div>
                     <div className="flex justify-between text-xs mb-1">
                       <label htmlFor="ch-r0" className="font-medium text-slate-700">
-                        Bán kính đáy r₀ (m)
+                        <MathText text="Bán kính đáy $r_0$ ($\text{m}$)" />
                       </label>
                       <span className="font-mono font-bold">{challengeParams.r0.toFixed(2)} m</span>
                     </div>
@@ -475,7 +479,7 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
                   <div>
                     <div className="flex justify-between text-xs mb-1">
                       <label htmlFor="ch-r1" className="font-medium text-slate-700">
-                        Bán kính miệng r₁ (m)
+                        <MathText text="Bán kính miệng $r_1$ ($\text{m}$)" />
                       </label>
                       <span className="font-mono font-bold">{challengeParams.r1.toFixed(2)} m</span>
                     </div>
@@ -502,7 +506,9 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
               <div>
                 <div className="flex justify-between text-xs mb-1">
                   <label htmlFor="ch-H" className="font-medium text-slate-700">
-                    Chiều cao bồn H (m) (Giới hạn ≤ {activeChallenge.maxH} m)
+                    <MathText
+                      text={`Chiều cao bồn $H$ ($\\text{m}$) (Giới hạn $\\le ${activeChallenge.maxH}\\text{ m}$)`}
+                    />
                   </label>
                   <span className="font-mono font-bold">{challengeParams.H.toFixed(2)} m</span>
                 </div>
@@ -526,16 +532,16 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
               </div>
 
               <div className="rounded-xl bg-slate-50 border border-slate-200 p-4 space-y-2 text-xs">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-baseline">
                   <span className="text-slate-600">Dung tích hiện đạt:</span>
                   <span className="font-mono font-bold text-base text-slate-900 tabular-nums">
-                    {challengeVolume.toFixed(3)} m³
+                    {challengeVolume.toFixed(3)} <MathFormula latex="\text{m}^3" />
                   </span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-baseline">
                   <span className="text-slate-600">Diện tích vỏ toàn phần:</span>
                   <span className="font-mono text-slate-800 tabular-nums">
-                    {challengeArea.toFixed(2)} m²
+                    {challengeArea.toFixed(2)} <MathFormula latex="\text{m}^2" />
                   </span>
                 </div>
               </div>
@@ -546,28 +552,34 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     Hoàn thành xuất sắc thử thách thiết kế!
                   </div>
-                  <p>
-                    Bồn chứa đạt dung tích {challengeVolume.toFixed(2)} m³ trong khoảng yêu cầu [{activeChallenge.minV}, {activeChallenge.maxV}] m³ và chiều cao hợp lệ.
+                  <p className="leading-relaxed">
+                    <MathText
+                      text={`Bồn chứa đạt dung tích $${challengeVolume.toFixed(2)}\\text{ m}^3$ trong khoảng yêu cầu $[${activeChallenge.minV}, ${activeChallenge.maxV}]\\text{ m}^3$ và chiều cao hợp lệ.`}
+                    />
                   </p>
                 </div>
               ) : (
                 <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-xs text-amber-950 space-y-1">
                   <div className="font-bold">Gợi ý hiệu chỉnh thông số:</div>
                   {challengeVolume < activeChallenge.minV && (
-                    <p>
-                      Dung tích đang thiếu{' '}
-                      <strong>{(activeChallenge.minV - challengeVolume).toFixed(2)} m³</strong>. Hãy tăng bán kính (vì V tỉ lệ với bình phương bán kính!) hoặc tăng chiều cao H.
+                    <p className="leading-relaxed">
+                      <MathText
+                        text={`Dung tích đang thiếu $${(activeChallenge.minV - challengeVolume).toFixed(2)}\\text{ m}^3$. Hãy tăng bán kính (vì $V$ tỉ lệ với bình phương bán kính!) hoặc tăng chiều cao $H$.`}
+                      />
                     </p>
                   )}
                   {challengeVolume > activeChallenge.maxV && (
-                    <p>
-                      Dung tích đang vượt mức giới hạn trên{' '}
-                      <strong>{(challengeVolume - activeChallenge.maxV).toFixed(2)} m³</strong>. Hãy giảm nhẹ bán kính hoặc chiều cao.
+                    <p className="leading-relaxed">
+                      <MathText
+                        text={`Dung tích đang vượt mức giới hạn trên $${(challengeVolume - activeChallenge.maxV).toFixed(2)}\\text{ m}^3$. Hãy giảm nhẹ bán kính hoặc chiều cao $H$.`}
+                      />
                     </p>
                   )}
                   {challengeParams.H > activeChallenge.maxH && (
-                    <p>
-                      Chiều cao H = {challengeParams.H.toFixed(2)} m vượt giới hạn trần {activeChallenge.maxH} m. Hãy hạ H xuống và bù lại bằng bán kính.
+                    <p className="leading-relaxed">
+                      <MathText
+                        text={`Chiều cao $H = ${challengeParams.H.toFixed(2)}\\text{ m}$ vượt giới hạn trần $${activeChallenge.maxH}\\text{ m}$. Hãy hạ $H$ xuống và bù lại bằng bán kính.`}
+                      />
                     </p>
                   )}
                 </div>
@@ -645,24 +657,27 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
               return (
                 <div
                   key={q.id}
-                  className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-3"
+                  className="rounded-xl border border-slate-200 bg-slate-50/60 p-5 space-y-3.5"
                 >
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <span className="text-xs font-bold text-slate-900">
-                      Câu {idx + 1}: {q.question}
-                    </span>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="text-sm font-semibold text-slate-900 leading-relaxed">
+                      <span className="font-bold text-cyan-950 mr-1.5">
+                        Câu {idx + 1}:
+                      </span>
+                      <MathText text={q.question} />
+                    </div>
                     <span className="text-[11px] font-medium text-slate-500 shrink-0">
                       Mức độ: {q.level}
                     </span>
                   </div>
 
                   {q.latex && (
-                    <div className="rounded-lg bg-white border border-slate-200 px-3 py-1.5 inline-block">
-                      <MathFormula latex={q.latex} />
+                    <div className="rounded-lg bg-white border border-slate-200 px-3.5 py-2 inline-block overflow-x-auto max-w-full">
+                      <MathFormula displayMode latex={q.latex} />
                     </div>
                   )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                     {q.options.map((opt, optIdx) => {
                       const isPicked = chosen === optIdx;
                       const isRightOption = optIdx === q.correctIndex;
@@ -683,23 +698,23 @@ export const PracticeLab: React.FC<PracticeLabProps> = ({
                           type="button"
                           disabled={submitted}
                           onClick={() => setAnswers((prev) => ({ ...prev, [q.id]: optIdx }))}
-                          className={`rounded-lg border px-3.5 py-2.5 text-left text-xs transition-colors ${btnStyle}`}
+                          className={`rounded-lg border px-4 py-3 text-left text-xs leading-relaxed transition-colors flex items-center gap-2.5 overflow-x-auto ${btnStyle}`}
                         >
-                          <span className="font-mono mr-1.5">
+                          <span className="font-mono font-bold shrink-0">
                             {String.fromCharCode(65 + optIdx)}.
                           </span>
-                          {opt}
+                          <MathText text={opt} className="min-w-0" />
                         </button>
                       );
                     })}
                   </div>
 
                   {submitted && showAnswerKey && (
-                    <div className="rounded-lg bg-white border border-slate-200 p-3 text-xs text-slate-700">
-                      <strong className="text-slate-900">
+                    <div className="rounded-lg bg-white border border-slate-200 p-3.5 text-xs text-slate-700 leading-relaxed">
+                      <strong className="text-slate-900 mr-1.5">
                         Đáp án đúng: {String.fromCharCode(65 + q.correctIndex)}.
-                      </strong>{' '}
-                      {q.explanation}
+                      </strong>
+                      <MathText text={q.explanation} />
                     </div>
                   )}
                 </div>

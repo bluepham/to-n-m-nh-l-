@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { STEM_GLOSSARY } from '../data/stemData';
 import { AppTab, LanguageMode } from '../types';
+import { MathText } from './MathFormula';
 
 export interface QuickGuideStep {
   step: number;
@@ -25,22 +26,22 @@ export const QUICK_GUIDE_STEPS: QuickGuideStep[] = [
     titleVi: 'Chọn loại bồn',
     titleEn: 'Select Tank Type',
     descVi: 'Chọn trụ, nón cụt, thành cong, hàm tùy chỉnh hoặc ví dụ bán cầu.',
-    descEn: 'Pick cylinder, frustum, curved wall, custom r(z), or hemisphere.',
+    descEn: 'Pick cylinder, frustum, curved wall, custom $r(z)$, or hemisphere.',
     targetTab: 'design3d',
   },
   {
     step: 2,
     titleVi: 'Chỉnh thông số',
     titleEn: 'Adjust Dimensions',
-    descVi: 'Kéo thanh trượt R, H, mực nước h và kiểm tra miền hợp lệ.',
-    descEn: 'Tune R, H, and water level h with real-time validation.',
+    descVi: 'Kéo thanh trượt $R, H$, mực nước $h$ và kiểm tra miền hợp lệ.',
+    descEn: 'Tune $R, H$, and water level $h$ with real-time validation.',
     targetTab: 'design3d',
   },
   {
     step: 3,
     titleVi: 'Xem mô hình 3D',
     titleEn: 'Inspect 3D Model',
-    descVi: 'Xoay 360°, bật mặt cắt dọc r(z) hoặc xuất tệp .GLB.',
+    descVi: 'Xoay 360°, bật mặt cắt dọc $r(z)$ hoặc xuất tệp .GLB.',
     descEn: 'Orbit 360°, toggle longitudinal cross-section, or export .GLB.',
     targetTab: 'design3d',
   },
@@ -56,15 +57,15 @@ export const QUICK_GUIDE_STEPS: QuickGuideStep[] = [
     step: 5,
     titleVi: 'Thử bơm hoặc xả',
     titleEn: 'Pump & Drain',
-    descVi: 'Quan sát mực nước h(t) tăng/giảm phi tuyến theo tiết diện bồn.',
-    descEn: 'Observe non-linear water level h(t) under inflow and outflow.',
+    descVi: 'Quan sát mực nước $h(t)$ tăng/giảm phi tuyến theo tiết diện bồn.',
+    descEn: 'Observe non-linear water level $h(t)$ under inflow and outflow.',
     targetTab: 'pump',
   },
   {
     step: 6,
     titleVi: 'Quan sát đồ thị',
     titleEn: 'Analyze Charts',
-    descVi: 'Tương tác trên 4 đồ thị r(z), V(h), V(t), dh/dt và tải CSV/PNG.',
+    descVi: 'Tương tác trên 4 đồ thị $r(z), V(h), V(t), \\frac{dh}{dt}$ và tải CSV/PNG.',
     descEn: 'Interact with 4 live mathematical plots and export CSV/PNG.',
     targetTab: 'charts',
   },
@@ -135,8 +136,8 @@ export const QuickGuideBanner: React.FC<QuickGuideBannerProps> = ({
                 </span>
                 <ArrowRight className="w-3 h-3 text-cyan-700 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
               </div>
-              <p className="mt-1 text-[11px] leading-snug text-slate-600 line-clamp-2">
-                {language === 'vi' ? item.descVi : item.descEn}
+              <p className="mt-1 text-[11px] leading-relaxed text-slate-600">
+                <MathText text={language === 'vi' ? item.descVi : item.descEn} />
               </p>
             </button>
           );
@@ -360,7 +361,9 @@ export const LearningSupportModal: React.FC<LearningSupportModalProps> = ({
                     </button>
                   </div>
 
-                  <p className="text-xs text-slate-600 leading-relaxed">{item.definitionVi}</p>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    <MathText text={item.definitionVi} />
+                  </p>
                 </div>
               ))}
             </div>
@@ -398,7 +401,9 @@ export const LearningSupportModal: React.FC<LearningSupportModalProps> = ({
                       </span>
                       <ArrowRight className="w-4 h-4 text-cyan-700" />
                     </div>
-                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">{s.descVi}</p>
+                    <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
+                      <MathText text={s.descVi} />
+                    </p>
                   </button>
                 ))}
               </div>

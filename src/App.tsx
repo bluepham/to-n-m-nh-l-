@@ -43,7 +43,7 @@ import { PumpSimulation } from './components/PumpSimulation';
 import { MathCharts } from './components/MathCharts';
 import { OptimizationLab } from './components/OptimizationLab';
 import { PracticeLab } from './components/PracticeLab';
-import { MathFormula } from './components/MathFormula';
+import { MathFormula, MathText } from './components/MathFormula';
 import {
   LearningSupportModal,
   QuickGuideBanner,
@@ -443,8 +443,11 @@ export default function App() {
               >
                 {vWater.toFixed(3)} m³
               </strong>{' '}
-              ({fillPercent.toFixed(1)}% · h = {parameters.h.toFixed(2)} /{' '}
-              {parameters.H.toFixed(2)} m)
+              ({fillPercent.toFixed(1)}% ·{' '}
+              <MathText
+                text={`$h = ${parameters.h.toFixed(2)} / ${parameters.H.toFixed(2)}\\text{ m}$`}
+              />
+              )
             </span>
           </div>
 
@@ -534,10 +537,12 @@ export default function App() {
                     ? 'Phòng Thiết kế & Mô phỏng Bồn nước 3D'
                     : 'Interactive 3D Water Tank Design Studio'}
                 </h1>
-                <p className="text-xs text-slate-600 mt-1">
-                  {language === 'vi'
-                    ? 'Điều chỉnh hình học bồn chứa từ hàm bán kính r(z), quan sát mặt cắt dọc và xuất tệp .GLB thực tế.'
-                    : 'Configure rotational tank geometry from r(z), inspect longitudinal cross-sections, and export .GLB models.'}
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  {language === 'vi' ? (
+                    <MathText text="Điều chỉnh hình học bồn chứa từ hàm bán kính $r(z)$, quan sát mặt cắt dọc và xuất tệp .GLB thực tế." />
+                  ) : (
+                    <MathText text="Configure rotational tank geometry from $r(z)$, inspect longitudinal cross-sections, and export .GLB models." />
+                  )}
                 </p>
               </div>
 
@@ -578,8 +583,8 @@ export default function App() {
                       <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-800">
                         Liên kết Hình học 3D & Tích phân Toán 12
                       </span>
-                      <div className="mt-1">
-                        <MathFormula latex={mathReport.totalIntegralLatex} />
+                      <div className="mt-1 overflow-x-auto">
+                        <MathFormula displayMode latex={mathReport.totalIntegralLatex} />
                       </div>
                     </div>
                     <button
@@ -595,7 +600,7 @@ export default function App() {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 tabular-nums">
                     <div className="rounded-lg bg-slate-50 border border-slate-200/80 p-3">
                       <div className="text-[11px] text-slate-500">
-                        Dung tích tối đa Vmax
+                        <MathText text="Dung tích tối đa $V_{\max}$" />
                       </div>
                       <div
                         data-testid="design-vmax"
@@ -610,7 +615,7 @@ export default function App() {
 
                     <div className="rounded-lg bg-cyan-50/60 border border-cyan-200/80 p-3">
                       <div className="text-[11px] text-cyan-900">
-                        Thể tích nước V(h)
+                        <MathText text="Thể tích nước $V(h)$" />
                       </div>
                       <div
                         data-testid="design-vwater"
@@ -618,15 +623,17 @@ export default function App() {
                       >
                         {vWater.toFixed(3)} m³
                       </div>
-                      <div className="text-[11px] font-mono text-cyan-800">
-                        Mực nước h = {parameters.h.toFixed(2)} m (
-                        {fillPercent.toFixed(1)}%)
+                      <div className="text-[11px] text-cyan-800">
+                        <MathText
+                          text={`Mực nước $h = ${parameters.h.toFixed(2)}\\text{ m}$`}
+                        />{' '}
+                        ({fillPercent.toFixed(1)}%)
                       </div>
                     </div>
 
                     <div className="rounded-lg bg-slate-50 border border-slate-200/80 p-3">
                       <div className="text-[11px] text-slate-500">
-                        Diện tích thành bên S_xq
+                        <MathText text="Diện tích thành bên $S_{\text{xq}}$" />
                       </div>
                       <div className="text-base font-bold font-mono text-slate-950 mt-0.5">
                         {surfaceBreakdown.side.toFixed(3)} m²

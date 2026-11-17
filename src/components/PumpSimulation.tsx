@@ -19,7 +19,7 @@ import {
   simulatePumpStep,
 } from '../math/MathEngine';
 import { TankScene3D } from './TankScene3D';
-import { MathFormula } from './MathFormula';
+import { MathFormula, MathText } from './MathFormula';
 
 interface PumpSimulationProps {
   parameters: TankParameters;
@@ -108,7 +108,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
       if (Math.abs(activeQin - activeQout) < 1e-7) {
         setAlertMessage({
           tone: 'amber',
-          text: 'Lưu lượng ròng (Qv − Qr) bằng 0 — mực nước sẽ không thay đổi.',
+          text: 'Lưu lượng ròng $(Q_v - Q_r)$ bằng $0$ — mực nước sẽ không thay đổi.',
         });
         setMode('paused');
         return;
@@ -142,19 +142,19 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
         setMode('idle');
         setAlertMessage({
           tone: 'red',
-          text: `Cảnh báo: Bồn đã đầy (${stepRes.vMax.toFixed(3)} m³). Hệ thống tự động ngắt bơm chống tràn!`,
+          text: `Cảnh báo: Bồn đã đầy ($${stepRes.vMax.toFixed(3)}\\text{ m}^3$). Hệ thống tự động ngắt bơm chống tràn!`,
         });
       } else if (stepRes.isEmpty && activeQout > activeQin) {
         setMode('idle');
         setAlertMessage({
           tone: 'amber',
-          text: 'Thông báo: Bồn đã cạn hết nước (0,000 m³). Đã đóng van xả.',
+          text: 'Thông báo: Bồn đã cạn hết nước ($0{,}000\\text{ m}^3$). Đã đóng van xả.',
         });
       } else if (nextElapsed >= st.targetDurationMin) {
         setMode('paused');
         setAlertMessage({
           tone: 'emerald',
-          text: `Đã hoàn thành thời gian mô phỏng mục tiêu (${st.targetDurationMin} phút).`,
+          text: `Đã hoàn thành thời gian mô phỏng mục tiêu ($${st.targetDurationMin}$ phút).`,
         });
       }
     }, 100);
@@ -169,21 +169,21 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
     if (qInM3Min < 0 || qOutM3Min < 0 || targetDurationMin <= 0) {
       setAlertMessage({
         tone: 'red',
-        text: 'Thông số lưu lượng hoặc thời gian không hợp lệ (phải ≥ 0).',
+        text: 'Thông số lưu lượng hoặc thời gian không hợp lệ (phải $\\ge 0$).',
       });
       return;
     }
     if (targetMode === 'pumping' && qInM3Min <= 0) {
       setAlertMessage({
         tone: 'amber',
-        text: 'Lưu lượng bơm vào Qv đang bằng 0. Hãy tăng Qv > 0 để bơm nước.',
+        text: 'Lưu lượng bơm vào $Q_v$ đang bằng $0$. Hãy tăng $Q_v > 0$ để bơm nước.',
       });
       return;
     }
     if (targetMode === 'draining' && qOutM3Min <= 0) {
       setAlertMessage({
         tone: 'amber',
-        text: 'Lưu lượng xả ra Qr đang bằng 0. Hãy tăng Qr > 0 để xả nước.',
+        text: 'Lưu lượng xả ra $Q_r$ đang bằng $0$. Hãy tăng $Q_r > 0$ để xả nước.',
       });
       return;
     }
@@ -197,7 +197,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
     if (targetMode === 'draining' && currentVolume <= 1e-5) {
       setAlertMessage({
         tone: 'amber',
-        text: 'Bồn đang cạn (0 m³) — không còn nước để xả.',
+        text: 'Bồn đang cạn ($0\\text{ m}^3$) — không còn nước để xả.',
       });
       return;
     }
@@ -239,7 +239,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
     onChangeParameters({ ...parameters, h: parameters.H });
     setAlertMessage({
       tone: 'emerald',
-      text: `Đã bơm đầy bồn: Vwater = Vmax = ${vMax.toFixed(3)} m³ (h = ${parameters.H.toFixed(2)} m).`,
+      text: `Đã bơm đầy bồn: $V_{\\text{water}} = V_{\\max} = ${vMax.toFixed(3)}\\text{ m}^3$ ($h = ${parameters.H.toFixed(2)}\\text{ m}$).`,
     });
   };
 
@@ -248,7 +248,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
     onChangeParameters({ ...parameters, h: 0 });
     setAlertMessage({
       tone: 'amber',
-      text: 'Đã xả hết toàn bộ nước trong bồn: Vwater = 0,000 m³ (h = 0,00 m).',
+      text: 'Đã xả hết toàn bộ nước trong bồn: $V_{\\text{water}} = 0{,}000\\text{ m}^3$ ($h = 0{,}00\\text{ m}$).',
     });
   };
 
@@ -281,7 +281,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
           ) : (
             <AlertCircle className="w-4 h-4 shrink-0" />
           )}
-          <span>{alertMessage.text}</span>
+          <MathText text={alertMessage.text} />
         </div>
       )}
 
@@ -314,7 +314,9 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
               </div>
 
               <div className="text-right">
-                <span className="text-xs text-slate-500 block">Tốc độ dâng mặt thoáng dh/dt</span>
+                <span className="text-xs text-slate-500 block">
+                  <MathText text="Tốc độ dâng mặt thoáng $\frac{dh}{dt}$" />
+                </span>
                 <span className="text-sm font-bold font-mono text-cyan-800 tabular-nums">
                   {dhDt !== null ? `${dhDt >= 0 ? '+' : ''}${dhDt.toFixed(4)} m/phút` : 'Tiết diện ~ 0'}
                 </span>
@@ -377,13 +379,17 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
                 </span>
               </div>
               <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-3">
-                <span className="text-[11px] text-emerald-900 block">Lưu lượng vào (Qv)</span>
+                <span className="text-[11px] text-emerald-900 block">
+                  <MathText text="Lưu lượng vào ($Q_v$)" />
+                </span>
                 <span className="text-base font-bold font-mono text-emerald-950 tabular-nums">
                   {(qInM3Min * unitFactor).toFixed(unit === 'l_min' ? 0 : 2)} {unitLabel}
                 </span>
               </div>
               <div className="rounded-lg border border-amber-200 bg-amber-50/50 p-3">
-                <span className="text-[11px] text-amber-900 block">Lưu lượng ra (Qr)</span>
+                <span className="text-[11px] text-amber-900 block">
+                  <MathText text="Lưu lượng ra ($Q_r$)" />
+                </span>
                 <span className="text-base font-bold font-mono text-amber-950 tabular-nums">
                   {(qOutM3Min * unitFactor).toFixed(unit === 'l_min' ? 0 : 2)} {unitLabel}
                 </span>
@@ -397,8 +403,8 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
           <div className="rounded-xl border border-slate-200 bg-white p-5 space-y-5">
             <div>
               <h2 className="text-base font-bold text-slate-900">Bảng điều khiển Bơm – Xả thực</h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Giải nghiệm chia đôi π∫₀ʰ[r(z)]²dz = Vwater tại từng bước thời gian
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                <MathText text="Giải nghiệm chia đôi $\displaystyle \pi \int_{0}^{h} [r(z)]^2\,dz = V_{\text{water}}$ tại từng bước thời gian" />
               </p>
             </div>
 
@@ -478,7 +484,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
-                Chạy đồng thời (Qv − Qr)
+                <MathText text="Chạy đồng thời ($Q_v - Q_r$)" />
               </button>
               <button
                 type="button"
@@ -494,7 +500,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
               <div className="space-y-1">
                 <span className="text-xs font-semibold text-slate-700 block">
-                  Đơn vị lưu lượng (1 m³ = 1.000 lít)
+                  <MathText text="Đơn vị lưu lượng ($1\text{ m}^3 = 1.000\text{ lít}$)" />
                 </span>
                 <div className="grid grid-cols-2 gap-1 p-1 bg-slate-100 rounded-lg">
                   <button
@@ -546,7 +552,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
               <div className="space-y-1">
                 <div className="flex justify-between text-xs">
                   <label htmlFor="qin-input" className="font-medium text-slate-700">
-                    Lưu lượng bơm vào (Qv)
+                    <MathText text="Lưu lượng bơm vào ($Q_v$)" />
                   </label>
                   <span className="font-mono font-semibold text-emerald-800 tabular-nums">
                     {(qInM3Min * unitFactor).toFixed(unit === 'l_min' ? 0 : 2)} {unitLabel}
@@ -585,7 +591,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
               <div className="space-y-1">
                 <div className="flex justify-between text-xs">
                   <label htmlFor="qout-input" className="font-medium text-slate-700">
-                    Lưu lượng xả ra (Qr)
+                    <MathText text="Lưu lượng xả ra ($Q_r$)" />
                   </label>
                   <span className="font-mono font-semibold text-amber-800 tabular-nums">
                     {(qOutM3Min * unitFactor).toFixed(unit === 'l_min' ? 0 : 2)} {unitLabel}
@@ -627,7 +633,7 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
                     htmlFor="init-vol-input"
                     className="block text-xs font-medium text-slate-700 mb-1"
                   >
-                    Lượng nước ban đầu (m³)
+                    <MathText text="Lượng nước ban đầu ($\text{m}^3$)" />
                   </label>
                   <input
                     id="init-vol-input"
@@ -676,8 +682,8 @@ export const PumpSimulation: React.FC<PumpSimulationProps> = ({
                 displayMode
                 latex="V(t + \Delta t) = V(t) + (Q_v - Q_r)\Delta t, \qquad \pi\int_{0}^{h} [r(z)]^2\,dz = V_{\text{water}}"
               />
-              <p className="text-[11px] text-slate-500">
-                Lưu ý: Tuyệt đối không dùng h = H·V/Vmax cho bồn nón cụt hay bồn thành cong vì diện tích mặt thoáng A(z) biến thiên theo độ cao.
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                <MathText text="Lưu ý: Tuyệt đối không dùng $h = \dfrac{H \cdot V}{V_{\max}}$ cho bồn nón cụt hay bồn thành cong vì diện tích mặt thoáng $A(z) = \pi [r(z)]^2$ biến thiên theo độ cao." />
               </p>
             </div>
           </div>

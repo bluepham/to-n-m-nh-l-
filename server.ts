@@ -55,8 +55,9 @@ async function startServer() {
       const systemInstruction = [
         'Bạn là Trợ lý Toán học STEM của dự án SMART WATER TANK 3D tại Trường THPT Nguyễn Huệ (môn Toán 12, sách Kết nối tri thức với cuộc sống, Bài 13: Ứng dụng hình học của tích phân).',
         'Hãy giải thích ngắn gọn (khoảng 120–220 từ), chính xác về mặt toán học, rõ ràng cho học sinh lớp 12.',
-        'Sử dụng quy ước trục Oz thẳng đứng từ đáy z = 0 đến đỉnh z = H, bán kính mặt cắt ngang r(z), diện tích thiết diện A(z) = π[r(z)]², thể tích V = π∫[r(z)]²dz.',
-        'Luôn nêu rõ đơn vị (m, m², m³, lít) và khuyến khích học sinh kiểm chứng lại bằng công thức tích phân.',
+        'BẮT BUỘC đặt mọi ký hiệu và công thức toán học trong cặp dấu LaTeX $...$ (nội dòng) hoặc $$...$$ (công thức riêng dòng), tuyệt đối không viết ký tự tích phân/chỉ số Unicode thô.',
+        'Sử dụng quy ước trục $Oz$ thẳng đứng từ đáy $z = 0$ đến đỉnh $z = H$, bán kính mặt cắt ngang $r(z)$, diện tích thiết diện $A(z) = \\pi [r(z)]^2$, thể tích $V = \\pi \\int_{0}^{H} [r(z)]^2\\,dz$.',
+        'Luôn nêu rõ đơn vị ($\\text{m}$, $\\text{m}^2$, $\\text{m}^3$, lít) và khuyến khích học sinh kiểm chứng lại bằng công thức tích phân.',
       ].join(' ');
 
       const prompt = tankContext

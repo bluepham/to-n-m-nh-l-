@@ -2,6 +2,7 @@ import React from 'react';
 import { CheckCircle2, PlayCircle, ShieldCheck, XCircle } from 'lucide-react';
 import { InternalTestResult, StudentAssignment } from '../types';
 import { runInternalTestSuite } from '../math/MathEngine';
+import { MathText } from './MathFormula';
 
 interface TestPanelProps {
   results: InternalTestResult[];
@@ -39,8 +40,8 @@ export const TestPanel: React.FC<TestPanelProps> = ({
             <ShieldCheck className="w-5 h-5 text-cyan-700" />
             Trang Kiểm thử Toán học & Chức năng Nội bộ (12 Test Cases chuẩn)
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Sai số tuyệt đối chấp nhận &lt; 0,001 m³ đối với toàn bộ công thức thể tích và diện tích chuẩn
+          <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+            <MathText text="Sai số tuyệt đối chấp nhận $< 0{,}001\text{ m}^3$ đối với toàn bộ công thức thể tích và diện tích chuẩn" />
           </p>
         </div>
 
@@ -74,11 +75,13 @@ export const TestPanel: React.FC<TestPanelProps> = ({
         </div>
       ) : (
         <>
-          <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-4 py-2.5 flex items-center justify-between text-xs font-semibold text-emerald-950">
+          <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-emerald-950">
             <span>
               Tổng hợp phiên kiểm thử: Đạt {passedCount} / {results.length} bài kiểm tra
             </span>
-            <span className="font-mono">Ngưỡng dung sai số học: ±0,001 m³</span>
+            <span>
+              <MathText text="Ngưỡng dung sai số học: $\pm 0{,}001\text{ m}^3$" />
+            </span>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-slate-200">
@@ -99,9 +102,13 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                     <td className="py-2.5 px-3 font-mono font-bold text-slate-900 whitespace-nowrap">
                       {r.id}
                     </td>
-                    <td className="py-2.5 px-3">
-                      <div className="font-semibold text-slate-900">{r.name}</div>
-                      <div className="text-[11px] text-slate-500">{r.description}</div>
+                    <td className="py-2.5 px-3 leading-relaxed">
+                      <div className="font-semibold text-slate-900">
+                        <MathText text={r.name} />
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        <MathText text={r.description} />
+                      </div>
                     </td>
                     <td className="py-2.5 px-3 whitespace-nowrap">
                       {r.passed ? (
@@ -116,14 +123,14 @@ export const TestPanel: React.FC<TestPanelProps> = ({
                         </span>
                       )}
                     </td>
-                    <td className="py-2.5 px-3 font-mono text-[11px] text-slate-700">
-                      {r.expected}
+                    <td className="py-2.5 px-3 text-[11px] text-slate-700 leading-relaxed">
+                      <MathText text={r.expected} />
                     </td>
-                    <td className="py-2.5 px-3 font-mono text-[11px] text-cyan-900 font-medium">
-                      {r.actual}
+                    <td className="py-2.5 px-3 text-[11px] text-cyan-900 font-medium leading-relaxed">
+                      <MathText text={r.actual} />
                     </td>
-                    <td className="py-2.5 px-3 text-[11px] text-slate-500">
-                      {r.errorInfo ?? 'Không có lỗi'}
+                    <td className="py-2.5 px-3 text-[11px] text-slate-500 leading-relaxed">
+                      <MathText text={r.errorInfo ?? 'Không có lỗi'} />
                     </td>
                   </tr>
                 ))}

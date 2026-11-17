@@ -20,7 +20,7 @@ import {
   crossSectionArea,
   radiusAtHeight,
 } from '../math/MathEngine';
-import { MathFormula } from './MathFormula';
+import { MathFormula, MathText } from './MathFormula';
 
 interface MathChartsProps {
   parameters: TankParameters;
@@ -241,7 +241,7 @@ export const MathCharts: React.FC<MathChartsProps> = ({
             <YAxis
               unit=" m³"
               tick={{ fontSize: 11 }}
-              label={{ value: 'Vwater (m³)', angle: -90, position: 'insideLeft', fontSize: 11 }}
+              label={{ value: 'V(h) (m³)', angle: -90, position: 'insideLeft', fontSize: 11 }}
             />
             <Tooltip
               formatter={(value: unknown) => [`${Number(value).toFixed(3)} m³`, 'Thể tích nước V(h)']}
@@ -251,7 +251,7 @@ export const MathCharts: React.FC<MathChartsProps> = ({
             <Line
               type="monotone"
               dataKey="volume"
-              name="Thể tích tích phân Vwater(h)"
+              name="Thể tích tích phân V(h)"
               stroke="#0891b2"
               strokeWidth={2.6}
               dot={false}
@@ -372,7 +372,7 @@ export const MathCharts: React.FC<MathChartsProps> = ({
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
             <label htmlFor="chart-h-slider" className="text-xs font-semibold text-slate-700">
-              Kéo điểm mực nước h:
+              <MathText text="Kéo điểm mực nước $h$:" />
             </label>
             <input
               id="chart-h-slider"
@@ -386,8 +386,10 @@ export const MathCharts: React.FC<MathChartsProps> = ({
               }
               className="w-32 accent-cyan-600"
             />
-            <span className="font-mono text-xs font-bold text-cyan-900 tabular-nums">
-              {parameters.h.toFixed(2)} m ({vCurrent.toFixed(2)} m³)
+            <span className="text-xs font-bold text-cyan-900 tabular-nums">
+              <MathText
+                text={`$${parameters.h.toFixed(2)}\\text{ m}$ ($${vCurrent.toFixed(2)}\\text{ m}^3$)`}
+              />
             </span>
           </div>
         </div>
@@ -400,10 +402,10 @@ export const MathCharts: React.FC<MathChartsProps> = ({
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="text-sm font-bold text-slate-900">
-                Biểu đồ 1 – Bán kính r(z) & Tiết diện ngang theo độ cao z
+                <MathText text="Biểu đồ 1 – Bán kính $r(z)$ & Tiết diện ngang theo độ cao $z$" />
               </h3>
-              <p className="text-xs text-slate-500">
-                Rê chuột vào đường cong để xem độ cao z, bán kính r(z) và diện tích A(z) = π[r(z)]².
+              <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                <MathText text="Rê chuột vào đường cong để xem độ cao $z$, bán kính $r(z)$ và diện tích $A(z) = \pi [r(z)]^2$." />
               </p>
             </div>
             <div className="flex items-center gap-1 shrink-0">
@@ -449,11 +451,13 @@ export const MathCharts: React.FC<MathChartsProps> = ({
         <div ref={refC2} className="rounded-xl border border-slate-200 bg-white p-5 space-y-3">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
-                Biểu đồ 2 – Thể tích nước Vwater(h) = π∫₀ʰ[r(z)]²dz
+              <h3 className="text-sm font-bold text-slate-900 leading-relaxed">
+                <MathText text="Biểu đồ 2 – Thể tích nước $\displaystyle V_{\text{water}}(h) = \pi \int_{0}^{h} [r(z)]^2\,dz$" />
               </h3>
-              <p className="text-xs text-slate-500">
-                Điểm đỏ đánh dấu mực nước hiện tại (h = {parameters.h.toFixed(2)} m). Bấm vào đồ thị để đổi h!
+              <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                <MathText
+                  text={`Điểm đỏ đánh dấu mực nước hiện tại ($h = ${parameters.h.toFixed(2)}\\text{ m}$). Bấm vào đồ thị để đổi $h$!`}
+                />
               </p>
             </div>
             <div className="flex items-center gap-1 shrink-0">
@@ -500,7 +504,7 @@ export const MathCharts: React.FC<MathChartsProps> = ({
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="text-sm font-bold text-slate-900">
-                Biểu đồ 3 – Thể tích theo thời gian V(t) & So sánh tốc độ bơm
+                <MathText text="Biểu đồ 3 – Thể tích theo thời gian $V(t)$ & So sánh tốc độ bơm" />
               </h3>
               <div className="flex items-center gap-2 mt-1">
                 <label htmlFor="cmp-q-input" className="text-xs text-slate-500">
@@ -519,7 +523,9 @@ export const MathCharts: React.FC<MathChartsProps> = ({
                   }}
                   className="w-16 rounded border border-slate-300 px-1.5 py-0.5 font-mono text-xs tabular-nums"
                 />
-                <span className="text-xs text-slate-500">m³/phút</span>
+                <span className="text-xs text-slate-500">
+                  <MathFormula latex="\text{m}^3/\text{phút}" />
+                </span>
               </div>
             </div>
             <div className="flex items-center gap-1 shrink-0">
@@ -565,11 +571,11 @@ export const MathCharts: React.FC<MathChartsProps> = ({
         <div ref={refC4} className="rounded-xl border border-slate-200 bg-white p-5 space-y-3">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="text-sm font-bold text-slate-900">
-                Biểu đồ 4 – Tốc độ tăng mực nước dh/dt theo độ cao h
+              <h3 className="text-sm font-bold text-slate-900 leading-relaxed">
+                <MathText text="Biểu đồ 4 – Tốc độ tăng mực nước $\dfrac{dh}{dt}$ theo độ cao $h$" />
               </h3>
-              <p className="text-xs text-slate-500">
-                Khi tiết diện ngang A(h) = πr(h)² nhỏ, cùng một lượng nước làm mực nước dâng nhanh hơn.
+              <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                <MathText text="Khi tiết diện ngang $A(h) = \pi [r(h)]^2$ nhỏ, cùng một lượng nước làm mực nước dâng nhanh hơn." />
               </p>
             </div>
             <div className="flex items-center gap-1 shrink-0">
@@ -613,9 +619,9 @@ export const MathCharts: React.FC<MathChartsProps> = ({
           </div>
           {renderChartContent('c4', 260)}
           <div className="rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600 flex flex-wrap items-center justify-between gap-2">
-            <MathFormula latex="\frac{dh}{dt} = \frac{Q_v - Q_r}{\pi [r(h)]^2}" />
-            <span className="text-[11px] text-slate-500">
-              Các điểm có tiết diện A(h) ≈ 0 (như đỉnh vòm bán cầu z = 2) được lọc an toàn, không hiển thị vô cực.
+            <MathFormula displayMode latex="\frac{dh}{dt} = \frac{Q_v - Q_r}{\pi [r(h)]^2}" />
+            <span className="text-[11px] text-slate-500 leading-relaxed">
+              <MathText text="Các điểm có tiết diện $A(h) \approx 0$ (như đỉnh vòm bán cầu $z = 2$) được lọc an toàn, không hiển thị vô cực." />
             </span>
           </div>
         </div>
@@ -632,10 +638,18 @@ export const MathCharts: React.FC<MathChartsProps> = ({
           <div className="w-full max-w-4xl rounded-2xl bg-white p-6 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <h3 className="text-base font-bold text-slate-900">
-                {zoomChartId === 'c1' && 'Biểu đồ 1 – Bán kính r(z) theo độ cao z'}
-                {zoomChartId === 'c2' && 'Biểu đồ 2 – Thể tích nước Vwater(h)'}
-                {zoomChartId === 'c3' && 'Biểu đồ 3 – Thể tích theo thời gian V(t)'}
-                {zoomChartId === 'c4' && 'Biểu đồ 4 – Tốc độ tăng mực nước dh/dt'}
+                {zoomChartId === 'c1' && (
+                  <MathText text="Biểu đồ 1 – Bán kính $r(z)$ theo độ cao $z$" />
+                )}
+                {zoomChartId === 'c2' && (
+                  <MathText text="Biểu đồ 2 – Thể tích nước $\displaystyle V_{\text{water}}(h) = \pi \int_{0}^{h} [r(z)]^2\,dz$" />
+                )}
+                {zoomChartId === 'c3' && (
+                  <MathText text="Biểu đồ 3 – Thể tích theo thời gian $V(t)$" />
+                )}
+                {zoomChartId === 'c4' && (
+                  <MathText text="Biểu đồ 4 – Tốc độ tăng mực nước $\dfrac{dh}{dt}$" />
+                )}
               </h3>
               <button
                 type="button"

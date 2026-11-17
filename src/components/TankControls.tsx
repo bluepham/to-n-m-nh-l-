@@ -7,7 +7,8 @@ import {
   generateStepByStepSolution,
   validateTankParameters,
 } from '../math/MathEngine';
-import { MathFormula } from './MathFormula';
+import { stripMathDelimiters } from '../math/mathTextParser';
+import { MathFormula, MathText } from './MathFormula';
 
 interface TankControlsProps {
   parameters: TankParameters;
@@ -38,10 +39,10 @@ const SliderNumberField: React.FC<SliderNumberFieldProps> = ({
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between gap-2">
-        <label htmlFor={id} className="text-xs font-medium text-slate-700">
-          {label}
+        <label htmlFor={id} className="text-xs font-medium text-slate-700 leading-relaxed">
+          <MathText text={label} />
         </label>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 shrink-0">
           <input
             id={id}
             type="number"
@@ -62,7 +63,7 @@ const SliderNumberField: React.FC<SliderNumberFieldProps> = ({
       </div>
       <input
         type="range"
-        aria-label={`${label} thanh trượt`}
+        aria-label={`${stripMathDelimiters(label)} thanh trượt`}
         min={min}
         max={max}
         step={step}
@@ -174,7 +175,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
         <div>
           <h2 className="text-base font-bold text-slate-900">Thông số thiết kế bồn</h2>
           <p className="text-xs text-slate-500 mt-0.5">
-            Trục Oz thẳng đứng · Đáy z = 0 m · Đỉnh z = H
+            <MathText text="Trục $Oz$ thẳng đứng · Đáy $z = 0\text{ m}$ · Đỉnh $z = H$" />
           </p>
         </div>
         <button
@@ -225,7 +226,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
           className="w-full flex items-center justify-center gap-2 rounded-lg border border-cyan-300 bg-cyan-50/80 px-3 py-2 text-xs font-semibold text-cyan-950 hover:bg-cyan-100 transition-colors"
         >
           <Sparkles className="w-3.5 h-3.5 text-cyan-700 shrink-0" />
-          <span>Xem ví dụ bán cầu – V = 16π/3 (≈ 16,755 m³)</span>
+          <MathText text="Xem ví dụ bán cầu – $V = \frac{16\pi}{3} \approx 16{,}755\text{ m}^3$" />
         </button>
       </div>
 
@@ -238,7 +239,9 @@ export const TankControls: React.FC<TankControlsProps> = ({
           <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           <div>
             <p className="font-semibold">Thông báo kiểm tra miền xác định</p>
-            <p className="mt-0.5">{draftError}</p>
+            <p className="mt-0.5 leading-relaxed">
+              <MathText text={draftError} />
+            </p>
             <p className="mt-1 text-[11px] text-amber-800">
               Hệ thống vẫn đang giữ mô hình hợp lệ gần nhất để đảm bảo an toàn tính toán.
             </p>
@@ -250,7 +253,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
       <div className="space-y-4">
         <SliderNumberField
           id="param-H"
-          label="Chiều cao toàn bồn (H)"
+          label="Chiều cao toàn bồn ($H$)"
           unit="m"
           value={parameters.H}
           min={0.5}
@@ -262,7 +265,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
         {parameters.type === 'cylinder' && (
           <SliderNumberField
             id="param-R"
-            label="Bán kính hình trụ (R)"
+            label="Bán kính hình trụ ($R$)"
             unit="m"
             value={parameters.R}
             min={0.2}
@@ -276,7 +279,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
           <>
             <SliderNumberField
               id="param-r0"
-              label="Bán kính đáy dưới (r₀)"
+              label="Bán kính đáy dưới ($r_0$)"
               unit="m"
               value={parameters.r0}
               min={0.2}
@@ -286,7 +289,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
             />
             <SliderNumberField
               id="param-r1"
-              label="Bán kính miệng trên (r₁)"
+              label="Bán kính miệng trên ($r_1$)"
               unit="m"
               value={parameters.r1}
               min={0.2}
@@ -301,7 +304,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
           <>
             <SliderNumberField
               id="param-curveA"
-              label="Bán kính nền a trong a + b·sin(πz/H)"
+              label="Bán kính nền $a$ trong $a + b\sin(\frac{\pi z}{H})$"
               unit="m"
               value={parameters.curveA}
               min={0.4}
@@ -311,7 +314,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
             />
             <SliderNumberField
               id="param-curveB"
-              label="Độ phình/thắt b trong a + b·sin(πz/H)"
+              label="Độ phình/thắt $b$ trong $a + b\sin(\frac{\pi z}{H})$"
               unit="m"
               value={parameters.curveB}
               min={-Math.min(1.5, parameters.curveA - 0.15)}
@@ -340,7 +343,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                Bậc hai a + bz + cz²
+                <MathText text="Bậc hai $a + bz + cz^2$" />
               </button>
               <button
                 type="button"
@@ -365,7 +368,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
               <div className="space-y-3">
                 <SliderNumberField
                   id="param-polyA"
-                  label="Hệ số tự do a"
+                  label="Hệ số tự do $a$"
                   unit="m"
                   value={parameters.polyA}
                   min={0.2}
@@ -375,7 +378,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
                 />
                 <SliderNumberField
                   id="param-polyB"
-                  label="Hệ số bậc nhất b"
+                  label="Hệ số bậc nhất $b$"
                   unit=""
                   value={parameters.polyB}
                   min={-1.2}
@@ -385,7 +388,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
                 />
                 <SliderNumberField
                   id="param-polyC"
-                  label="Hệ số bậc hai c"
+                  label="Hệ số bậc hai $c$"
                   unit=""
                   value={parameters.polyC}
                   min={-0.5}
@@ -398,9 +401,9 @@ export const TankControls: React.FC<TankControlsProps> = ({
               <div className="space-y-2">
                 <label
                   htmlFor="custom-expr-input"
-                  className="block text-xs font-medium text-slate-700"
+                  className="block text-xs font-medium text-slate-700 leading-relaxed"
                 >
-                  Nhập hàm r(z) theo biến z (hỗ trợ sin, cos, sqrt, pi, H):
+                  <MathText text="Nhập hàm $r(z)$ theo biến $z$ (hỗ trợ $\sin, \cos, \sqrt{\cdot}, \pi, H$):" />
                 </label>
                 <div className="flex gap-1.5">
                   <input
@@ -461,7 +464,7 @@ export const TankControls: React.FC<TankControlsProps> = ({
         <div className="pt-2 border-t border-slate-100">
           <SliderNumberField
             id="param-h"
-            label="Chiều cao mực nước hiện tại (h)"
+            label="Chiều cao mực nước hiện tại ($h$)"
             unit="m"
             value={parameters.h}
             min={0}
@@ -481,7 +484,9 @@ export const TankControls: React.FC<TankControlsProps> = ({
 
         <div className="grid grid-cols-2 gap-2.5 pt-1">
           <div className="rounded-lg bg-white border border-slate-200 p-2.5">
-            <span className="text-[11px] text-slate-500 block">Dung tích toàn bồn (Vmax)</span>
+            <span className="text-[11px] text-slate-500 block">
+              <MathText text="Dung tích toàn bồn ($V_{\max}$)" />
+            </span>
             <span
               data-testid="metric-vmax"
               className="text-base font-bold text-slate-900 font-mono tabular-nums"
@@ -494,7 +499,9 @@ export const TankControls: React.FC<TankControlsProps> = ({
           </div>
 
           <div className="rounded-lg bg-cyan-50/70 border border-cyan-200 p-2.5">
-            <span className="text-[11px] text-cyan-900 block">Thể tích nước (Vwater)</span>
+            <span className="text-[11px] text-cyan-900 block">
+              <MathText text="Thể tích nước ($V_{\text{water}}$)" />
+            </span>
             <span
               data-testid="metric-vwater"
               className="text-base font-bold text-cyan-950 font-mono tabular-nums"

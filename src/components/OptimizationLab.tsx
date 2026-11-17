@@ -20,7 +20,7 @@ import {
   scanCandidateTankDesigns,
 } from '../math/MathEngine';
 import { TankScene3D } from './TankScene3D';
-import { MathFormula } from './MathFormula';
+import { MathFormula, MathText } from './MathFormula';
 
 export const OptimizationLab: React.FC = () => {
   const [constraints, setConstraints] = useState<OptimizationConstraints>({
@@ -66,13 +66,19 @@ export const OptimizationLab: React.FC = () => {
 
     const reasons: string[] = [];
     if (vol < constraints.vTarget - 0.02) {
-      reasons.push(`Thiếu ${(constraints.vTarget - vol).toFixed(2)} m³ so với Vtarget`);
+      reasons.push(
+        `Thiếu $${(constraints.vTarget - vol).toFixed(2)}\\text{ m}^3$ so với $V_{\\text{target}}$`,
+      );
     }
     if (p.H < constraints.hMin || p.H > constraints.hMax) {
-      reasons.push(`Chiều cao H = ${p.H.toFixed(2)} m nằm ngoài [${constraints.hMin}, ${constraints.hMax}] m`);
+      reasons.push(
+        `Chiều cao $H = ${p.H.toFixed(2)}\\text{ m}$ nằm ngoài $[${constraints.hMin}, ${constraints.hMax}]\\text{ m}$`,
+      );
     }
     if (maxR > constraints.rMax) {
-      reasons.push(`Bán kính lớn nhất ${maxR.toFixed(2)} m vượt ngưỡng ${constraints.rMax} m`);
+      reasons.push(
+        `Bán kính lớn nhất $${maxR.toFixed(2)}\\text{ m}$ vượt ngưỡng $${constraints.rMax}\\text{ m}$`,
+      );
     }
 
     return {
@@ -123,14 +129,14 @@ export const OptimizationLab: React.FC = () => {
     if (resA.surf.total < resB.surf.total) {
       return {
         winner: 'A' as const,
-        message: `Phương án A tiết kiệm hơn ${diffArea.toFixed(2)} m² vật liệu (giảm khoảng ${Math.round(
+        message: `Phương án A tiết kiệm hơn $${diffArea.toFixed(2)}\\text{ m}^2$ vật liệu (giảm khoảng ${Math.round(
           diffCost,
-        ).toLocaleString('vi-VN')} VNĐ) nhờ tỉ lệ chiều cao và bán kính cân đối hơn.`,
+        ).toLocaleString('vi-VN')} VNĐ) nhờ tỉ lệ chiều cao $H$ và bán kính cân đối hơn.`,
       };
     }
     return {
       winner: 'B' as const,
-      message: `Phương án B tiết kiệm hơn ${diffArea.toFixed(2)} m² vật liệu (giảm khoảng ${Math.round(
+      message: `Phương án B tiết kiệm hơn $${diffArea.toFixed(2)}\\text{ m}^2$ vật liệu (giảm khoảng ${Math.round(
         diffCost,
       ).toLocaleString('vi-VN')} VNĐ) trong cùng điều kiện dung tích yêu cầu.`,
     };
@@ -202,7 +208,7 @@ export const OptimizationLab: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
           <div>
             <label className="block text-[11px] font-medium text-slate-600 mb-1">
-              Chiều cao H (m)
+              <MathText text="Chiều cao $H$ ($\text{m}$)" />
             </label>
             <input
               type="number"
@@ -221,7 +227,7 @@ export const OptimizationLab: React.FC = () => {
           {plan.type === 'cylinder' && (
             <div>
               <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Bán kính R (m)
+                <MathText text="Bán kính $R$ ($\text{m}$)" />
               </label>
               <input
                 type="number"
@@ -242,7 +248,7 @@ export const OptimizationLab: React.FC = () => {
             <>
               <div>
                 <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                  Đáy r₀ (m)
+                  <MathText text="Đáy $r_0$ ($\text{m}$)" />
                 </label>
                 <input
                   type="number"
@@ -259,7 +265,7 @@ export const OptimizationLab: React.FC = () => {
               </div>
               <div>
                 <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                  Miệng r₁ (m)
+                  <MathText text="Miệng $r_1$ ($\text{m}$)" />
                 </label>
                 <input
                   type="number"
@@ -281,7 +287,7 @@ export const OptimizationLab: React.FC = () => {
             <>
               <div>
                 <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                  Tham số a (m)
+                  <MathText text="Tham số $a$ ($\text{m}$)" />
                 </label>
                 <input
                   type="number"
@@ -298,7 +304,7 @@ export const OptimizationLab: React.FC = () => {
               </div>
               <div>
                 <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                  Độ phình b (m)
+                  <MathText text="Độ phình $b$ ($\text{m}$)" />
                 </label>
                 <input
                   type="number"
@@ -323,9 +329,9 @@ export const OptimizationLab: React.FC = () => {
         {!evalRes.meetsConstraints ? (
           <div className="rounded-lg border border-amber-300 bg-amber-50 p-2.5 text-xs text-amber-950 space-y-1">
             {evalRes.reasons.map((r, i) => (
-              <div key={i} className="flex items-center gap-1.5">
+              <div key={i} className="flex items-center gap-1.5 leading-relaxed">
                 <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                <span>{r}</span>
+                <MathText text={r} />
               </div>
             ))}
           </div>
@@ -338,28 +344,34 @@ export const OptimizationLab: React.FC = () => {
 
         {/* Calculated Surface & Cost Breakdown */}
         <div className="rounded-lg bg-slate-50 border border-slate-200 p-3 space-y-1.5 text-xs">
-          <div className="flex justify-between">
-            <span className="text-slate-600">Dung tích toàn bồn (V):</span>
+          <div className="flex justify-between items-baseline">
+            <span className="text-slate-600">
+              <MathText text="Dung tích toàn bồn ($V$):" />
+            </span>
             <span className="font-mono font-bold text-slate-900 tabular-nums">
-              {evalRes.vol.toFixed(3)} m³
+              {evalRes.vol.toFixed(3)} <MathFormula latex="\text{m}^3" />
             </span>
           </div>
-          <div className="flex justify-between">
-            <span className="text-slate-600">Diện tích thành xung quanh (Sside):</span>
+          <div className="flex justify-between items-baseline">
+            <span className="text-slate-600">
+              <MathText text="Diện tích thành xung quanh ($S_{\text{side}}$):" />
+            </span>
             <span className="font-mono text-slate-800 tabular-nums">
-              {evalRes.surf.side.toFixed(3)} m²
+              {evalRes.surf.side.toFixed(3)} <MathFormula latex="\text{m}^2" />
             </span>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-baseline">
             <span className="text-slate-600">Diện tích đáy + nắp được tính:</span>
             <span className="font-mono text-slate-800 tabular-nums">
-              {(evalRes.surf.bottom + evalRes.surf.top).toFixed(3)} m²
+              {(evalRes.surf.bottom + evalRes.surf.top).toFixed(3)} <MathFormula latex="\text{m}^2" />
             </span>
           </div>
-          <div className="flex justify-between pt-1.5 border-t border-slate-200">
-            <span className="font-semibold text-slate-800">Tổng diện tích vật liệu (Stotal):</span>
+          <div className="flex justify-between items-baseline pt-1.5 border-t border-slate-200">
+            <span className="font-semibold text-slate-800">
+              <MathText text="Tổng diện tích vật liệu ($S_{\text{total}}$):" />
+            </span>
             <span className="font-mono font-bold text-cyan-900 tabular-nums">
-              {evalRes.surf.total.toFixed(3)} m²
+              {evalRes.surf.total.toFixed(3)} <MathFormula latex="\text{m}^2" />
             </span>
           </div>
           <div className="flex justify-between">
@@ -399,8 +411,11 @@ export const OptimizationLab: React.FC = () => {
         </div>
 
         {/* Surface Integral Formula Display */}
-        <div className="rounded-lg bg-slate-50 border border-slate-200 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-700">
-          <MathFormula latex="S_{\text{side}} = 2\pi \int_{0}^{H} r(z)\sqrt{1 + [r'(z)]^2}\,dz, \qquad S_{\text{total}} = S_{\text{side}} + S_{\text{bottom}} + S_{\text{top}}" />
+        <div className="rounded-lg bg-slate-50 border border-slate-200 px-4 py-2.5 overflow-x-auto text-xs text-slate-700">
+          <MathFormula
+            displayMode
+            latex="S_{\text{side}} = 2\pi \int_{0}^{H} r(z)\sqrt{1 + [r'(z)]^2}\,dz, \qquad S_{\text{total}} = S_{\text{side}} + S_{\text{bottom}} + S_{\text{top}}"
+          />
         </div>
 
         {/* Constraints Form */}
@@ -410,7 +425,7 @@ export const OptimizationLab: React.FC = () => {
               htmlFor="opt-vtarget"
               className="block text-xs font-medium text-slate-700 mb-1"
             >
-              Dung tích Vtarget (m³)
+              <MathText text="Dung tích $V_{\text{target}}$ ($\text{m}^3$)" />
             </label>
             <input
               id="opt-vtarget"
@@ -429,7 +444,7 @@ export const OptimizationLab: React.FC = () => {
 
           <div>
             <label htmlFor="opt-hmin" className="block text-xs font-medium text-slate-700 mb-1">
-              H nhỏ nhất (m)
+              <MathText text="$H_{\min}$ nhỏ nhất ($\text{m}$)" />
             </label>
             <input
               id="opt-hmin"
@@ -448,7 +463,7 @@ export const OptimizationLab: React.FC = () => {
 
           <div>
             <label htmlFor="opt-hmax" className="block text-xs font-medium text-slate-700 mb-1">
-              H lớn nhất (m)
+              <MathText text="$H_{\max}$ lớn nhất ($\text{m}$)" />
             </label>
             <input
               id="opt-hmax"
@@ -467,7 +482,7 @@ export const OptimizationLab: React.FC = () => {
 
           <div>
             <label htmlFor="opt-rmax" className="block text-xs font-medium text-slate-700 mb-1">
-              Bán kính tối đa (m)
+              <MathText text="Bán kính $R_{\max}$ ($\text{m}$)" />
             </label>
             <input
               id="opt-rmax"
@@ -486,7 +501,7 @@ export const OptimizationLab: React.FC = () => {
 
           <div>
             <label htmlFor="opt-cost" className="block text-xs font-medium text-slate-700 mb-1">
-              Đơn giá (VNĐ/m²)
+              <MathText text="Đơn giá ($\text{VNĐ/m}^2$)" />
             </label>
             <input
               id="opt-cost"
@@ -537,8 +552,10 @@ export const OptimizationLab: React.FC = () => {
             </div>
 
             {scanResults.bestCandidates.length === 0 ? (
-              <p className="text-xs text-amber-800">
-                Không tìm thấy bộ tham số nào trong lưới quét đạt Vtarget = {constraints.vTarget} m³ dưới giới hạn Hmax = {constraints.hMax} m và Rmax = {constraints.rMax} m. Hãy nới rộng giới hạn!
+              <p className="text-xs text-amber-800 leading-relaxed">
+                <MathText
+                  text={`Không tìm thấy bộ tham số nào trong lưới quét đạt $V_{\\text{target}} = ${constraints.vTarget}\\text{ m}^3$ dưới giới hạn $H_{\\max} = ${constraints.hMax}\\text{ m}$ và $R_{\\max} = ${constraints.rMax}\\text{ m}$. Hãy nới rộng giới hạn!`}
+                />
               </p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -548,9 +565,12 @@ export const OptimizationLab: React.FC = () => {
                     className="rounded-lg border border-slate-200 bg-white p-3 space-y-1.5 text-xs"
                   >
                     <div className="font-bold text-slate-900">{cand.label}</div>
-                    <div className="font-mono text-[11px] text-slate-600">{cand.summary}</div>
-                    <div className="font-mono text-cyan-900 font-semibold tabular-nums">
-                      Stotal = {cand.surfaceArea.toFixed(2)} m² · {Math.round(cand.estimatedCost).toLocaleString('vi-VN')} đ
+                    <div className="text-[11px] text-slate-600 leading-relaxed">
+                      <MathText text={cand.summary} />
+                    </div>
+                    <div className="text-cyan-900 font-semibold tabular-nums leading-relaxed">
+                      <MathText text={`$S_{\\text{total}} = ${cand.surfaceArea.toFixed(2)}\\text{ m}^2$`} />{' '}
+                      · <span className="font-mono">{Math.round(cand.estimatedCost).toLocaleString('vi-VN')} đ</span>
                     </div>
                     <div className="flex gap-1.5 pt-1">
                       <button
@@ -600,7 +620,7 @@ export const OptimizationLab: React.FC = () => {
           Kết luận đối sánh & Lý do lựa chọn phương án
         </h3>
         <p className="text-xs text-slate-800 font-medium leading-relaxed">
-          {comparisonSummary.message}
+          <MathText text={comparisonSummary.message} />
         </p>
         <p className="text-[11px] text-slate-500 pt-1 border-t border-slate-100">
           Ghi chú học thuật: Kết quả trên là mô hình toán học hình học phục vụ học tập môn Toán 12, chưa xét độ bền kết cấu chịu lực, áp suất thủy tĩnh theo độ sâu, hao hụt cắt gọt tôn/inox, mối hàn, tiêu chuẩn thi công và các yếu tố kỹ thuật công trình thực tế.

@@ -19,6 +19,7 @@ import {
   TaskStatus,
   VersionLogItem,
 } from '../types';
+import { MathText } from './MathFormula';
 
 interface GroupWorkspaceProps {
   students: StudentAssignment[];
@@ -223,9 +224,11 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                     {grp.studentRange} · {grpDone}/10 xong
                   </span>
                 </div>
-                <ul className="space-y-1 text-xs text-slate-600 list-disc pl-4">
+                <ul className="space-y-1 text-xs text-slate-600 list-disc pl-4 leading-relaxed">
                   {grp.objectives.map((obj, i) => (
-                    <li key={i}>{obj}</li>
+                    <li key={i}>
+                      <MathText text={obj} />
+                    </li>
                   ))}
                 </ul>
                 <p className="text-xs text-slate-800 pt-1 border-t border-slate-200/80">
@@ -464,8 +467,8 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
           <h3 className="text-base font-bold text-slate-900">
             Bảng khảo sát & Đối sánh 3 Công cụ AI (Nhiệm vụ Nhóm 3: HS21 – HS30)
           </h3>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Bài toán thử nghiệm chung: Tạo bồn trụ 3D, cho chỉnh R, H và tính đúng V = πR²H. Nhập điểm 0–2 cho từng tiêu chí sau khi thực nghiệm (hệ thống không tự điền sẵn điểm khi chưa có dữ liệu kiểm chứng).
+          <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+            <MathText text="Bài toán thử nghiệm chung: Tạo bồn trụ 3D, cho chỉnh $R, H$ và tính đúng $V = \pi R^2 H$. Nhập điểm 0–2 cho từng tiêu chí sau khi thực nghiệm (hệ thống không tự điền sẵn điểm khi chưa có dữ liệu kiểm chứng)." />
           </p>
         </div>
 
@@ -497,9 +500,11 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
             <tbody className="divide-y divide-slate-200">
               {AI_TOOL_CRITERIA.map((crit) => (
                 <tr key={crit.id} className="hover:bg-slate-50/70">
-                  <td className="py-2.5 px-3">
+                  <td className="py-2.5 px-3 leading-relaxed">
                     <div className="font-semibold text-slate-900">{crit.label}</div>
-                    <div className="text-[11px] text-slate-500">{crit.description}</div>
+                    <div className="text-[11px] text-slate-500">
+                      <MathText text={crit.description} />
+                    </div>
                   </td>
                   {aiEvaluations.map((ev) => {
                     const val = ev.scores[crit.id];
@@ -629,25 +634,28 @@ export const GroupWorkspace: React.FC<GroupWorkspaceProps> = ({
                   </button>
 
                   {isOpen && (
-                    <div className="px-4 pb-4 pt-2 border-t border-slate-200/80 bg-white space-y-2 text-xs text-slate-700">
+                    <div className="px-4 pb-4 pt-2 border-t border-slate-200/80 bg-white space-y-2 text-xs text-slate-700 leading-relaxed">
                       <p>
-                        <strong className="text-slate-900">Mục tiêu:</strong> {stage.goal}
+                        <strong className="text-slate-900">Mục tiêu:</strong>{' '}
+                        <MathText text={stage.goal} />
                       </p>
                       <div>
                         <strong className="text-slate-900">Công việc cụ thể:</strong>
                         <ul className="list-disc pl-5 mt-1 space-y-0.5">
                           {stage.tasks.map((t, idx) => (
-                            <li key={idx}>{t}</li>
+                            <li key={idx}>
+                              <MathText text={t} />
+                            </li>
                           ))}
                         </ul>
                       </div>
                       <p>
                         <strong className="text-slate-900">Sản phẩm bàn giao:</strong>{' '}
-                        {stage.deliverable}
+                        <MathText text={stage.deliverable} />
                       </p>
                       <p>
                         <strong className="text-slate-900">Tiêu chí hoàn thành:</strong>{' '}
-                        {stage.criteria}
+                        <MathText text={stage.criteria} />
                       </p>
                     </div>
                   )}

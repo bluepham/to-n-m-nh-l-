@@ -23,6 +23,11 @@
   font-variant-numeric: tabular-nums;
 }
 
+.katex {
+  font-size: 1.04em;
+  color: inherit;
+}
+
 .katex-display {
   margin: 0.5rem 0 !important;
   overflow-x: auto;

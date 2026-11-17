@@ -43,7 +43,7 @@ export const STEM_GROUPS_META: StemGroupMeta[] = [
     studentRange: 'HS21–HS30',
     objectives: [
       'Khảo sát thực nghiệm 3 công cụ: Google AI Studio (Gemini), Base44 và Google Antigravity.',
-      'Thử nghiệm cùng bài toán chuẩn: dựng bồn trụ 3D chỉnh R, H và tính V = πR²H.',
+      'Thử nghiệm cùng bài toán chuẩn: dựng bồn trụ 3D chỉnh $R, H$ và tính $V = \\pi R^2 H$.',
       'Chấm điểm theo bộ 8 tiêu chí có minh chứng cụ thể, không suy đoán cảm tính.',
     ],
     deliverable: 'Bảng đánh giá đối sánh có minh chứng và đề xuất lựa chọn công cụ phù hợp cho THPT.',
@@ -122,7 +122,7 @@ export const AI_TOOL_CRITERIA: AIJudgeCriterion[] = [
   { id: 'ease', label: '1. Dễ sử dụng', weightFactor: 1.25, description: 'Giao diện trực quan, dễ bắt đầu với học sinh THPT (0–2 điểm).' },
   { id: 'ui', label: '2. Tạo giao diện', weightFactor: 1.25, description: 'Khả năng sinh bố cục tiếng Việt rõ ràng, đáp ứng nhiều màn hình (0–2 điểm).' },
   { id: 'model3d', label: '3. Khả năng xây dựng 3D', weightFactor: 1.25, description: 'Dựng hình khối Three.js tương tác xoay/thu phóng thực (0–2 điểm).' },
-  { id: 'math', label: '4. Tính đúng công thức', weightFactor: 1.25, description: 'Tính chính xác tích phân V = π∫[r(z)]²dz, không gán số giả (0–2 điểm).' },
+  { id: 'math', label: '4. Tính đúng công thức', weightFactor: 1.25, description: 'Tính chính xác tích phân $\\displaystyle V = \\pi \\int_{0}^{H} [r(z)]^2\\,dz$, không gán số giả (0–2 điểm).' },
   { id: 'edit', label: '5. Khả năng chỉnh sửa', weightFactor: 1.25, description: 'Cho phép cập nhật từng phần mã hoặc tinh chỉnh bằng prompt tiếp nối (0–2 điểm).' },
   { id: 'deploy', label: '6. Xuất mã và triển khai', weightFactor: 1.25, description: 'Tải mã nguồn ZIP/GitHub và build lên Vercel/Netlify (0–2 điểm).' },
   { id: 'access', label: '7. Điều kiện sử dụng', weightFactor: 1.25, description: 'Chi phí, tài khoản và giới hạn lượt dùng miễn phí (0–2 điểm).' },
@@ -205,10 +205,10 @@ export const STEM_WORKFLOW_STAGES: StemWorkflowStage[] = [
     owner: 'Nhóm 1 (HS01–HS04)',
     tasks: [
       'Khảo sát bồn inox ngang/đứng tại trường học và gia đình.',
-      'Xác định câu hỏi: Làm sao đo lượng nước trong bồn cong chỉ từ chiều cao mực nước h?',
+      'Xác định câu hỏi: Làm sao đo lượng nước trong bồn cong chỉ từ chiều cao mực nước $h$?',
     ],
     deliverable: 'Phiếu khảo sát thực tế và danh mục bài toán cần giải quyết.',
-    criteria: 'Nêu rõ tối thiểu 3 dạng hình học bồn và các đại lượng đo đạc (R, H, h, Q).',
+    criteria: 'Nêu rõ tối thiểu 3 dạng hình học bồn và các đại lượng đo đạc ($R, H, h, Q$).',
   },
   {
     step: 2,
@@ -220,7 +220,7 @@ export const STEM_WORKFLOW_STAGES: StemWorkflowStage[] = [
       'Thiết lập công thức chuẩn cho bồn trụ, nón cụt, thành cong và bán cầu.',
     ],
     deliverable: 'Wireframe giao diện và bảng công thức chuẩn đối chiếu.',
-    criteria: 'Đầy đủ 6 khu vực và công thức V = π∫₀ᴴ[r(z)]²dz kèm điều kiện miền xác định.',
+    criteria: 'Đầy đủ 6 khu vực và công thức $\\displaystyle V = \\pi \\int_{0}^{H} [r(z)]^2\\,dz$ kèm điều kiện miền xác định.',
   },
   {
     step: 3,
@@ -229,7 +229,7 @@ export const STEM_WORKFLOW_STAGES: StemWorkflowStage[] = [
     owner: 'Nhóm 2 (HS11–HS14)',
     tasks: [
       'Phân tách prompt thành các mục: Vai trò, Công nghệ, 3D, Động cơ tích phân, Kiểm thử.',
-      'Ràng buộc rõ yêu cầu không gán số giả và không dùng h = H·V/Vmax cho bồn cong.',
+      'Ràng buộc rõ yêu cầu không gán số giả và không dùng $h = \\dfrac{H \\cdot V}{V_{\\max}}$ cho bồn cong.',
     ],
     deliverable: 'Tài liệu Prompt v1 và Prompt cải tiến v2.',
     criteria: 'Prompt có cấu trúc rõ ràng, nêu đủ các trường hợp biên và bộ test chuẩn.',
@@ -240,7 +240,7 @@ export const STEM_WORKFLOW_STAGES: StemWorkflowStage[] = [
     goal: 'Đánh giá khách quan các nền tảng tạo ứng dụng bằng AI dựa trên cùng một bài toán thử.',
     owner: 'Nhóm 3 (HS21–HS30)',
     tasks: [
-      'Chạy bài toán chuẩn tạo bồn trụ 3D (chỉnh R, H, tính V = πR²H) trên các công cụ.',
+      'Chạy bài toán chuẩn tạo bồn trụ 3D (chỉnh $R, H$, tính $V = \\pi R^2 H$) trên các công cụ.',
       'Ghi lại ảnh chụp màn hình/liên kết minh chứng và chấm điểm từng tiêu chí 0–2.',
     ],
     deliverable: 'Bảng đối sánh 3 công cụ AI quy đổi thang 10 điểm.',
@@ -252,8 +252,8 @@ export const STEM_WORKFLOW_STAGES: StemWorkflowStage[] = [
     goal: 'Xây dựng và kết nối đầy đủ mô hình 3D, động cơ tích phân, mô phỏng bơm – xả và đồ thị.',
     owner: 'Nhóm 2 (HS15–HS20)',
     tasks: [
-      'Dựng hình khối tròn xoay bằng LatheGeometry từ hàm r(z).',
-      'Lập trình giải phương trình tìm mực nước h bằng phương pháp chia đôi.',
+      'Dựng hình khối tròn xoay bằng LatheGeometry từ hàm $r(z)$.',
+      'Lập trình giải phương trình tìm mực nước $h$ bằng phương pháp chia đôi.',
     ],
     deliverable: 'Bản ứng dụng chạy thực tế trong trình duyệt.',
     criteria: 'Thay đổi thanh trượt cập nhật tức thời cả mô hình 3D, lời giải KaTeX và 4 đồ thị.',
@@ -264,7 +264,7 @@ export const STEM_WORKFLOW_STAGES: StemWorkflowStage[] = [
     goal: 'Xác minh độ chính xác Toán học, giới hạn vật lý và khả năng hiển thị đa thiết bị.',
     owner: 'Nhóm 4 (HS31–HS39)',
     tasks: [
-      'Chạy 12 ca kiểm thử chuẩn (sai số thể tích < 0,001 m³).',
+      'Chạy 12 ca kiểm thử chuẩn (sai số thể tích $< 0{,}001\\text{ m}^3$).',
       'Kiểm tra trường hợp tràn bồn, cạn bồn, nhập số âm và màn hình điện thoại.',
     ],
     deliverable: 'Biên bản kiểm thử 12 test cases và danh sách lỗi đã khắc phục.',
@@ -363,55 +363,55 @@ export const STEM_GLOSSARY: GlossaryItem[] = [
     en: 'Volume',
     vi: 'Thể tích',
     phonetic: '/ˈvɒljuːm/',
-    definitionVi: 'Lượng không gian ba chiều mà bồn hoặc khối nước chiếm chỗ, đo bằng m³ hoặc lít.',
+    definitionVi: 'Lượng không gian ba chiều mà bồn hoặc khối nước chiếm chỗ, đo bằng $\\text{m}^3$ hoặc lít.',
   },
   {
     en: 'Integral',
     vi: 'Tích phân',
     phonetic: '/ˈɪntɪɡrəl/',
-    definitionVi: 'Phép toán giải tích cộng dồn vô hạn các lát cắt vi phân A(z)dz để tính thể tích chính xác.',
+    definitionVi: 'Phép toán giải tích cộng dồn vô hạn các lát cắt vi phân $A(z)\\,dz$ để tính thể tích chính xác.',
   },
   {
     en: 'Radius',
     vi: 'Bán kính',
     phonetic: '/ˈreɪdiəs/',
-    definitionVi: 'Khoảng cách từ trục đối xứng Oz đến thành bồn tại độ cao z, ký hiệu r(z).',
+    definitionVi: 'Khoảng cách từ trục đối xứng $Oz$ đến thành bồn tại độ cao $z$, ký hiệu $r(z)$.',
   },
   {
     en: 'Height',
     vi: 'Chiều cao',
     phonetic: '/haɪt/',
-    definitionVi: 'Khoảng cách thẳng đứng từ đáy bồn z = 0 đến đỉnh bồn z = H.',
+    definitionVi: 'Khoảng cách thẳng đứng từ đáy bồn $z = 0$ đến đỉnh bồn $z = H$.',
   },
   {
     en: 'Water Level',
     vi: 'Mực nước',
     phonetic: '/ˈwɔːtər ˈlevəl/',
-    definitionVi: 'Độ cao mặt thoáng nằm ngang h (m) của lượng nước hiện có trong bồn.',
+    definitionVi: 'Độ cao mặt thoáng nằm ngang $h$ ($\\text{m}$) của lượng nước hiện có trong bồn.',
   },
   {
     en: 'Flow Rate',
     vi: 'Lưu lượng',
     phonetic: '/fləʊ reɪt/',
-    definitionVi: 'Thể tích nước bơm vào (Qv) hoặc xả ra (Qr) trên một đơn vị thời gian (m³/phút hoặc lít/phút).',
+    definitionVi: 'Thể tích nước bơm vào ($Q_v$) hoặc xả ra ($Q_r$) trên một đơn vị thời gian ($\\text{m}^3/\\text{phút}$ hoặc $\\text{lít/phút}$).',
   },
   {
     en: 'Cylinder',
     vi: 'Hình trụ',
     phonetic: '/ˈsɪlɪndər/',
-    definitionVi: 'Khối tròn xoay có bán kính mặt cắt ngang không đổi r(z) = R.',
+    definitionVi: 'Khối tròn xoay có bán kính mặt cắt ngang không đổi $r(z) = R$.',
   },
   {
     en: 'Frustum',
     vi: 'Hình nón cụt',
     phonetic: '/ˈfrʌstəm/',
-    definitionVi: 'Khối tròn xoay có bán kính biến thiên bậc nhất từ đáy r₀ đến miệng r₁.',
+    definitionVi: 'Khối tròn xoay có bán kính biến thiên bậc nhất từ đáy $r_0$ đến miệng $r_1$.',
   },
   {
     en: 'Surface Area',
     vi: 'Diện tích bề mặt',
     phonetic: '/ˈsɜːfɪs ˈeəriə/',
-    definitionVi: 'Tổng diện tích vỏ thành, đáy và nắp bồn, quyết định lượng vật liệu chế tạo.',
+    definitionVi: 'Tổng diện tích vỏ thành, đáy và nắp bồn ($\\text{m}^2$), quyết định lượng vật liệu chế tạo.',
   },
   {
     en: 'Optimization',
@@ -423,7 +423,7 @@ export const STEM_GLOSSARY: GlossaryItem[] = [
     en: 'Three-dimensional Model',
     vi: 'Mô hình ba chiều',
     phonetic: '/θriː dɪˈmenʃənəl ˈmɒdəl/',
-    definitionVi: 'Biểu diễn trực quan vật thể trong không gian Oxyz cho phép xoay, cắt lớp và quan sát.',
+    definitionVi: 'Biểu diễn trực quan vật thể trong không gian $Oxyz$ cho phép xoay, cắt lớp và quan sát.',
   },
 ];
 
@@ -439,41 +439,41 @@ export const BUILTIN_MATH_QA: MathAssistantQA[] = [
   {
     id: 'why_integral',
     question: 'Vì sao phải dùng tích phân để tính thể tích bồn nước?',
-    shortSummary: 'Vì khi bán kính r(z) thay đổi theo chiều cao, các công thức hình học sơ cấp không còn áp dụng trực tiếp được.',
+    shortSummary: 'Vì khi bán kính $r(z)$ thay đổi theo chiều cao, các công thức hình học sơ cấp không còn áp dụng trực tiếp được.',
     detailedAnswer:
-      'Với bồn hình trụ, tiết diện ngang không đổi nên chỉ cần lấy diện tích đáy nhân chiều cao. Tuy nhiên với bồn thành cong, bồn cầu hoặc thiết kế tùy chỉnh, bán kính r(z) thay đổi liên tục theo độ cao z. Ta chia bồn thành vô số lát cắt ngang cực mỏng dày dz có diện tích A(z) = π[r(z)]², sau đó dùng tích phân xác định để cộng dồn chính xác toàn bộ các lát cắt từ z = 0 đến z = H.',
+      'Với bồn hình trụ, tiết diện ngang không đổi nên chỉ cần lấy diện tích đáy nhân chiều cao. Tuy nhiên với bồn thành cong, bồn cầu hoặc thiết kế tùy chỉnh, bán kính $r(z)$ thay đổi liên tục theo độ cao $z$. Ta chia bồn thành vô số lát cắt ngang cực mỏng dày $dz$ có diện tích $A(z) = \\pi [r(z)]^2$, sau đó dùng tích phân xác định để cộng dồn chính xác toàn bộ các lát cắt từ $z = 0$ đến $z = H$.',
     latex: 'V = \\lim_{n \\to \\infty} \\sum_{i=1}^{n} \\pi [r(z_i)]^2 \\Delta z = \\pi \\int_{0}^{H} [r(z)]^2\\,dz',
   },
   {
     id: 'why_radius_squared',
     question: 'Vì sao bán kính thay đổi lại làm thể tích thay đổi rất mạnh?',
-    shortSummary: 'Vì diện tích mặt cắt ngang tỉ lệ thuận với bình phương bán kính [r(z)]².',
+    shortSummary: 'Vì diện tích mặt cắt ngang tỉ lệ thuận với bình phương bán kính $[r(z)]^2$.',
     detailedAnswer:
-      'Trong công thức A(z) = π[r(z)]², bán kính r(z) được bình phương. Do đó, nếu tại một độ cao nào đó bán kính tăng gấp 2 lần thì diện tích lát cắt ngang tại đó tăng gấp 4 lần! Chẳng hạn với bồn thành cong r(z) = 1 + 0,5sin(πz/2), phần bụng giữa z = 1 m có bán kính 1,5 m nên chứa lượng nước trên mỗi mét chiều cao gấp 2,25 lần so với phần đáy z = 0 (r = 1 m).',
+      'Trong công thức $A(z) = \\pi [r(z)]^2$, bán kính $r(z)$ được bình phương. Do đó, nếu tại một độ cao nào đó bán kính tăng gấp $2$ lần thì diện tích lát cắt ngang tại đó tăng gấp $4$ lần! Chẳng hạn với bồn thành cong $r(z) = 1 + 0{,}5\\sin\\left(\\frac{\\pi z}{2}\\right)$, phần bụng giữa $z = 1\\text{ m}$ có bán kính $1{,}5\\text{ m}$ nên chứa lượng nước trên mỗi mét chiều cao gấp $2{,}25$ lần so với phần đáy $z = 0$ ($r = 1\\text{ m}$).',
     latex: 'r_2 = 2r_1 \\implies A_2 = \\pi (2r_1)^2 = 4\\pi r_1^2 = 4 A_1',
   },
   {
     id: 'why_nonlinear_level',
     question: 'Vì sao mực nước trong bồn cong hoặc nón cụt không tăng đều theo thời gian?',
-    shortSummary: 'Tốc độ dâng mực nước dh/dt tỉ lệ nghịch với diện tích mặt thoáng A(h) = π[r(h)]².',
+    shortSummary: 'Tốc độ dâng mực nước $\\dfrac{dh}{dt}$ tỉ lệ nghịch với diện tích mặt thoáng $A(h) = \\pi [r(h)]^2$.',
     detailedAnswer:
-      'Khi máy bơm hoạt động với lưu lượng không đổi Q = dV/dt, theo quy tắc đạo hàm hàm hợp ta có dV/dt = (dV/dh)·(dh/dt) = A(h)·(dh/dt). Suy ra dh/dt = Q / [πr(h)²]. Ở đoạn cổ bồn hẹp (r nhỏ), tiết diện nhỏ nên nước dâng lên rất nhanh; ở đoạn thân bồn phình rộng (r lớn), cùng lượng nước đó phải trải rộng trên mặt thoáng lớn nên mực nước dâng chậm lại.',
+      'Khi máy bơm hoạt động với lưu lượng không đổi $Q = \\dfrac{dV}{dt}$, theo quy tắc đạo hàm hàm hợp ta có $\\dfrac{dV}{dt} = \\dfrac{dV}{dh} \\cdot \\dfrac{dh}{dt} = A(h) \\cdot \\dfrac{dh}{dt}$. Suy ra $\\dfrac{dh}{dt} = \\dfrac{Q}{\\pi [r(h)]^2}$. Ở đoạn cổ bồn hẹp ($r$ nhỏ), tiết diện nhỏ nên nước dâng lên rất nhanh; ở đoạn thân bồn phình rộng ($r$ lớn), cùng lượng nước đó phải trải rộng trên mặt thoáng lớn nên mực nước dâng chậm lại.',
     latex: '\\frac{dh}{dt} = \\frac{Q_{\\text{vào}} - Q_{\\text{ra}}}{\\pi [r(h)]^2}',
   },
   {
     id: 'frustum_derivation',
     question: 'Công thức thể tích hình nón cụt được thiết lập từ tích phân như thế nào?',
-    shortSummary: 'Viết phương trình đường thẳng đi qua (0, r₀) và (H, r₁) rồi lấy tích phân bình phương trên [0, H].',
+    shortSummary: 'Viết phương trình đường thẳng đi qua $(0, r_0)$ và $(H, r_1)$ rồi lấy tích phân bình phương trên $[0, H]$.',
     detailedAnswer:
-      'Đặt trục Oz dọc theo tâm bồn. Tại z = 0 bán kính là r₀, tại z = H bán kính là r₁, nên hàm bán kính là hàm bậc nhất r(z) = r₀ + ((r₁ − r₀)/H)z. Thay vào công thức tích phân khối tròn xoay V = π∫₀ᴴ[r(z)]²dz và đổi biến u = r₀ + ((r₁ − r₀)/H)z, ta thu được chính xác công thức quen thuộc của hình học không gian.',
+      'Đặt trục $Oz$ dọc theo tâm bồn. Tại $z = 0$ bán kính là $r_0$, tại $z = H$ bán kính là $r_1$, nên hàm bán kính là hàm bậc nhất $r(z) = r_0 + \\dfrac{r_1 - r_0}{H}z$. Thay vào công thức tích phân khối tròn xoay $\\displaystyle V = \\pi \\int_{0}^{H} [r(z)]^2\\,dz$ và đổi biến $u = r_0 + \\dfrac{r_1 - r_0}{H}z$, ta thu được chính xác công thức quen thuộc của hình học không gian.',
     latex: 'V = \\pi \\int_{0}^{H} \\left(r_0 + \\frac{r_1 - r_0}{H}z\\right)^2 dz = \\frac{\\pi H}{3}\\left(r_0^2 + r_0 r_1 + r_1^2\\right)',
   },
   {
     id: 'material_optimization',
     question: 'Khi nào bồn chứa nước dùng ít vật liệu vỏ hơn cho cùng một dung tích?',
-    shortSummary: 'Khi hình dạng bồn cân đối giữa chiều cao và đường kính (gần tỉ lệ khối cầu/trụ vuông H = 2R với bồn kín).',
+    shortSummary: 'Khi hình dạng bồn cân đối giữa chiều cao và đường kính (gần tỉ lệ khối trụ vuông $H = 2R$ với bồn kín).',
     detailedAnswer:
-      'Nếu làm bồn quá dẹt (R rất lớn, H rất nhỏ) thì diện tích đáy và nắp tăng vọt; ngược lại nếu làm bồn quá cao và ốm (R rất nhỏ, H rất lớn) thì diện tích thành xung quanh tăng mạnh. Với bồn trụ kín có cả đáy và nắp cố định thể tích V, đạo hàm diện tích toàn phần S = 2πRH + 2πR² đạt cực tiểu khi chiều cao bằng đường kính (H = 2R). Với bồn không nắp, tỉ lệ tiết kiệm nhất là H = R.',
+      'Nếu làm bồn quá dẹt ($R$ rất lớn, $H$ rất nhỏ) thì diện tích đáy và nắp tăng vọt; ngược lại nếu làm bồn quá cao và hẹp ($R$ rất nhỏ, $H$ rất lớn) thì diện tích thành xung quanh tăng mạnh. Với bồn trụ kín có cả đáy và nắp cố định thể tích $V$, đạo hàm diện tích toàn phần $S = 2\\pi RH + 2\\pi R^2$ đạt cực tiểu khi chiều cao bằng đường kính ($H = 2R$). Với bồn không nắp, tỉ lệ tiết kiệm nhất là $H = R$.',
     latex: 'S_{\\text{trụ kín}} = 2\\pi R H + 2\\pi R^2 = \\frac{2V}{R} + 2\\pi R^2 \\;\\xrightarrow{\\text{nhỏ nhất khi}}\\; H = 2R',
   },
 ];
@@ -488,141 +488,156 @@ export interface QuizQuestion {
   explanation: string;
 }
 
-// All 10+ questions verified analytically!
+// All 10+ questions verified analytically and formatted with KaTeX $...$!
 export const QUIZ_BANK: QuizQuestion[] = [
   {
     id: 'q1',
     level: 'Nhận biết',
     question:
-      'Cho hình phẳng giới hạn bởi đồ thị hàm bán kính liên tục r(z) ≥ 0, trục Oz và hai đường thẳng z = 0, z = H quay quanh trục Oz. Công thức tính thể tích khối tròn xoay tạo thành là:',
-    latex: '0 \\le z \\le H',
+      'Cho hình phẳng giới hạn bởi đồ thị hàm bán kính liên tục $r(z) \\ge 0$, trục $Oz$ và hai đường thẳng $z = 0$, $z = H$ quay quanh trục $Oz$. Công thức tính thể tích khối tròn xoay tạo thành là:',
     options: [
-      'V = π ∫₀ᴴ [r(z)]² dz',
-      'V = ∫₀ᴴ [r(z)]² dz',
-      'V = 2π ∫₀ᴴ r(z) dz',
-      'V = π² ∫₀ᴴ [r(z)]² dz',
+      '$\\displaystyle V = \\pi \\int_{0}^{H} [r(z)]^2\\,dz$',
+      '$\\displaystyle V = \\int_{0}^{H} [r(z)]^2\\,dz$',
+      '$\\displaystyle V = 2\\pi \\int_{0}^{H} r(z)\\,dz$',
+      '$\\displaystyle V = \\pi^2 \\int_{0}^{H} [r(z)]^2\\,dz$',
     ],
     correctIndex: 0,
     explanation:
-      'Theo Bài 13 – Toán 12 (Kết nối tri thức), thiết diện vuông góc trục Oz tại độ cao z là hình tròn diện tích A(z) = π[r(z)]², nên V = ∫₀ᴴ A(z)dz = π∫₀ᴴ[r(z)]²dz.',
+      'Theo Bài 13 – Toán 12 (Kết nối tri thức), thiết diện vuông góc trục $Oz$ tại độ cao $z \\in [0, H]$ là hình tròn diện tích $A(z) = \\pi [r(z)]^2$, nên $\\displaystyle V = \\int_{0}^{H} A(z)\\,dz = \\pi \\int_{0}^{H} [r(z)]^2\\,dz$.',
   },
   {
     id: 'q2',
     level: 'Nhận biết',
     question:
-      'Một bồn nước hình trụ đứng có bán kính đáy R = 1,5 m và chiều cao H = 2 m. Dung tích tối đa của bồn bằng bao nhiêu (làm tròn đến chữ số thập phân thứ hai)?',
-    latex: 'R = 1{,}5\\text{ m}, \\quad H = 2\\text{ m}',
-    options: ['14,14 m³', '9,42 m³', '18,85 m³', '4,50 m³'],
+      'Một bồn nước hình trụ đứng có bán kính đáy $R = 1{,}5\\text{ m}$ và chiều cao $H = 2\\text{ m}$. Dung tích tối đa của bồn bằng bao nhiêu (làm tròn đến chữ số thập phân thứ hai)?',
+    options: [
+      '$14{,}14\\text{ m}^3$',
+      '$9{,}42\\text{ m}^3$',
+      '$18{,}85\\text{ m}^3$',
+      '$4{,}50\\text{ m}^3$',
+    ],
     correctIndex: 0,
-    explanation: 'Áp dụng V = πR²H = π · 1,5² · 2 = 4,5π ≈ 14,1372 m³ ≈ 14,14 m³.',
+    explanation:
+      'Áp dụng công thức $V = \\pi R^2 H = \\pi \\cdot 1{,}5^2 \\cdot 2 = 4{,}5\\pi \\approx 14{,}1372\\text{ m}^3 \\approx 14{,}14\\text{ m}^3$.',
   },
   {
     id: 'q3',
     level: 'Thông hiểu',
     question:
-      'Một bồn nước hình nón cụt có bán kính đáy r₀ = 1 m, bán kính miệng trên r₁ = 2 m và chiều cao H = 3 m. Thể tích toàn bồn là:',
-    latex: 'r_0 = 1\\text{ m},\\; r_1 = 2\\text{ m},\\; H = 3\\text{ m}',
-    options: ['7π ≈ 21,99 m³', '9π ≈ 28,27 m³', '5π ≈ 15,71 m³', '21π ≈ 65,97 m³'],
+      'Một bồn nước hình nón cụt có bán kính đáy $r_0 = 1\\text{ m}$, bán kính miệng trên $r_1 = 2\\text{ m}$ và chiều cao $H = 3\\text{ m}$. Thể tích toàn bồn là:',
+    options: [
+      '$7\\pi \\approx 21{,}99\\text{ m}^3$',
+      '$9\\pi \\approx 28{,}27\\text{ m}^3$',
+      '$5\\pi \\approx 15{,}71\\text{ m}^3$',
+      '$21\\pi \\approx 65{,}97\\text{ m}^3$',
+    ],
     correctIndex: 0,
     explanation:
-      'Theo công thức nón cụt V = πH(r₀² + r₀r₁ + r₁²)/3 = π·3·(1 + 2 + 4)/3 = 7π ≈ 21,991 m³.',
+      'Theo công thức nón cụt $\\displaystyle V = \\frac{\\pi H}{3}\\left(r_0^2 + r_0 r_1 + r_1^2\\right) = \\frac{\\pi \\cdot 3}{3}(1 + 2 + 4) = 7\\pi \\approx 21{,}991\\text{ m}^3$.',
   },
   {
     id: 'q4',
     level: 'Thông hiểu',
     question:
-      'Một bồn chứa dạng bán cầu có hàm bán kính r(z) = √(4 − z²) với 0 ≤ z ≤ 2 (đơn vị: mét). Biểu thức tích phân tính dung tích toàn bồn là:',
-    latex: 'r(z) = \\sqrt{4 - z^2}, \\quad 0 \\le z \\le 2',
+      'Một bồn chứa dạng bán cầu có hàm bán kính $r(z) = \\sqrt{4 - z^2}$ với $0 \\le z \\le 2$ (đơn vị: mét). Biểu thức tích phân tính dung tích toàn bồn là:',
     options: [
-      'V = π ∫₀² (4 − z²) dz = 16π/3 m³',
-      'V = π ∫₀² √(4 − z²) dz = π² m³',
-      'V = ∫₀² (4 − z²) dz = 16/3 m³',
-      'V = 2π ∫₀² (4 − z²) dz = 32π/3 m³',
+      '$\\displaystyle V = \\pi \\int_{0}^{2} (4 - z^2)\\,dz = \\frac{16\\pi}{3}\\text{ m}^3$',
+      '$\\displaystyle V = \\pi \\int_{0}^{2} \\sqrt{4 - z^2}\\,dz = \\pi^2\\text{ m}^3$',
+      '$\\displaystyle V = \\int_{0}^{2} (4 - z^2)\\,dz = \\frac{16}{3}\\text{ m}^3$',
+      '$\\displaystyle V = 2\\pi \\int_{0}^{2} (4 - z^2)\\,dz = \\frac{32\\pi}{3}\\text{ m}^3$',
     ],
     correctIndex: 0,
     explanation:
-      'Bình phương bán kính cho [r(z)]² = 4 − z². Khi đó V = π∫₀²(4 − z²)dz = π[4z − z³/3]₀² = π(8 − 8/3) = 16π/3 m³.',
+      'Bình phương bán kính cho $[r(z)]^2 = 4 - z^2$. Khi đó $\\displaystyle V = \\pi \\int_{0}^{2} (4 - z^2)\\,dz = \\pi \\left[4z - \\frac{z^3}{3}\\right]_{0}^{2} = \\pi\\left(8 - \\frac{8}{3}\\right) = \\frac{16\\pi}{3}\\text{ m}^3$.',
   },
   {
     id: 'q5',
     level: 'Vận dụng',
     question:
-      'Bồn thành cong có hàm bán kính r(z) = 1 + 0,5sin(πz/2) trên đoạn 0 ≤ z ≤ 2 (m). Thể tích toàn bồn gần nhất với giá trị nào sau đây?',
-    latex: 'r(z) = 1 + 0{,}5\\sin\\left(\\frac{\\pi z}{2}\\right), \\quad H = 2\\text{ m}',
-    options: ['11,07 m³', '6,28 m³', '14,14 m³', '8,54 m³'],
+      'Bồn thành cong có hàm bán kính $r(z) = 1 + 0{,}5\\sin\\left(\\dfrac{\\pi z}{2}\\right)$ trên đoạn $0 \\le z \\le 2$ ($\\text{m}$). Thể tích toàn bồn gần nhất với giá trị nào sau đây?',
+    options: [
+      '$11{,}07\\text{ m}^3$',
+      '$6{,}28\\text{ m}^3$',
+      '$14{,}14\\text{ m}^3$',
+      '$8{,}54\\text{ m}^3$',
+    ],
     correctIndex: 0,
     explanation:
-      'Tính V = π∫₀²[1 + sin(πz/2) + 0,25sin²(πz/2)]dz = π(2 + 4/π + 0,25) = 2,25π + 4 ≈ 11,0686 m³ ≈ 11,07 m³.',
+      'Tính $\\displaystyle V = \\pi \\int_{0}^{2} \\left[1 + \\sin\\left(\\frac{\\pi z}{2}\\right) + 0{,}25\\sin^2\\left(\\frac{\\pi z}{2}\\right)\\right] dz = \\pi\\left(2 + \\frac{4}{\\pi} + 0{,}25\\right) = 2{,}25\\pi + 4 \\approx 11{,}0686\\text{ m}^3 \\approx 11{,}07\\text{ m}^3$.',
   },
   {
     id: 'q6',
     level: 'Thông hiểu',
     question:
-      'Phát biểu nào sau đây phân biệt ĐÚNG giữa dung tích toàn bồn Vmax và thể tích nước hiện có Vwater(h) khi mực nước ở độ cao h (0 < h < H)?',
+      'Phát biểu nào sau đây phân biệt ĐÚNG giữa dung tích toàn bồn $V_{\\max}$ và thể tích nước hiện có $V_{\\text{water}}(h)$ khi mực nước ở độ cao $h$ ($0 < h < H$)?',
     options: [
-      'Vmax tích phân từ 0 đến H; còn Vwater(h) tích phân từ 0 đến h trên cùng hàm diện tích π[r(z)]².',
-      'Luôn có Vwater(h) = (h / H) · Vmax với mọi hình dạng bồn bất kỳ.',
-      'Vwater(h) tích phân từ h đến H của hàm π[r(z)]².',
-      'Vmax và Vwater(h) chỉ khác nhau hệ số hằng số π.',
+      '$V_{\\max}$ lấy tích phân từ $0$ đến $H$; còn $V_{\\text{water}}(h)$ lấy tích phân từ $0$ đến $h$ trên cùng hàm diện tích $\\pi [r(z)]^2$.',
+      'Luôn có $V_{\\text{water}}(h) = \\dfrac{h}{H} \\cdot V_{\\max}$ với mọi hình dạng bồn bất kỳ.',
+      '$V_{\\text{water}}(h)$ lấy tích phân từ $h$ đến $H$ của hàm $\\pi [r(z)]^2$.',
+      '$V_{\\max}$ và $V_{\\text{water}}(h)$ chỉ khác nhau hệ số hằng số $\\pi$.',
     ],
     correctIndex: 0,
     explanation:
-      'Nước chiếm phần lòng bồn từ đáy z = 0 đến mặt thoáng z = h nên Vwater(h) = π∫₀ʰ[r(z)]²dz. Công thức tỉ lệ tuyến tính (h/H)·Vmax chỉ đúng khi tiết diện không đổi (hình trụ).',
+      'Nước chiếm phần lòng bồn từ đáy $z = 0$ đến mặt thoáng $z = h$ nên $\\displaystyle V_{\\text{water}}(h) = \\pi \\int_{0}^{h} [r(z)]^2\\,dz$. Công thức tỉ lệ tuyến tính $\\dfrac{h}{H} \\cdot V_{\\max}$ chỉ đúng khi tiết diện không đổi (hình trụ).',
   },
   {
     id: 'q7',
     level: 'Nhận biết',
     question:
-      'Nếu thể tích nước trong bồn tính được từ tích phân là Vwater = 3,25 m³ thì lượng nước đó tương ứng bao nhiêu lít?',
-    options: ['3.250 lít', '325 lít', '32.500 lít', '3,25 lít'],
+      'Nếu thể tích nước trong bồn tính được từ tích phân là $V_{\\text{water}} = 3{,}25\\text{ m}^3$ thì lượng nước đó tương ứng bao nhiêu lít?',
+    options: [
+      '$3.250\\text{ lít}$',
+      '$325\\text{ lít}$',
+      '$32.500\\text{ lít}$',
+      '$3{,}25\\text{ lít}$',
+    ],
     correctIndex: 0,
-    explanation: 'Quy đổi đơn vị chuẩn: 1 m³ = 1.000 dm³ = 1.000 lít. Vậy 3,25 m³ = 3,25 × 1.000 = 3.250 lít.',
+    explanation:
+      'Quy đổi đơn vị chuẩn: $1\\text{ m}^3 = 1.000\\text{ dm}^3 = 1.000\\text{ lít}$. Vậy $3{,}25\\text{ m}^3 = 3{,}25 \\times 1.000 = 3.250\\text{ lít}$.',
   },
   {
     id: 'q8',
     level: 'Thông hiểu',
     question:
-      'Một bồn hình trụ R = 1 m, H = 2 m ban đầu rỗng. Bơm nước vào với lưu lượng Qv = 0,6 m³/phút đồng thời xả ra Qr = 0,1 m³/phút. Sau 6 phút thể tích nước và chiều cao mực nước là:',
-    latex: 'Q_v = 0{,}6,\\; Q_r = 0{,}1\\text{ (m}^3\\text{/phút)},\\; t = 6\\text{ phút}',
+      'Một bồn hình trụ $R = 1\\text{ m}$, $H = 2\\text{ m}$ ban đầu rỗng. Bơm nước vào với lưu lượng $Q_v = 0{,}6\\text{ m}^3/\\text{phút}$ đồng thời xả ra $Q_r = 0{,}1\\text{ m}^3/\\text{phút}$. Sau $6\\text{ phút}$ thể tích nước và chiều cao mực nước là:',
     options: [
-      'Vwater = 3,00 m³ và h = 3/π ≈ 0,95 m',
-      'Vwater = 3,60 m³ và h ≈ 1,15 m',
-      'Vwater = 3,00 m³ và h = 1,50 m',
-      'Vwater = 4,20 m³ và h ≈ 1,34 m',
+      '$V_{\\text{water}} = 3{,}00\\text{ m}^3$ và $h = \\dfrac{3}{\\pi} \\approx 0{,}95\\text{ m}$',
+      '$V_{\\text{water}} = 3{,}60\\text{ m}^3$ và $h \\approx 1{,}15\\text{ m}$',
+      '$V_{\\text{water}} = 3{,}00\\text{ m}^3$ và $h = 1{,}50\\text{ m}$',
+      '$V_{\\text{water}} = 4{,}20\\text{ m}^3$ và $h \\approx 1{,}34\\text{ m}$',
     ],
     correctIndex: 0,
     explanation:
-      'Lưu lượng ròng Q = 0,6 − 0,1 = 0,5 m³/phút. Sau 6 phút: Vwater = 0,5 × 6 = 3 m³. Với hình trụ R = 1 m: h = V/(πR²) = 3/π ≈ 0,9549 m.',
+      'Lưu lượng ròng $Q = Q_v - Q_r = 0{,}6 - 0{,}1 = 0{,}5\\text{ m}^3/\\text{phút}$. Sau $6\\text{ phút}$: $V_{\\text{water}} = 0{,}5 \\times 6 = 3\\text{ m}^3$. Với hình trụ $R = 1\\text{ m}$: $h = \\dfrac{V_{\\text{water}}}{\\pi R^2} = \\dfrac{3}{\\pi} \\approx 0{,}9549\\text{ m}$.',
   },
   {
     id: 'q9',
     level: 'Vận dụng',
     question:
-      'Bơm nước với lưu lượng không đổi vào một bồn hình nón cụt loe dần lên trên (r₀ = 0,8 m ở đáy, r₁ = 1,8 m ở miệng). Khi mực nước dâng từ đáy lên miệng thì tốc độ tăng mực nước dh/dt biến đổi thế nào?',
+      'Bơm nước với lưu lượng không đổi vào một bồn hình nón cụt loe dần lên trên ($r_0 = 0{,}8\\text{ m}$ ở đáy, $r_1 = 1{,}8\\text{ m}$ ở miệng). Khi mực nước dâng từ đáy lên miệng thì tốc độ tăng mực nước $\\dfrac{dh}{dt}$ biến đổi thế nào?',
     options: [
-      'Giảm dần vì diện tích mặt thoáng π[r(h)]² ngày càng lớn.',
+      'Giảm dần vì diện tích mặt thoáng $\\pi [r(h)]^2$ ngày càng lớn.',
       'Tăng dần vì càng lên cao áp suất càng lớn.',
       'Không đổi vì lưu lượng máy bơm không đổi.',
       'Tăng lên cực đại ở giữa bồn rồi giảm.',
     ],
     correctIndex: 0,
     explanation:
-      'Do dh/dt = Q / (π[r(h)]²), khi h tăng thì bán kính r(h) tăng từ 0,8 m lên 1,8 m làm mẫu số tăng, nên tốc độ dâng mực nước dh/dt giảm dần.',
+      'Do $\\dfrac{dh}{dt} = \\dfrac{Q}{\\pi [r(h)]^2}$, khi $h$ tăng thì bán kính $r(h)$ tăng từ $0{,}8\\text{ m}$ lên $1{,}8\\text{ m}$ làm mẫu số tăng, nên tốc độ dâng mực nước $\\dfrac{dh}{dt}$ giảm dần.',
   },
   {
     id: 'q10',
     level: 'Vận dụng',
     question:
-      'Cần chế tạo bồn hình trụ kín (có cả đáy và nắp) dung tích 2π m³. So sánh Phương án A (R = 1 m, H = 2 m) và Phương án B (R = √2 m, H = 1 m), phương án nào tốn ít diện tích vật liệu vỏ hơn?',
-    latex: 'V = \\pi R^2 H = 2\\pi\\text{ m}^3, \\quad S_{\\text{toàn phần}} = 2\\pi RH + 2\\pi R^2',
+      'Cần chế tạo bồn hình trụ kín (có cả đáy và nắp) dung tích $V = 2\\pi\\text{ m}^3$ với $S_{\\text{toàn phần}} = 2\\pi RH + 2\\pi R^2$. So sánh Phương án A ($R = 1\\text{ m},\\; H = 2\\text{ m}$) và Phương án B ($R = \\sqrt{2}\\text{ m},\\; H = 1\\text{ m}$), phương án nào tốn ít diện tích vật liệu vỏ hơn?',
     options: [
-      'Phương án A tốn ít vật liệu hơn (6π ≈ 18,85 m² so với (4 + 2√2)π ≈ 21,45 m²).',
+      'Phương án A tốn ít vật liệu hơn ($6\\pi \\approx 18{,}85\\text{ m}^2$ so với $(4 + 2\\sqrt{2})\\pi \\approx 21{,}45\\text{ m}^2$).',
       'Phương án B tốn ít vật liệu hơn vì chiều cao thấp hơn một nửa.',
       'Hai phương án có diện tích toàn phần bằng nhau vì cùng thể tích.',
-      'Phương án A tốn nhiều vật liệu hơn (8π m² so với 6π m²).',
+      'Phương án A tốn nhiều vật liệu hơn ($8\\pi\\text{ m}^2$ so với $6\\pi\\text{ m}^2$).',
     ],
     correctIndex: 0,
     explanation:
-      'Phương án A (H = 2R): S_A = 2π(1)(2) + 2π(1)² = 6π ≈ 18,85 m². Phương án B: S_B = 2π(√2)(1) + 2π(2) = (4 + 2√2)π ≈ 21,45 m². Phương án A tiết kiệm hơn khoảng 2,60 m² vật liệu!',
+      'Phương án A ($H = 2R$): $S_A = 2\\pi(1)(2) + 2\\pi(1)^2 = 6\\pi \\approx 18{,}85\\text{ m}^2$. Phương án B: $S_B = 2\\pi(\\sqrt{2})(1) + 2\\pi(2) = (4 + 2\\sqrt{2})\\pi \\approx 21{,}45\\text{ m}^2$. Phương án A tiết kiệm hơn khoảng $2{,}60\\text{ m}^2$ vật liệu!',
   },
 ];
