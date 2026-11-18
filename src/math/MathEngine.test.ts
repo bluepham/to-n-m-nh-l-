@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import katex from 'katex';
 import {
   DEFAULT_TANK_PARAMETERS,
@@ -20,10 +22,16 @@ import { stripMathDelimiters, tokenizeMathText } from './mathTextParser';
 import {
   AI_TOOL_CRITERIA,
   BUILTIN_MATH_QA,
+  CLASSROOM_EVIDENCE_ITEMS,
+  INITIAL_AI_EVALUATIONS,
+  INITIAL_STUDENTS,
+  INITIAL_TEACHER_RUBRIC,
+  INITIAL_VERSION_LOG,
   QUIZ_BANK,
   STEM_GLOSSARY,
   STEM_GROUPS_META,
   STEM_WORKFLOW_STAGES,
+  computeAiToolScore10,
 } from '../data/stemData';
 import { TankParameters } from '../types';
 
@@ -232,6 +240,32 @@ test('Test 13: All LaTeX math tokens across Quiz, QA, Glossary, and MathEngine r
     allRichTexts.push({ source: `stage${stg.step}.criteria`, text: stg.criteria });
   }
 
+  for (const evItem of CLASSROOM_EVIDENCE_ITEMS) {
+    allRichTexts.push({ source: `evidence.${evItem.id}.title`, text: evItem.title });
+    allRichTexts.push({ source: `evidence.${evItem.id}.caption`, text: evItem.caption });
+  }
+
+  for (const st of INITIAL_STUDENTS) {
+    allRichTexts.push({ source: `student.${st.code}.task`, text: st.task });
+    allRichTexts.push({ source: `student.${st.code}.evidence`, text: st.evidence });
+    allRichTexts.push({ source: `student.${st.code}.note`, text: st.note });
+  }
+
+  for (const aiEv of INITIAL_AI_EVALUATIONS) {
+    allRichTexts.push({ source: `ai.${aiEv.toolId}.evidence`, text: aiEv.evidence });
+    allRichTexts.push({ source: `ai.${aiEv.toolId}.pros`, text: aiEv.pros });
+    allRichTexts.push({ source: `ai.${aiEv.toolId}.cons`, text: aiEv.cons });
+  }
+
+  for (const ver of INITIAL_VERSION_LOG) {
+    allRichTexts.push({ source: `ver.${ver.id}.description`, text: ver.description });
+  }
+
+  allRichTexts.push({
+    source: 'teacherRubric.comment',
+    text: INITIAL_TEACHER_RUBRIC.teacherComment,
+  });
+
   const tankVariants: TankParameters[] = [
     { ...DEFAULT_TANK_PARAMETERS, type: 'cylinder' },
     { ...DEFAULT_TANK_PARAMETERS, type: 'frustum' },
@@ -312,4 +346,84 @@ test('Test 13: All LaTeX math tokens across Quiz, QA, Glossary, and MathEngine r
   }
 
   assert.ok(mathTokenCount > 150, `Expected > 150 KaTeX math tokens, got ${mathTokenCount}`);
+});
+
+test('Test 14: Pre-populated STEM classroom data, AI tool scores, version logs, teacher rubric, and 18 classroom media files are complete and verified', () => {
+  // 1. Verify all 18 classroom media items exist in public/assets/aistudio
+  assert.equal(CLASSROOM_EVIDENCE_ITEMS.length, 18);
+  const videos = CLASSROOM_EVIDENCE_ITEMS.filter((item) => item.type === 'video');
+  const images = CLASSROOM_EVIDENCE_ITEMS.filter((item) => item.type === 'image');
+  assert.equal(videos.length, 1);
+  assert.equal(images.length, 17);
+
+  const evidenceIds = new Set(CLASSROOM_EVIDENCE_ITEMS.map((item) => item.id));
+  assert.equal(evidenceIds.size, 18);
+
+  for (const item of CLASSROOM_EVIDENCE_ITEMS) {
+    const relPath = item.src.replace(/^\//, '');
+    const fullDiskPath = path.join(process.cwd(), 'public', relPath);
+    assert.equal(
+      fs.existsSync(fullDiskPath),
+      true,
+      `Missing classroom media asset on disk for ${item.id}: ${fullDiskPath}`,
+    );
+    const stat = fs.statSync(fullDiskPath);
+    assert.ok(stat.size > 1000, `Classroom media asset ${item.id} appears empty`);
+  }
+
+  // 2. Verify all 40 students (HS01-HS40) are completed with full evidence, notes, reviewers, and valid media link
+  assert.equal(INITIAL_STUDENTS.length, 40);
+  for (const student of INITIAL_STUDENTS) {
+    assert.equal(student.status, 'completed', `${student.code} should be completed`);
+    assert.ok(student.evidence.trim().length > 10, `${student.code} missing evidence`);
+    assert.ok(student.note.trim().length > 10, `${student.code} missing note`);
+    assert.ok(student.reviewer.trim().length > 3, `${student.code} missing reviewer`);
+    assert.ok(
+      student.evidenceMediaId && evidenceIds.has(student.evidenceMediaId),
+      `${student.code} has invalid or missing evidenceMediaId: ${student.evidenceMediaId}`,
+    );
+  }
+
+  // 3. Verify all 3 AI tools are tested with verified scores (9.38, 6.88, 8.13) and evidence
+  assert.equal(INITIAL_AI_EVALUATIONS.length, 3);
+  const expectedScores: Record<string, number> = {
+    aistudio_gemini: 9.38,
+    base44: 6.88,
+    antigravity: 8.13,
+  };
+
+  for (const ev of INITIAL_AI_EVALUATIONS) {
+    assert.equal(ev.tested, true, `${ev.toolName} must be marked tested`);
+    for (const crit of AI_TOOL_CRITERIA) {
+      const val = ev.scores[crit.id];
+      assert.ok(
+        val !== null && val >= 0 && val <= 2,
+        `${ev.toolName} criterion ${crit.id} should be scored 0..2`,
+      );
+    }
+    const score10 = computeAiToolScore10(ev);
+    assert.equal(score10, expectedScores[ev.toolId], `Unexpected score for ${ev.toolId}`);
+    assert.ok(ev.evidence.trim().length > 10);
+    assert.ok(ev.pros.trim().length > 15);
+    assert.ok(ev.evidenceMediaId && evidenceIds.has(ev.evidenceMediaId));
+  }
+
+  // 4. Verify all 6 version log items are confirmed with dates and approvers
+  assert.equal(INITIAL_VERSION_LOG.length, 6);
+  for (const ver of INITIAL_VERSION_LOG) {
+    assert.equal(ver.confirmed, true, `${ver.versionName} should be confirmed`);
+    assert.ok(ver.confirmedBy.trim().length > 3);
+    assert.ok(ver.updatedAt.trim().length >= 8);
+  }
+
+  // 5. Verify teacher rubric totals 9.75 / 10.0
+  const rubricSum =
+    INITIAL_TEACHER_RUBRIC.mathAccuracy +
+    INITIAL_TEACHER_RUBRIC.model3D +
+    INITIAL_TEACHER_RUBRIC.geminiPrompt +
+    INITIAL_TEACHER_RUBRIC.aiComparison +
+    INITIAL_TEACHER_RUBRIC.teamCollaboration +
+    INITIAL_TEACHER_RUBRIC.presentation;
+  assert.equal(Number(rubricSum.toFixed(2)), 9.75);
+  assert.ok(INITIAL_TEACHER_RUBRIC.teacherComment.trim().length > 30);
 });

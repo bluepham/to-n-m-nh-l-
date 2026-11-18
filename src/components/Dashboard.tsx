@@ -38,6 +38,7 @@ interface DashboardProps {
     aiEvaluations?: AIToolEvaluation[];
     versionLog?: VersionLogItem[];
   }) => void;
+  onResetDefaultWorkspace: () => void;
   aiEvaluations: AIToolEvaluation[];
   onUpdateAiEvaluation: (
     toolId: AIToolEvaluation['toolId'],
@@ -47,6 +48,7 @@ interface DashboardProps {
   onUpdateVersionLog: (id: string, patch: Partial<VersionLogItem>) => void;
   rubric: TeacherRubricState;
   onChangeRubric: (next: TeacherRubricState) => void;
+  onResetRubric: () => void;
   bestQuizScore: number | null;
   testResults: InternalTestResult[];
   onUpdateTestResults: (next: InternalTestResult[]) => void;
@@ -59,12 +61,14 @@ export const Dashboard: React.FC<DashboardProps> = ({
   students,
   onUpdateStudent,
   onImportWorkspaceJson,
+  onResetDefaultWorkspace,
   aiEvaluations,
   onUpdateAiEvaluation,
   versionLog,
   onUpdateVersionLog,
   rubric,
   onChangeRubric,
+  onResetRubric,
   bestQuizScore,
   testResults,
   onUpdateTestResults,
@@ -287,6 +291,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             students={students}
             onUpdateStudent={onUpdateStudent}
             onImportWorkspaceJson={onImportWorkspaceJson}
+            onResetDefaultWorkspace={onResetDefaultWorkspace}
             aiEvaluations={aiEvaluations}
             onUpdateAiEvaluation={onUpdateAiEvaluation}
             versionLog={versionLog}
@@ -299,6 +304,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
             students={students}
             rubric={rubric}
             onChangeRubric={onChangeRubric}
+            onResetRubric={onResetRubric}
             bestQuizScore={bestQuizScore}
             testResults={testResults}
           />

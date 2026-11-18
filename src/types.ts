@@ -103,6 +103,20 @@ export type TaskStatus =
   | 'completed'
   | 'needs_revision';
 
+export type EvidenceCategory = 'lecture' | 'lab_3d_casio' | 'group_work';
+
+export interface ClassroomEvidenceItem {
+  id: string;
+  type: 'video' | 'image';
+  category: EvidenceCategory;
+  title: string;
+  caption: string;
+  src: string;
+  posterSrc?: string;
+  groupIds: (1 | 2 | 3 | 4)[];
+  dateLabel: string;
+}
+
 export interface StudentAssignment {
   code: string; // HS01 .. HS40
   groupId: 1 | 2 | 3 | 4;
@@ -112,6 +126,7 @@ export interface StudentAssignment {
   evidence: string;
   note: string;
   reviewer: string;
+  evidenceMediaId?: string;
 }
 
 export interface AIToolCriterionScore {
@@ -128,6 +143,7 @@ export interface AIToolEvaluation {
   evidence: string;
   pros: string;
   cons: string;
+  evidenceMediaId?: string;
 }
 
 export interface VersionLogItem {

@@ -68,7 +68,11 @@ export function stripMathDelimiters(input: string): string {
   return input
     .replace(/\$\$/g, '')
     .replace(/\$/g, '')
+    .replace(/\^\\circ/g, '°')
+    .replace(/\\pi\b/g, 'π')
+    .replace(/\\int/g, '∫')
     .replace(/\\text\{([^}]*)\}/g, '$1')
+    .replace(/\{,\}/g, ',')
     .replace(/\\(?:displaystyle|quad|qquad|,|;)/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();

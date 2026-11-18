@@ -51,11 +51,11 @@ import {
 
 const STORAGE_KEYS = {
   TANK: 'swt_tank_params_v1',
-  STUDENTS: 'swt_students_v1',
-  AI_EVALS: 'swt_ai_evals_v1',
-  VERSIONS: 'swt_versions_v1',
-  RUBRIC: 'swt_rubric_v1',
-  QUIZ_BEST: 'swt_best_quiz_v1',
+  STUDENTS: 'swt_students_v3',
+  AI_EVALS: 'swt_ai_evals_v3',
+  VERSIONS: 'swt_versions_v2',
+  RUBRIC: 'swt_rubric_v2',
+  QUIZ_BEST: 'swt_best_quiz_v2',
   LANG: 'swt_lang_v1',
   GUIDE_DISMISSED: 'swt_quick_guide_dismissed_v1',
 };
@@ -157,7 +157,7 @@ export default function App() {
   );
 
   const [bestQuizScore, setBestQuizScore] = useState<number | null>(() =>
-    loadJsonFromStorage<number | null>(STORAGE_KEYS.QUIZ_BEST, null),
+    loadJsonFromStorage<number | null>(STORAGE_KEYS.QUIZ_BEST, 9.0),
   );
 
   const [testResults, setTestResults] = useState<InternalTestResult[]>(() =>
@@ -292,6 +292,16 @@ export default function App() {
     setVersionLog((prev) =>
       prev.map((v) => (v.id === id ? { ...v, ...patch } : v)),
     );
+  };
+
+  const handleResetDefaultWorkspace = () => {
+    setStudents(INITIAL_STUDENTS);
+    setAiEvaluations(INITIAL_AI_EVALUATIONS);
+    setVersionLog(INITIAL_VERSION_LOG);
+  };
+
+  const handleResetRubric = () => {
+    setRubric(INITIAL_TEACHER_RUBRIC);
   };
 
   const handleQuizScoreUpdate = (scoreOutOf10: number) => {
@@ -515,12 +525,14 @@ export default function App() {
             students={students}
             onUpdateStudent={handleUpdateStudent}
             onImportWorkspaceJson={handleImportWorkspaceJson}
+            onResetDefaultWorkspace={handleResetDefaultWorkspace}
             aiEvaluations={aiEvaluations}
             onUpdateAiEvaluation={handleUpdateAiEvaluation}
             versionLog={versionLog}
             onUpdateVersionLog={handleUpdateVersionLog}
             rubric={rubric}
             onChangeRubric={setRubric}
+            onResetRubric={handleResetRubric}
             bestQuizScore={bestQuizScore}
             testResults={testResults}
             onUpdateTestResults={setTestResults}

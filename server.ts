@@ -94,7 +94,12 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.resolve(__dirname, 'dist');
+    const publicPath = path.resolve(__dirname, 'public');
     app.use(express.static(distPath));
+    app.use(express.static(publicPath));
+    app.use('/assets', (_req, res) => {
+      res.status(404).json({ error: 'Không tìm thấy tệp tài nguyên minh chứng.' });
+    });
     app.get('*', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
